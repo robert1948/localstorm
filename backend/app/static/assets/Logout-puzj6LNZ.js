@@ -1,0 +1,1 @@
+import{r as s,A as e,u as a,j as n}from"./index-BeMhyx-i.js";function r(){const{logout:t}=s.useContext(e),o=a();return s.useEffect(()=>{t(),o("/login")},[t,o]),n.jsx("p",{className:"p-4",children:"Logging out..."})}export{r as default};

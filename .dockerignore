@@ -1,0 +1,37 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtualenvs
+.venv/
+env/
+venv/
+
+# Environment variables
+.env
+.env.*
+
+# Node modules
+client/node_modules/
+
+# Build output
+client/dist/
+backend/app/static/
+
+# Logs
+*.log
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Git
+.git
+.gitignore
+
+# Docker-related
+Dockerfile
+.dockerignore

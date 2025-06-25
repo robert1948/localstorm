@@ -1,0 +1,17 @@
+{
+  "name": "CapeControl",
+  "description": "FastAPI backend for CapeControl MVP",
+  "env": {
+    "SECRET_KEY": {
+      "required": true
+    },
+    "FRONTEND_ORIGIN": {
+      "required": true
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+}

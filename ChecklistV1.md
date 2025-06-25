@@ -1,21 +1,3 @@
-
----
-
-## 🧪 Live App
-
-🌐 [https://tailstorm.herokuapp.com](https://tailstorm.herokuapp.com)
-
-📄 [API Docs](https://tailstorm.herokuapp.com/docs)
-
----
-
-## 🤝 Contributing
-
-This repo is structured for collaborative scaling. To join, fork this repo, clone locally, and create a feature branch. PRs are welcome.
-
----
-
-© 2025 CapeControl · Built with ❤️ in Cape Town
 Checklist# ✅ CapeControl Development Checklist — V2
 
 This version expands direction for production readiness, clean coding practices, and deployment.
@@ -106,5 +88,4 @@ This version expands direction for production readiness, clean coding practices,
 - [ ] Add multi-user organization support
 - [ ] Rate limiting with FastAPI middleware
 - [ ] Connect Stripe or PayPal
-- [ ] AI onboarding assistant# Test deploy
-# Test deploy
+- [ ] AI onboarding assistant
