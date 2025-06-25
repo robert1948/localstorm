@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      HEROKU_APP_NAME: tailstorm-a57f748ab672
+      HEROKU_APP_NAME: autolocal
       HEROKU_EMAIL: zeonita@gmail.com
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
     steps:
-      - name: 📥 Checkout code
+      - name: 📅 Checkout code
         uses: actions/checkout@v3
 
       - name: ⚙️ Set up Node.js
