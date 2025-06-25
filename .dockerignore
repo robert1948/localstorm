@@ -1,37 +1,38 @@
-# Byte-compiled / cache
+# === Python bytecode & cache ===
 __pycache__/
 *.py[cod]
 *.pyo
 
-# Virtualenvs
+# === Python virtual environments ===
 .venv/
 env/
 venv/
 
-# Environment variables
+# === Environment files ===
 .env
 .env.*
 
-# Node modules
+# === Node modules & build ===
 client/node_modules/
-
-# Build output
 client/dist/
-backend/app/static/
 
-# Logs
+# === Backend static output ===
+backend/app/static/  # Only if you generate static files here
+
+# === Logs ===
 *.log
 
-# IDE/editor files
+# === IDE/editor files ===
 .vscode/
 .idea/
 *.swp
 .DS_Store
 
-# Git
-.git
+# === Git ===
+.git/
 .gitignore
 
-# Docker-related
+# === Docker artifacts (optional) ===
 Dockerfile
 .dockerignore
+docker-compose.override.yml

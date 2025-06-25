@@ -9,6 +9,7 @@ services:
     ports:
       - "8000:8000"
     environment:
+      # Backend env vars
       PORT: 8000
       POSTGRES_DB: tailstorm_dev
       POSTGRES_USER: postgres
@@ -22,9 +23,12 @@ services:
     depends_on:
       - db
     volumes:
-      - .:/app
       - ./client:/app/client
       - ./backend:/app/backend
+      - ./scripts:/app/scripts  # Optional: if using dev scripts
+    working_dir: /app/backend   # Ensures backend commands run in the correct directory
+    command: >
+      bash -c "uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload"
 
   db:
     image: postgres:15
