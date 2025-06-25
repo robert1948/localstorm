@@ -36,17 +36,13 @@ jobs:
         with:
           python-version: 3.11
 
-      - name: 🐳 Install Heroku CLI
-        run: |
-          curl https://cli-assets.heroku.com/install.sh | sh
-
-      - name: 🔐 Heroku Container Login
-        run: echo "$HEROKU_API_KEY" | docker login --username=_ --password-stdin registry.heroku.com
-
-      - name: 🚢 Push container to Heroku
-        run: |
-          heroku container:push web --app $HEROKU_APP_NAME
-          heroku container:release web --app $HEROKU_APP_NAME
+      - name: 🚀 Deploy to Heroku Container Registry
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: autolocal
+          heroku_email: zeonita@gmail.com
+          usedocker: true
 
       - name: ✅ Done!
         run: echo "Deployed to https://$HEROKU_APP_NAME.herokuapp.com"
