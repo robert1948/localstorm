@@ -30,7 +30,7 @@ export default function Hero() {
         className="bg-white rounded-xl shadow-md mx-auto w-full max-w-4xl overflow-hidden"
       >
         <img
-          src="/static/dashboard-preview.png"
+          src="https://lightning-s3.s3.amazonaws.com/static/website/img/dashboard-preview.png"
           alt="Dashboard preview"
           className="w-full h-auto"
           loading="lazy"
