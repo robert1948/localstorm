@@ -11,6 +11,7 @@ jobs:
 
     env:
       HEROKU_APP_NAME: autolocal
+      HEROKU_EMAIL: zeonita@gmail.com
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
     steps:
@@ -22,7 +23,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: 📦 Install frontend dependencies
+      - name: 🍞 Install frontend dependencies
         working-directory: client
         run: npm ci
 
@@ -42,12 +43,13 @@ jobs:
 
       - name: 🔑 Login to Heroku Container Registry
         run: |
-          echo $HEROKU_API_KEY | docker login --username=_ --password-stdin registry.heroku.com
+          echo "${HEROKU_API_KEY}" | heroku auth:token > ~/.netrc
+          heroku container:login
 
       - name: 🛠️ Build Docker image
         run: docker build -t registry.heroku.com/$HEROKU_APP_NAME/web .
 
-      - name: 📦 Push Docker image to Heroku
+      - name: 📆 Push Docker image to Heroku
         run: docker push registry.heroku.com/$HEROKU_APP_NAME/web
 
       - name: 🎉 Release app on Heroku
