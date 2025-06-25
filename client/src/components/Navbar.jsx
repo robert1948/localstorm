@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function NavBar() {
+export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -12,7 +12,7 @@ export default function NavBar() {
           <Link to="/" className="flex items-center space-x-2">
             <img
               src="https://lightning-s3.s3.amazonaws.com/static/website/img/capecontrol-logo.png"
-              alt="CapeControl Logo"
+              alt="CapeControl logo"
               className="h-8 w-8"
             />
             <span className="text-xl font-semibold">CapeControl</span>
