@@ -43,8 +43,6 @@ jobs:
           export PATH="$HOME/.local/share/heroku/bin:$PATH"
 
       - name: 🔑 Login to Heroku Container Registry
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: |
           echo $HEROKU_API_KEY | docker login --username=_ --password-stdin registry.heroku.com
 
