@@ -9,8 +9,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    env:
+      HEROKU_APP_NAME: autolocal
+      HEROKU_EMAIL: zeonita@gmail.com
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
     steps:
-      - name: 📅 Checkout code
+      - name: 🗕️ Checkout code
         uses: actions/checkout@v3
 
       - name: ⚙️ Set up Node.js
@@ -31,25 +36,21 @@ jobs:
         with:
           python-version: 3.11
 
-      - name: 📦 Install Heroku CLI
+      - name: 🚀 Install Heroku CLI
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-          heroku --version
 
-      - name: 🔐 Login to Heroku Container Registry
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: |
-          echo "$HEROKU_API_KEY" | docker login --username=_ --password-stdin registry.heroku.com
+      - name: 🔑 Login to Heroku Container Registry
+        run: echo "$HEROKU_API_KEY" | docker login --username=_ --password-stdin registry.heroku.com
 
-      - name: 🐳 Build Docker image
-        run: docker build -t registry.heroku.com/autolocal/web .
+      - name: 📁 Build Docker image
+        run: docker build -t registry.heroku.com/$HEROKU_APP_NAME/web .
 
-      - name: 🚚 Push Docker image to Heroku
-        run: docker push registry.heroku.com/autolocal/web
+      - name: 🚜 Push Docker image to Heroku
+        run: docker push registry.heroku.com/$HEROKU_APP_NAME/web
 
-      - name: 🚀 Release app on Heroku
-        run: heroku container:release web --app autolocal
+      - name: 🎉 Release app on Heroku
+        run: heroku container:release web --app $HEROKU_APP_NAME
 
       - name: ✅ Done!
-        run: echo "Deployed to https://autolocal.herokuapp.com"
+        run: echo "Deployed to https://$HEROKU_APP_NAME.herokuapp.com"
