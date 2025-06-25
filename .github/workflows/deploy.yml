@@ -11,7 +11,6 @@ jobs:
 
     env:
       HEROKU_APP_NAME: autolocal
-      HEROKU_EMAIL: zeonita@gmail.com
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
     steps:
@@ -36,15 +35,27 @@ jobs:
         with:
           python-version: 3.11
 
-      - name: 🚀 Log in to Heroku Container Registry
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ env.HEROKU_APP_NAME }}
-          heroku_email: ${{ env.HEROKU_EMAIL }}
-          usedocker: true
-          docker_heroku_process_type: web
-          appdir: .
+      - name: 🚀 Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+          export PATH="$HOME/.local/share/heroku/bin:$PATH"
+          heroku --version
+
+      - name: 🔑 Login to Heroku Container Registry
+        run: |
+          export PATH="$HOME/.local/share/heroku/bin:$PATH"
+          echo "$HEROKU_API_KEY" | docker login --username=_ --password-stdin registry.heroku.com
+
+      - name: 🛠️ Build Docker image
+        run: docker build -t registry.heroku.com/$HEROKU_APP_NAME/web .
+
+      - name: 📦 Push Docker image to Heroku
+        run: docker push registry.heroku.com/$HEROKU_APP_NAME/web
+
+      - name: 🎉 Release app on Heroku
+        run: |
+          export PATH="$HOME/.local/share/heroku/bin:$PATH"
+          heroku container:release web --app $HEROKU_APP_NAME
 
       - name: ✅ Done!
         run: echo "Deployed to https://$HEROKU_APP_NAME.herokuapp.com"
