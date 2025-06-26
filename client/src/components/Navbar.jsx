@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function Navbar() {
+export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <nav className="bg-blue-600 dark:bg-gray-900 text-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
+        <div className="flex justify-between h-16 items-center w-full">
           {/* Logo + Brand */}
           <Link to="/" className="flex items-center space-x-2">
             <img
               src="https://lightning-s3.s3.amazonaws.com/static/website/img/capecontrol-logo.png"
-              alt="CapeControl logo"
+              alt="CapeControl Logo"
               className="h-8 w-8"
             />
             <span className="text-xl font-semibold">CapeControl</span>
@@ -26,7 +26,7 @@ export default function Navbar() {
               aria-label="Toggle menu"
             >
               <svg
-                className="w-6 h-6"
+                className="w-6 h-6 block"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

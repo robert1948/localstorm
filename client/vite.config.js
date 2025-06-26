@@ -1,11 +1,13 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import cacheBusterPlugin from './vite.plugins.cachebuster.js'; // 👈 Add this
 
 export default defineConfig({
   plugins: [
     react(),
     tsconfigPaths(),
+    cacheBusterPlugin(), // 👈 Use the plugin
   ],
   base: './', // ✅ Ensures relative paths for static assets after build
   server: {
