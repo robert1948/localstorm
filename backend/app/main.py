@@ -5,21 +5,24 @@ import os
 
 app = FastAPI()
 
-# ✅ Absolute path to static build output (Docker copies frontend here)
+# ✅ Absolute paths to static build output
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 INDEX_HTML = os.path.join(STATIC_DIR, "index.html")
 ASSETS_DIR = os.path.join(STATIC_DIR, "assets")
 
-# ✅ Optional: Gracefully warn if frontend is missing (for local dev)
+# ✅ Warn and explain if frontend build is missing (dev help)
 if not os.path.exists(INDEX_HTML):
-    raise RuntimeError(f"❌ Missing frontend build: {INDEX_HTML}. Run `npm run build` in client/.")
+    raise RuntimeError(
+        f"❌ Frontend build not found: {INDEX_HTML}\n"
+        "➡️  Run `npm run build` in the client directory first."
+    )
 
-# ✅ Mount static assets (e.g., JS/CSS/images)
+# ✅ Mount static files (e.g., CSS/JS)
 if os.path.isdir(ASSETS_DIR):
     app.mount("/assets", StaticFiles(directory=ASSETS_DIR), name="assets")
 
-# ✅ Serve React SPA for any path
+# ✅ Catch-all route to serve SPA
 @app.get("/{full_path:path}")
 async def serve_spa(full_path: str, request: Request):
     return FileResponse(INDEX_HTML)

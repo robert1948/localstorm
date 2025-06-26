@@ -1,0 +1,48 @@
+{
+  "name": "CapeControl",
+  "short_name": "CapeControl",
+  "start_url": "/",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1d4ed8",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://lightning-s3.s3.amazonaws.com/static/website/img/apple-touch-icon.png?v=1750908484406",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "https://lightning-s3.s3.amazonaws.com/static/website/img/favicon-32x32.png?v=1750908484406",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "https://lightning-s3.s3.amazonaws.com/static/website/img/favicon-16x16.png?v=1750908484406",
+      "sizes": "16x16",
+      "type": "image/png"
+    }
+  ]
+}

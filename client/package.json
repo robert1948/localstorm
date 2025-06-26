@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && npm run cache-bust && npm run copy",
-    "cache-bust": "node scripts/cache-bust.js",
+    "cache-bust": "node scripts/cache-bust.cjs",
     "copy": "mkdir -p ../backend/app/static && rm -rf ../backend/app/static/* && cp -a dist/. ../backend/app/static/",
     "lint": "eslint .",
     "preview": "vite preview"

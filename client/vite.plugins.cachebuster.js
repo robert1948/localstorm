@@ -1,13 +1,20 @@
-// vite.plugins.cachebuster.js
-export default function cacheBusterPlugin() {
-  const timestamp = new Date().getTime();
+export function cacheBusterPlugin() {
   return {
-    name: 'html-cache-buster',
-    transformIndexHtml(html) {
-      return html.replace(
-        /(\.(png|jpe?g|svg|ico|webp|gif|css|js))(\?v=\d+)?/g,
-        (match, p1) => `${p1}?v=${timestamp}`
-      );
+    name: 'vite-plugin-cachebuster',
+    enforce: 'post',
+    generateBundle(_, bundle) {
+      const timestamp = Date.now();
+      for (const fileName of Object.keys(bundle)) {
+        if (fileName.endsWith('.js')) {
+          const chunk = bundle[fileName];
+          if (chunk.code) {
+            chunk.code = chunk.code.replace(
+              /(<script.+src=["'].*?)(["'])/g,
+              `$1?v=${timestamp}$2`
+            );
+          }
+        }
+      }
     },
   };
 }
