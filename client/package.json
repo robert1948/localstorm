@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && npm run copy",
+    "build": "vite build && npm run cache-bust && npm run copy",
+    "cache-bust": "node scripts/cache-bust.js",
     "copy": "mkdir -p ../backend/app/static && rm -rf ../backend/app/static/* && cp -a dist/. ../backend/app/static/",
     "lint": "eslint .",
     "preview": "vite preview"
