@@ -38,7 +38,6 @@ jobs:
       - name: 🚀 Install Heroku CLI
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-          echo "$HOME/.local/share/heroku/bin" >> $GITHUB_PATH
           export PATH="$HOME/.local/share/heroku/bin:$PATH"
 
       - name: 🔑 Login to Heroku Container Registry
