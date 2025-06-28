@@ -1,70 +1,57 @@
 import { useState } from "react";
+import axios from "axios";
 
-export default function Login() {
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setError("");
 
     try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.detail || "Login failed");
-      }
-
-      const data = await res.json();
-      localStorage.setItem("token", data.access_token);
-      window.location.href = "/dashboard";
+      const response = await axios.post("/api/login", { email, password });
+      // handle successful login (e.g., store token, redirect)
+      console.log("Logged in:", response.data);
     } catch (err) {
-      setError(err.message);
+      setError("Invalid email or password");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <section className="max-w-md mx-auto mt-16 p-6 bg-white rounded-lg shadow">
-      <h2 className="text-2xl font-semibold text-center mb-4">Login</h2>
-
-      {error && <p className="text-red-600 text-sm mb-4 text-center">{error}</p>}
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <label className="block">
-          <span className="sr-only">Email</span>
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full p-2 border rounded"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </label>
-        <label className="block">
-          <span className="sr-only">Password</span>
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full p-2 border rounded"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
+    <div className="max-w-md mx-auto mt-20 p-6 border rounded-xl shadow">
+      <h2 className="text-2xl font-bold mb-4">Login</h2>
+      {error && <div className="mb-4 text-red-600">{error}</div>}
+      <form onSubmit={handleLogin}>
+        <input
+          className="block w-full mb-2 p-2 border"
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          className="block w-full mb-4 p-2 border"
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         <button
+          className="w-full bg-blue-600 text-white py-2 rounded disabled:opacity-50"
           type="submit"
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition"
+          disabled={loading}
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
-    </section>
+    </div>
   );
 }
+
+export default Login;

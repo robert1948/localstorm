@@ -64,4 +64,7 @@ We welcome:
 
 ---
 
-> “Empowering every neighborhood with the intelligence of the internet – one smart local app at a time.”
+## CI Status
+
+[![🚀 Deploy to Heroku (Container)](https://github.com/robert1948/localstorm/actions/workflows/deploy.yml/badge.svg)](https://github.com/robert1948/localstorm/actions/workflows/deploy.yml)
+ “Empowering every neighborhood with the intelligence of the internet – one smart local app at a time.”
