@@ -1,15 +1,14 @@
 version: '3.9'
 
 services:
-  web:
+  backend:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: backend/Dockerfile
     container_name: tailstorm-backend
     ports:
       - "8000:8000"
     environment:
-      # Backend env vars
       PORT: 8000
       POSTGRES_DB: tailstorm_dev
       POSTGRES_USER: postgres
@@ -24,11 +23,23 @@ services:
       - db
     volumes:
       - ./client:/app/client
-      - ./backend:/app/backend
-      - ./scripts:/app/scripts  # Optional: if using dev scripts
-    working_dir: /app/backend   # Ensures backend commands run in the correct directory
+      - ./backend:/app
+    working_dir: /app
     command: >
-      bash -c "uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload"
+      bash -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+
+  frontend:
+    image: node:20
+    container_name: tailstorm-frontend
+    working_dir: /app
+    volumes:
+      - ./client:/app
+    ports:
+      - "3000:3000"
+    command: >
+      bash -c "npm install && npm run dev"
+    depends_on:
+      - backend
 
   db:
     image: postgres:15

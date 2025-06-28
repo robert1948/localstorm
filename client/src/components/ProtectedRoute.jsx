@@ -5,9 +5,16 @@ import { AuthContext } from '../context/AuthContext';
 export default function ProtectedRoute({ children }) {
   const { user } = useContext(AuthContext);
 
+  // Optional: Show loading if user is still undefined (e.g., loading from localStorage later)
   if (user === undefined) {
-    return <div className="p-4 text-center">Checking authentication...</div>; // or show spinner
+    return <div className="p-4 text-center">Checking authentication...</div>;
   }
 
-  return user ? children : <Navigate to="/login" />;
+  // If user is not logged in (null), redirect to login
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // Authenticated → allow access
+  return children;
 }

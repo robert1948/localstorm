@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>CapeControl</title>
-    <meta name="description" content="Empower your business with AI agents — fast, affordable, and simple." />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CapeControl</title>
+  <meta name="description" content="Empower your business with AI agents — fast, affordable, and simple." />
 
-    <!-- Icons from S3 -->
-    <link rel="icon" href="https://lightning-s3.s3.amazonaws.com/static/website/img/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="https://lightning-s3.s3.amazonaws.com/static/website/img/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="https://lightning-s3.s3.amazonaws.com/static/website/img/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="https://lightning-s3.s3.amazonaws.com/static/website/img/favicon-16x16.png" />
-    <link rel="manifest" href="https://lightning-s3.s3.amazonaws.com/static/website/img/site.webmanifest" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module">
-      const version = new Date().getTime();
-      const script = document.createElement("script");
-      script.type = "module";
-      script.src = `/src/main.jsx?v=${version}`;
-      document.head.appendChild(script);
-    </script>
-  </body>
+  <!-- Icons from S3 -->
+  <link rel="icon" href="https://lightning-s3.s3.amazonaws.com/static/website/img/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180"
+    href="https://lightning-s3.s3.amazonaws.com/static/website/img/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32"
+    href="https://lightning-s3.s3.amazonaws.com/static/website/img/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16"
+    href="https://lightning-s3.s3.amazonaws.com/static/website/img/favicon-16x16.png" />
+  <link rel="manifest" href="https://lightning-s3.s3.amazonaws.com/static/website/img/site.webmanifest" />
+</head>
+
+<body>
+  <div id="root"></div>
+  <!-- Vite will inject the actual script during build -->
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>

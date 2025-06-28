@@ -9,7 +9,7 @@ export default defineConfig({
     tsconfigPaths(),
     cacheBusterPlugin(), // 👈 Use the plugin as a function
   ],
-  base: './', // ✅ Ensures relative paths for static assets after build
+  base: '/', // ✅ Required for production
   server: {
     port: 3000,
     proxy: {

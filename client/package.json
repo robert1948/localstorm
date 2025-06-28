@@ -8,7 +8,9 @@
     "build": "vite build && npm run cache-bust && npm run copy",
     "cache-bust": "node scripts/cache-bust.cjs",
     "copy": "mkdir -p ../backend/app/static && rm -rf ../backend/app/static/* && cp -a dist/. ../backend/app/static/",
-    "lint": "eslint .",
+    "upload": "bash scripts/upload-to-s3.sh",
+    "heroku-postbuild": "npm install && npm run build && npm run upload",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Test</title>
+    <style>
+        .test-image {
+            max-width: 500px;
+            border: 2px solid #ccc;
+            margin: 10px;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Loading Test</h1>
+    
+    <div>
+        <h2>S3 Dashboard Preview Image:</h2>
+        <img 
+            src="https://lightning-s3.s3.amazonaws.com/static/website/img/dashboard-preview.png"
+            alt="Dashboard preview"
+            class="test-image"
+            onload="document.getElementById('s3-status').innerHTML = 'S3 Image loaded successfully!'; document.getElementById('s3-status').className = 'success';"
+            onerror="document.getElementById('s3-status').innerHTML = 'S3 Image failed to load'; document.getElementById('s3-status').className = 'error';"
+        />
+        <div id="s3-status">Loading S3 image...</div>
+    </div>
+
+    <div>
+        <h2>Local Fallback Image:</h2>
+        <img 
+            src="/static/dashboard-preview.png"
+            alt="Dashboard preview local"
+            class="test-image"
+            onload="document.getElementById('local-status').innerHTML = 'Local Image loaded successfully!'; document.getElementById('local-status').className = 'success';"
+            onerror="document.getElementById('local-status').innerHTML = 'Local Image failed to load'; document.getElementById('local-status').className = 'error';"
+        />
+        <div id="local-status">Loading local image...</div>
+    </div>
+
+    <script>
+        console.log('Testing image loading...');
+        
+        // Test S3 image with fetch
+        fetch('https://lightning-s3.s3.amazonaws.com/static/website/img/dashboard-preview.png')
+            .then(response => {
+                console.log('S3 Fetch Response:', response.status, response.statusText);
+                if (response.ok) {
+                    console.log('✅ S3 image accessible via fetch');
+                } else {
+                    console.log('❌ S3 image not accessible via fetch');
+                }
+            })
+            .catch(error => {
+                console.log('❌ S3 fetch error:', error);
+            });
+    </script>
+</body>
+</html>
