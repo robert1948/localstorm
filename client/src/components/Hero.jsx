@@ -24,24 +24,27 @@ export default function Hero() {
       </div>
 
       {/* Desktop image preview */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="hidden sm:block bg-white rounded-xl shadow-md mx-auto w-full max-w-4xl overflow-hidden"
-      >
-        <img
-          src="https://lightning-s3.s3.amazonaws.com/static/website/img/dashboard-preview.png"
-          alt="Dashboard preview"
-          className="w-full h-auto"
-          loading="lazy"
-        />
-        <div className="py-2 text-sm text-gray-700 font-medium">Dashboard preview</div>
-      </motion.div>
+      <div className="hidden sm:block">
+        <motion.div
+          key="desktop-dashboard"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-white rounded-xl shadow-md mx-auto w-full max-w-4xl overflow-hidden"
+        >
+          <img
+            src="https://lightning-s3.s3.amazonaws.com/static/website/img/dashboard-preview.png"
+            alt="CapeControl dashboard interface"
+            className="w-full h-auto"
+            loading="lazy"
+          />
+          <div className="py-2 text-sm text-gray-700 font-medium">Dashboard preview</div>
+        </motion.div>
+      </div>
 
       {/* Mobile text fallback */}
-      <div className="sm:hidden mt-6 text-blue-600 text-sm font-medium">
-        <p>⚡ Preview our powerful dashboard tools—designed for ease and speed.</p>
+      <div className="sm:hidden mt-6 text-blue-600 text-sm font-medium px-4">
+        ⚡ Preview our powerful dashboard tools—designed for ease and speed.
       </div>
 
       <div className="mt-8 text-gray-500 text-sm flex justify-center items-center gap-2">
