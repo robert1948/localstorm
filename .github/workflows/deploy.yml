@@ -14,7 +14,7 @@ jobs:
       HEROKU_EMAIL: zeonita@gmail.com
 
     steps:
-      - name: 🔵️ Checkout code
+      - name: 🔵 Checkout code
         uses: actions/checkout@v3
 
       - name: ⚙️ Set up Node.js
@@ -36,25 +36,27 @@ jobs:
           python-version: 3.11
 
       - name: 🚀 Install Heroku CLI
-        run: |
-          curl https://cli-assets.heroku.com/install.sh | sh
-          export PATH="$HOME/.local/share/heroku/bin:$PATH"
-
-      - name: 🔑 Login to Heroku Container Registry
-        run: echo $HEROKU_API_KEY | docker login --username=_ --password-stdin registry.heroku.com
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ env.HEROKU_APP_NAME }}
+          heroku_email: ${{ env.HEROKU_EMAIL }}
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
+      - name: 🔑 Login to Heroku Container Registry
+        run: echo "${{ secrets.HEROKU_API_KEY }}" | docker login --username=_ --password-stdin registry.heroku.com
+
       - name: 🔠 Build Docker image
-        run: docker build -t registry.heroku.com/$HEROKU_APP_NAME/web .
+        run: docker build -t registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web .
 
       - name: 📆 Push Docker image to Heroku
-        run: docker push registry.heroku.com/$HEROKU_APP_NAME/web
+        run: docker push registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
 
       - name: 🎉 Release app on Heroku
-        run: heroku container:release web --app $HEROKU_APP_NAME
+        run: heroku container:release web --app ${{ env.HEROKU_APP_NAME }}
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
       - name: ✅ Done!
-        run: echo "Deployed to https://$HEROKU_APP_NAME.herokuapp.com"
+        run: echo "Deployed to https://${{ env.HEROKU_APP_NAME }}.herokuapp.com"

@@ -4,7 +4,12 @@ import { motion } from "framer-motion";
 import { StarIcon, QuoteIcon } from "lucide-react";
 
 export default function Hero() {
-  const navigate = useNavigate();
+  let navigate = () => {};
+  try {
+    navigate = useNavigate();
+  } catch (error) {
+    console.warn("useNavigate() must be used within a <BrowserRouter>");
+  }
 
   return (
     <section className="text-center py-20 px-4 bg-gradient-to-b from-white to-blue-50">
@@ -23,10 +28,9 @@ export default function Hero() {
         <Button variant="outline" onClick={() => navigate("/how-it-works")}>See How It Works</Button>
       </div>
 
-      {/* Desktop image preview */}
+      {/* Desktop preview image */}
       <div className="hidden sm:block">
         <motion.div
-          key="desktop-dashboard"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
@@ -34,7 +38,7 @@ export default function Hero() {
         >
           <img
             src="https://lightning-s3.s3.amazonaws.com/static/website/img/dashboard-preview.png"
-            alt="CapeControl dashboard interface"
+            alt="Screenshot of CapeControl dashboard interface"
             className="w-full h-auto"
             loading="lazy"
           />
@@ -42,7 +46,7 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Mobile text fallback */}
+      {/* Mobile fallback message */}
       <div className="sm:hidden mt-6 text-blue-600 text-sm font-medium px-4">
         ⚡ Preview our powerful dashboard tools—designed for ease and speed.
       </div>
