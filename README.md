@@ -1,4 +1,4 @@
-# 🌍 AutoLocal
+# 🌍 AutoLocal V2
 
 **Your Hyperlocal AI Companion – Built to Empower People, Places, and Possibility**
 

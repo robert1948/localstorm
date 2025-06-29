@@ -39,8 +39,10 @@ export default function Hero() {
           <img
             src="https://lightning-s3.s3.amazonaws.com/static/website/img/dashboard-preview.png"
             alt="Screenshot of CapeControl dashboard interface"
+            width="1200"
+            height="600"
             className="w-full h-auto"
-            loading="lazy"
+            fetchpriority="high"
           />
           <div className="py-2 text-sm text-gray-700 font-medium">Dashboard preview</div>
         </motion.div>
