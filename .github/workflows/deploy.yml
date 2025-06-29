@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      HEROKU_APP_NAME: autolocal
+      HEROKU_APP_NAME: tailstorm
       HEROKU_EMAIL: zeonita@gmail.com
 
     steps:
@@ -36,13 +36,9 @@ jobs:
           python-version: 3.11
 
       - name: 🚀 Install Heroku CLI
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ env.HEROKU_APP_NAME }}
-          heroku_email: ${{ env.HEROKU_EMAIL }}
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+          echo "$HOME/.local/share/heroku/bin" >> $GITHUB_PATH
 
       - name: 🔑 Login to Heroku Container Registry
         run: echo "${{ secrets.HEROKU_API_KEY }}" | docker login --username=_ --password-stdin registry.heroku.com
@@ -59,4 +55,4 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
       - name: ✅ Done!
-        run: echo "Deployed to https://${{ env.HEROKU_APP_NAME }}.herokuapp.com"
+        run: echo "✅ Deployed to https://${{ env.HEROKU_APP_NAME }}.herokuapp.com"
