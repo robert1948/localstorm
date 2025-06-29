@@ -23,11 +23,12 @@ export default function Hero() {
         <Button variant="outline" onClick={() => navigate("/how-it-works")}>See How It Works</Button>
       </div>
 
+      {/* Desktop image preview */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="bg-white rounded-xl shadow-md mx-auto w-full max-w-4xl overflow-hidden"
+        className="hidden sm:block bg-white rounded-xl shadow-md mx-auto w-full max-w-4xl overflow-hidden"
       >
         <img
           src="https://lightning-s3.s3.amazonaws.com/static/website/img/dashboard-preview.png"
@@ -37,6 +38,11 @@ export default function Hero() {
         />
         <div className="py-2 text-sm text-gray-700 font-medium">Dashboard preview</div>
       </motion.div>
+
+      {/* Mobile text fallback */}
+      <div className="sm:hidden mt-6 text-blue-600 text-sm font-medium">
+        <p>⚡ Preview our powerful dashboard tools—designed for ease and speed.</p>
+      </div>
 
       <div className="mt-8 text-gray-500 text-sm flex justify-center items-center gap-2">
         <StarIcon className="w-4 h-4 text-yellow-500" />
