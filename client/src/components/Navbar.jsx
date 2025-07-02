@@ -5,9 +5,9 @@ export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-blue-600 dark:bg-gray-900 text-white shadow-md">
+    <nav className="bg-blue-600 dark:bg-gray-900 text-white shadow-md fixed w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center w-full">
+        <div className="flex justify-between items-center h-16">
           {/* Logo + Brand */}
           <Link to="/" className="flex items-center space-x-2">
             <img
@@ -18,19 +18,24 @@ export default function NavBar() {
             <span className="text-xl font-semibold">CapeControl</span>
           </Link>
 
+          {/* Desktop links */}
+          <div className="hidden md:flex space-x-6 items-center">
+            <Link to="/login" className="hover:underline">Login</Link>
+            <Link to="/register" className="hover:underline">Register</Link>
+          </div>
+
           {/* Hamburger menu button */}
-          <div className="flex md:hidden">
+          <div className="md:hidden">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               className="text-white focus:outline-none"
               aria-label="Toggle menu"
             >
               <svg
-                className="w-6 h-6 block"
+                className="w-6 h-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
               >
                 {menuOpen ? (
                   <path
@@ -50,31 +55,21 @@ export default function NavBar() {
               </svg>
             </button>
           </div>
-
-          {/* Desktop links */}
-          <div className="hidden md:flex space-x-6 items-center">
-            <Link to="/login" className="hover:underline">
-              Login
-            </Link>
-            <Link to="/register" className="hover:underline">
-              Register
-            </Link>
-          </div>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile dropdown */}
         {menuOpen && (
-          <div className="md:hidden px-2 pb-3 space-y-1">
+          <div className="md:hidden animate-dropdown bg-blue-600 px-2 pb-3 space-y-1">
             <Link
               to="/login"
-              className="block text-white hover:underline py-2"
+              className="block py-2 text-white hover:underline"
               onClick={() => setMenuOpen(false)}
             >
               Login
             </Link>
             <Link
               to="/register"
-              className="block text-white hover:underline py-2"
+              className="block py-2 text-white hover:underline"
               onClick={() => setMenuOpen(false)}
             >
               Register
