@@ -4,12 +4,7 @@ import { motion } from "framer-motion";
 import { StarIcon, QuoteIcon } from "lucide-react";
 
 export default function Hero() {
-  let navigate = () => {};
-  try {
-    navigate = useNavigate();
-  } catch (error) {
-    console.warn("useNavigate() must be used within a <BrowserRouter>");
-  }
+  const navigate = useNavigate(); // ✅ Must be at the top level
 
   return (
     <section className="text-center py-20 px-4 bg-gradient-to-b from-white to-blue-50">
