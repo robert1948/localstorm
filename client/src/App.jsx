@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import Navbar from "./components/Navbar";
-import { AuthProvider } from "./context/AuthContext"; // ✅ Import your context
+import { AuthProvider } from "./context/AuthContext";
 
-// Lazy-loaded pages
+// ✅ Lazy-loaded pages
 const Landing = lazy(() => import("./pages/Landing"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
@@ -14,9 +14,11 @@ const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"));
 
 export default function App() {
   return (
-    <AuthProvider> {/* ✅ Wrap everything in your provider */}
+    <AuthProvider>
       <div className="min-h-screen bg-gray-100 text-gray-900">
         <Navbar />
+
+        {/* ✅ Single Suspense around all routes */}
         <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
           <Routes>
             <Route path="/" element={<Landing />} />
