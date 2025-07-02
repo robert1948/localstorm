@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    fail-fast: false
 
     env:
       HEROKU_APP_NAME: tailstorm
@@ -17,22 +18,22 @@ jobs:
       - name: 🔵 Checkout code
         uses: actions/checkout@v4
 
-      - name: ⚙️ Set up Node.js
+      - name: ⚙️ Set up Node.js (v20)
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          cache: 'npm'
           cache-dependency-path: client/package-lock.json
 
       - name: 📦 Install frontend dependencies
         working-directory: client
         run: npm ci
 
-      - name: 🧩 Build frontend (with prebuild + cache-bust + copy)
+      - name: 🧩 Build frontend (prebuild + cache-bust + copy)
         working-directory: client
         run: npm run build
 
-      - name: ☁️ Upload assets to S3 (if used)
+      - name: ☁️ Upload built assets to S3
         working-directory: client
         run: npm run upload
         env:
@@ -40,7 +41,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: us-east-1
 
-      - name: 🐍 Set up Python
+      - name: 🐍 Set up Python (3.11)
         uses: actions/setup-python@v4
         with:
           python-version: 3.11
@@ -53,10 +54,10 @@ jobs:
       - name: 🔑 Login to Heroku Container Registry
         run: echo "${{ secrets.HEROKU_API_KEY }}" | docker login --username=_ --password-stdin registry.heroku.com
 
-      - name: 🔠 Build Docker image
+      - name: 🛠️ Build Docker image
         run: docker build -t registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web .
 
-      - name: 📆 Push Docker image to Heroku
+      - name: 📤 Push Docker image to Heroku
         run: docker push registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
 
       - name: 🎉 Release app on Heroku
@@ -64,5 +65,5 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
-      - name: ✅ Done!
+      - name: ✅ Confirm deployment
         run: echo "✅ Deployed to https://${{ env.HEROKU_APP_NAME }}.herokuapp.com"
