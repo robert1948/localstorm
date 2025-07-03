@@ -13,7 +13,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Set working directory for backend build
+# Set base working directory
 WORKDIR /app
 
 # Copy backend source
@@ -27,20 +27,17 @@ RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # Ensure static dir exists
-RUN mkdir -p backend/src/app/static
+RUN mkdir -p backend/app/static
 
 # Copy frontend build output into FastAPI static path
-COPY --from=frontend /app/client/dist/ ./backend/src/app/static/
+COPY --from=frontend /app/client/dist/ ./backend/app/static/
 
-# Set working directory for app execution
-WORKDIR /app/backend/src
+# Set working directory to where `app.main` lives
+WORKDIR /app/backend
 
-# Expose default port for Heroku
-EXPOSE 5000
-
-# Environment setup
+# Set environment variables
 ENV PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app/backend/src
+    PYTHONPATH=/app/backend
 
-# FastAPI startup (Heroku-compatible)
+# Start FastAPI (Heroku-compatible)
 CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-5000}"]
