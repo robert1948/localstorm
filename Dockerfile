@@ -19,8 +19,8 @@ WORKDIR /app
 # Copy backend source
 COPY backend/ ./backend
 
-# Copy Python requirements
-COPY backend/requirements.txt ./requirements.txt
+# Copy Python requirements from root, not backend/
+COPY requirements.txt .
 
 # Install Python dependencies
 RUN pip install --upgrade pip && \
@@ -32,16 +32,12 @@ RUN mkdir -p backend/src/app/static
 # Copy frontend build output into FastAPI static path
 COPY --from=frontend /app/client/dist/ ./backend/src/app/static/
 
-# (Optional) Debug checks — disable in production
-# RUN ls -l ./backend/src/app/static/index.html || echo "⚠️ index.html missing"
-# RUN ls -l ./backend/src/app/static/assets || echo "⚠️ assets folder missing"
+# Expose default port
+EXPOSE 5000
 
 # Environment setup
 ENV PYTHONUNBUFFERED=1 \
     PYTHONPATH=/app/backend/src
 
-# Expose default FastAPI port
-EXPOSE 5000
-
 # FastAPI startup
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5000"]
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-5000}"]
