@@ -1,70 +1,76 @@
-# 🌍 AutoLocal V2
+# 🌩️ CapeControl
 
-**Your Hyperlocal AI Companion – Built to Empower People, Places, and Possibility**
+CapeControl is a modern AI-powered platform designed to give individuals and businesses access to a curated suite of **agentic services** — intelligent tools that automate tasks, boost productivity, and drive innovation.
+
+## 🚀 Purpose
+
+CapeControl is built to democratize access to AI by offering a dashboard where users can:
+
+- Register and log in securely
+- Browse a marketplace of AI agents
+- Activate services for specific goals
+- Use via subscription or pay-per-use
+
+The platform focuses on simplicity, scalability, and user empowerment, offering smart automation with zero coding required.
+
+## 🛠 Tech Stack
+
+- **Frontend:** React + Vite + Tailwind CSS
+- **Backend:** FastAPI (Python)
+- **Database:** PostgreSQL
+- **DevOps:** Docker, GitHub Actions, Heroku Container Deploy
+- **Hosting:** Heroku
+- **Cloud Assets:** AWS S3
+- **Editor:** VS Code (Codespaces Ready)
+
+## ⚙️ Local Development
+
+1. **Clone the repo:**
+
+```bash
+git clone https://github.com/robert1948/localstorm.git
+cd localstorm
+```
+
+2. **Frontend Setup:**
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+3. **Backend Setup:**
+
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn src.main:app --reload
+```
+
+4. **Docker (optional full stack):**
+
+```bash
+docker-compose up --build
+```
+
+5. **Visit the app locally:**
+
+- Frontend: http://localhost:5173  
+- Backend API: http://localhost:8000
+
+## 🌐 Deployment
+
+Automatic deployment is triggered when code is pushed to the `main` branch via GitHub Actions.  
+Docker images are built and released to Heroku’s container registry.  
+Static frontend assets are synced to an AWS S3 bucket.
+
+Live site: [https://cape-control.com](https://cape-control.com)
+
+## 📄 License
+
+MIT License © Robert
 
 ---
 
-## 🎯 Vision
-
-AutoLocal is designed to bridge the gap between **community intelligence** and **modern automation**. Our goal is to **empower users and organizations to interact with their local environment** using intuitive, AI-driven tools – whether that means managing neighborhood resources, showcasing local talent, or launching smart local projects in minutes.
-
-This project is the **foundation** for a broader platform of contextual, agent-driven services under the **CapeControl** umbrella.
-
----
-
-## 👨‍💻 For Developers
-
-AutoLocal is a full-stack app currently deployed via **Heroku Container Registry** using:
-
-- **Frontend**: React + Vite
-- **Backend**: FastAPI
-- **Containerization**: Docker
-- **CI/CD**: GitHub Actions → Heroku
-
-### 🔁 CI/CD Workflow (GitHub Actions)
-
-Every push to `main`:
-
-1. Installs dependencies
-2. Builds frontend
-3. Builds and pushes a Docker image
-4. Releases the app to Heroku
-
-See [`deploy.yml`](.github/workflows/deploy.yml) for pipeline details.
-
----
-
-## 🌐 For Customers
-
-Imagine launching a community dashboard, a hyperlocal bulletin board, or a public service portal – all powered by **local intelligence agents**.
-
-AutoLocal helps you:
-- **Connect with local audiences** instantly
-- **Manage content and data** efficiently
-- **Grow trust** through intelligent, simple UX
-
-We’re building toward a future where **every user gets a smart local assistant** tuned to their needs.
-
----
-
-## 🔗 Live App
-
-➡️ [https://autolocal.herokuapp.com](https://autolocal.herokuapp.com)
-
----
-
-## 💬 Get Involved
-
-We welcome:
-- Feedback from local users
-- Contributions from developers
-- Ideas for real-world use cases
-
-📧 Contact us at **zeonita@gmail.com**
-
----
-
-## CI Status
-
-[![🚀 Deploy to Heroku (Container)](https://github.com/robert1948/localstorm/actions/workflows/deploy.yml/badge.svg)](https://github.com/robert1948/localstorm/actions/workflows/deploy.yml)
- “Empowering every neighborhood with the intelligence of the internet – one smart local app at a time.”
+_Last updated: 2025-07-03_
