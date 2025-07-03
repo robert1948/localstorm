@@ -1,8 +1,8 @@
 # 1️⃣ Frontend build stage
 FROM node:20 AS frontend
-WORKDIR /app/client
-COPY client/ . 
-RUN npm install && npm run build
+WORKDIR /app
+COPY client/ ./client
+RUN cd client && npm install && npm run build
 
 # 2️⃣ Backend stage
 FROM python:3.11-slim AS backend
@@ -20,24 +20,28 @@ WORKDIR /app
 COPY backend/ ./backend
 
 # Copy Python requirements
-COPY requirements.txt .
+COPY backend/requirements.txt ./requirements.txt
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Ensure static dir exists
-RUN mkdir -p backend/app/static
+RUN mkdir -p backend/src/app/static
 
 # Copy frontend build output into FastAPI static path
-COPY --from=frontend /app/client/dist/ ./backend/app/static/
+COPY --from=frontend /app/client/dist/ ./backend/src/app/static/
 
-# Debug check (optional – remove in production for cleaner image)
-RUN ls -l ./backend/app/static/index.html || echo "⚠️ index.html missing"
-RUN ls -l ./backend/app/static/assets || echo "⚠️ assets folder missing"
+# (Optional) Debug checks — disable in production
+# RUN ls -l ./backend/src/app/static/index.html || echo "⚠️ index.html missing"
+# RUN ls -l ./backend/src/app/static/assets || echo "⚠️ assets folder missing"
 
 # Environment setup
 ENV PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app/backend
+    PYTHONPATH=/app/backend/src
+
+# Expose default FastAPI port
+EXPOSE 5000
 
 # FastAPI startup
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port $PORT"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5000"]
