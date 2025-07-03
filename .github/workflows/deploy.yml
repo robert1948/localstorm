@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      HEROKU_APP_NAME: tailstorm
+      HEROKU_APP_NAME: capecraft
       HEROKU_EMAIL: zeonita@gmail.com
 
     steps:
