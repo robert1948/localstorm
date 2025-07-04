@@ -20,8 +20,10 @@ export default function Hero() {
       </p>
 
       <div className="flex flex-col sm:flex-row justify-center gap-4 mb-10">
-        <Button onClick={() => navigate("/register")}>Try for Free</Button>
-        <Button variant="outline" onClick={() => navigate("/how-it-works")}>
+        <Button type="button" onClick={() => navigate("/register")}>
+          Try for Free
+        </Button>
+        <Button type="button" variant="outline" onClick={() => navigate("/how-it-works")}>
           See How It Works
         </Button>
       </div>
@@ -40,9 +42,11 @@ export default function Hero() {
             width="1200"
             height="600"
             className="w-full h-auto"
-            fetchpriority="high"
+            loading="eager"
           />
-          <div className="py-2 text-sm text-gray-700 font-medium">Dashboard preview</div>
+          <div className="py-2 text-sm text-gray-700 font-medium">
+            Dashboard preview
+          </div>
         </motion.div>
       </div>
 
