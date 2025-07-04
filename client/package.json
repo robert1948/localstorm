@@ -11,7 +11,8 @@
     "upload": "bash scripts/upload-to-s3.sh",
     "heroku-postbuild": "npm install && npm run build && npm run upload",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy:static": "bash scripts/deploy-static-assets.sh"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
