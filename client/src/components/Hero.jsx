@@ -37,7 +37,7 @@ export default function Hero() {
           className="bg-white rounded-xl shadow-md mx-auto w-full max-w-4xl overflow-hidden"
         >
           <img
-            src="https://lightning-s3.s3.amazonaws.com/static/website/img/dashboard-preview.png"
+            src="https://lightning-s3.s3.amazonaws.com/static/website/img/static/img/dashboard-preview.png"
             alt="Screenshot of CapeControl dashboard interface"
             width="1200"
             height="600"
