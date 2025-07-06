@@ -1,28 +1,24 @@
 from fastapi import FastAPI, Request
-from fastapi.responses import FileResponse, RedirectResponse
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 import os
 
 app = FastAPI()
 
-# ✅ Absolute paths to static build output
+# ✅ Point to Vite build output directly
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_DIR = os.path.join(BASE_DIR, "static")
-INDEX_HTML = os.path.join(STATIC_DIR, "index.html")
-ASSETS_DIR = os.path.join(STATIC_DIR, "assets")
+FRONTEND_DIST = os.path.join(BASE_DIR, "..", "..", "client", "dist")
+INDEX_HTML = os.path.join(FRONTEND_DIST, "index.html")
 
-# ✅ Warn and explain if frontend build is missing (dev help)
 if not os.path.exists(INDEX_HTML):
-    raise RuntimeError(
-        f"❌ Frontend build not found: {INDEX_HTML}\n"
-        "➡️  Run `npm run build` in the client directory first."
-    )
+    raise RuntimeError(f"❌ Frontend build not found: {INDEX_HTML}\n"
+                       "➡️  Run `npm run build` in the client directory first.")
 
-# ✅ Mount static files (e.g., CSS/JS)
-if os.path.isdir(ASSETS_DIR):
-    app.mount("/assets", StaticFiles(directory=ASSETS_DIR), name="assets")
+# ✅ Serve all static files from Vite build
+app.mount("/assets", StaticFiles(directory=os.path.join(FRONTEND_DIST, "assets")), name="assets")
+app.mount("/static", StaticFiles(directory=os.path.join(FRONTEND_DIST, "static")), name="static")
 
-# ✅ Catch-all route to serve SPA
+# ✅ Serve the SPA entry point
 @app.get("/{full_path:path}")
 async def serve_spa(full_path: str, request: Request):
     return FileResponse(INDEX_HTML)

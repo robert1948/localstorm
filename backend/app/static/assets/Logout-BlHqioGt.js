@@ -1,1 +1,0 @@
-import{r as s,u as e,j as a}from"./index-CUh3vb5M.js";import{A as n}from"./AuthContext-CWElSH4T.js";function i(){const{logout:t}=s.useContext(n),o=e();return s.useEffect(()=>{t(),o("/login")},[t,o]),a.jsx("p",{className:"p-4",children:"Logging out..."})}export{i as default};

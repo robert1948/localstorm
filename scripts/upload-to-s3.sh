@@ -1,8 +1,18 @@
 #!/bin/bash
+
+# Exit on any error
 set -e
 
-echo "🔁 Uploading static assets to S3..."
+# S3 bucket and path (adjust if needed)
+BUCKET_NAME=lightning-s3
+REGION=us-east-1
+DEST_PATH=static/website/img/
 
-aws s3 sync client/public/ s3://lightning-s3/static/website/img/ --delete
+# Directory to upload
+SOURCE_DIR=dist/assets/
 
-echo "✅ Upload complete: https://lightning-s3.s3.amazonaws.com/static/website/img/"
+# Sync to S3
+echo "📤 Uploading $SOURCE_DIR to s3://$BUCKET_NAME/$DEST_PATH"
+aws s3 sync "$SOURCE_DIR" "s3://$BUCKET_NAME/$DEST_PATH" --region "$REGION" --delete
+
+echo "✅ Upload complete."

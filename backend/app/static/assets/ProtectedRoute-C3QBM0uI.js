@@ -1,1 +1,0 @@
-import{r as o,j as e,N as n}from"./index-CUh3vb5M.js";import{A as s}from"./AuthContext-CWElSH4T.js";function u({children:r}){const{user:t}=o.useContext(s);return t===void 0?e.jsx("div",{className:"p-4 text-center",children:"Checking authentication..."}):t?r:e.jsx(n,{to:"/login",replace:!0})}export{u as default};

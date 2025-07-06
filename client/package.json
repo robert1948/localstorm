@@ -3,23 +3,23 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-"scripts": {
-  "dev": "vite",
-  "start": "vite preview",
-  "build": "vite build && npm run cache-bust && npm run copy",
+  "scripts": {
+    "dev": "vite",
+    "start": "vite preview",
+    "build": "vite build && npm run cache-bust && npm run copy",
 
-  "cache-bust": "node ../scripts/cache-bust.cjs",
-  "copy": "mkdir -p ../backend/app/static && rm -rf ../backend/app/static/* && cp -a dist/. ../backend/app/static/",
+    "cache-bust": "node ../scripts/cache-bust.cjs",
+    "copy": "mkdir -p ../backend/app/static && rm -rf ../backend/app/static/* && cp -a dist/. ../backend/app/static/",
 
-  "upload": "bash ../scripts/upload-to-s3.sh",
-  "deploy:static": "bash ../scripts/deploy-static-assets.sh",
+    "upload": "bash ../scripts/upload-to-s3.sh",
+    "deploy:static": "bash ../scripts/deploy-static-assets.sh",
 
-  "heroku-postbuild": "npm install && npm run build && npm run upload",
-  "purge:cloudflare": "echo '🔄 Add curl call to Cloudflare API here'",
+    "heroku-postbuild": "npm install && npm run build && npm run upload",
+    "purge:cloudflare": "echo '🔄 Add curl call to Cloudflare API here'",
 
-  "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-  "reorganize:assets": "bash ../scripts/reorganize-assets.sh"
-},
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "reorganize:assets": "bash ../scripts/reorganize-assets.sh"
+  },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
     "axios": "^1.10.0",
