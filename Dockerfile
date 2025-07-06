@@ -3,14 +3,14 @@ FROM node:20 AS frontend
 
 WORKDIR /app
 
-# Copy frontend source
+# Copy frontend source and scripts
 COPY client/ ./client
-
-# Copy scripts used by frontend build (e.g., cache-bust)
 COPY scripts/ ./scripts
 
-# Install and build
+# Install dependencies and build
 RUN cd client && npm install && npm run build
+RUN node scripts/cache-bust.cjs
+RUN cd client && npm run copy
 
 # 2️⃣ Backend stage
 FROM python:3.11-slim AS backend
@@ -21,31 +21,29 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Set base working directory
+# Set working directory
 WORKDIR /app
 
-# Copy backend source
+# Copy backend source and requirements
 COPY backend/ ./backend
-
-# Copy Python requirements
 COPY requirements.txt .
 
 # Install Python dependencies
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Ensure static dir exists (just in case)
+# Ensure static dir exists
 RUN mkdir -p backend/app/static
 
-# Copy built frontend assets from the first stage
+# Copy built frontend assets from previous stage
 COPY --from=frontend /app/client/dist/ ./backend/app/static/
 
-# Set working directory for FastAPI app
+# Set FastAPI working directory
 WORKDIR /app/backend
 
-# Environment settings
+# Environment
 ENV PYTHONUNBUFFERED=1 \
     PYTHONPATH=/app/backend
 
-# Run FastAPI server (Heroku-compatible)
+# Launch FastAPI
 CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-5000}"]
