@@ -3,18 +3,18 @@ set -e
 
 # === Directory structure relative to client ===
 STATIC_DIR="public/static"
-IMG_DIR="$STATIC_DIR/img"
-MANIFEST_DIR="$STATIC_DIR/manifest"
-ICONS_DIR="$IMG_DIR/icons"
+IMG_DIR="$STATIC_DIR"
+ICONS_DIR="$STATIC_DIR"
+MANIFEST_FILE="public/site.webmanifest"
 S3_BUCKET="s3://lightning-s3/static/website/img"
 
 # === Upload static manifest ===
 echo "🚀 Uploading static manifest..."
-if [ -f "$MANIFEST_DIR/site.webmanifest" ]; then
-  aws s3 cp "$MANIFEST_DIR/site.webmanifest" "$S3_BUCKET/site.webmanifest" \
+if [ -f "$MANIFEST_FILE" ]; then
+  aws s3 cp "$MANIFEST_FILE" "$S3_BUCKET/site.webmanifest" \
     --content-type "application/manifest+json"
 else
-  echo "⚠️ Skipped: $MANIFEST_DIR/site.webmanifest not found."
+  echo "⚠️ Skipped: $MANIFEST_FILE not found."
 fi
 
 # === Upload dashboard preview ===
