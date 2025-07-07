@@ -10,11 +10,11 @@ const rootElement = document.getElementById('root');
 if (rootElement) {
   createRoot(rootElement).render(
     <React.StrictMode>
-      <AuthProvider> {/* ✅ Context must wrap everything */}
-        <BrowserRouter>
+      <BrowserRouter>
+        <AuthProvider> {/* ✅ Context must wrap everything */}
           <App />
-        </BrowserRouter>
-      </AuthProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </React.StrictMode>
   );
 }
