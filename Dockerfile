@@ -7,10 +7,12 @@ WORKDIR /app
 COPY client/ ./client
 COPY scripts/ ./scripts
 
+# Let scripts know we're inside Docker to avoid local-only actions
+ENV INSIDE_DOCKER=true
+
 # Install dependencies and build
 RUN cd client && npm install && npm run build
 RUN node scripts/cache-bust.cjs
-RUN cd client && npm run copy
 
 # 2️⃣ Backend stage
 FROM python:3.11-slim AS backend

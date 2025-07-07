@@ -9,7 +9,7 @@
     "build": "vite build && npm run cache-bust && npm run copy",
 
     "cache-bust": "node ../scripts/cache-bust.cjs",
-    "copy": "mkdir -p ../backend/app/static && rm -rf ../backend/app/static/* && cp -a dist/. ../backend/app/static/",
+    "copy": "if [ \"$INSIDE_DOCKER\" != \"true\" ]; then echo '📦 Copying to backend...'; mkdir -p ../backend/app/static && rm -rf ../backend/app/static/* && cp -a dist/. ../backend/app/static/; else echo '🚫 Skipping copy in Docker'; fi",
 
     "upload": "bash ../scripts/upload-to-s3.sh",
     "deploy:static": "bash ../scripts/deploy-static-assets.sh",

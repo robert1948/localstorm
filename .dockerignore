@@ -12,12 +12,12 @@ venv/
 .env
 .env.*
 
-# === Node modules & build ===
+# === Node modules & frontend build cache ===
 client/node_modules/
-client/dist/
 
-# === Backend static output ===
-backend/app/static/  # Only if you generate static files here
+# ❌ DO NOT exclude dist/ or static/ — they are needed in Docker builds!
+# client/dist/     <-- removed
+# backend/app/static/ <-- removed
 
 # === Logs ===
 *.log
@@ -32,7 +32,5 @@ backend/app/static/  # Only if you generate static files here
 .git/
 .gitignore
 
-# === Docker artifacts (optional) ===
-Dockerfile
-.dockerignore
+# === Docker local config ===
 docker-compose.override.yml
