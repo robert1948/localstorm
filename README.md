@@ -1,4 +1,4 @@
-# 🌩️ CapeControl V4
+# 🌩️ CapeControl V5
 
 CapeControl is a modern AI-powered platform designed to give individuals and businesses access to a curated suite of **agentic services** — intelligent tools that automate tasks, boost productivity, and drive innovation.
 
