@@ -12,6 +12,7 @@ jobs:
     env:
       HEROKU_APP_NAME: capecraft
       HEROKU_EMAIL: zeonita@gmail.com
+      AWS_DEFAULT_REGION: us-east-1
 
     steps:
       - name: 🔵 Checkout code
@@ -28,7 +29,7 @@ jobs:
         working-directory: client
         run: npm ci
 
-      - name: 🧩 Build frontend (prebuild + cache-bust + copy)
+      - name: 🧩 Build frontend (includes cache-bust)
         working-directory: client
         run: npm run build
 
@@ -38,7 +39,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-east-1
+          AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
 
       - name: 🐍 Set up Python (3.11)
         uses: actions/setup-python@v4
@@ -49,6 +50,7 @@ jobs:
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
           echo "$HOME/.local/share/heroku/bin" >> $GITHUB_PATH
+          export PATH="$HOME/.local/share/heroku/bin:$PATH"
 
       - name: 🔑 Login to Heroku Container Registry
         run: echo "${{ secrets.HEROKU_API_KEY }}" | docker login --username=_ --password-stdin registry.heroku.com
@@ -65,4 +67,7 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
       - name: ✅ Confirm deployment
-        run: echo "✅ Deployed to https://${{ env.HEROKU_APP_NAME }}.herokuapp.com"
+        run: |
+          echo "✅ Deployed to:"
+          echo "  🌐 https://${{ env.HEROKU_APP_NAME }}.herokuapp.com"
+          echo "  🔗 https://www.cape-control.com"
