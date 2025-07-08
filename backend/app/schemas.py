@@ -1,18 +1,41 @@
 from pydantic import BaseModel, EmailStr
+from typing import Optional
+from datetime import datetime
 
 # ----------------------------
-# Schema: User Registration
+# Schema: User Registration (Enhanced)
 # ----------------------------
 class UserCreate(BaseModel):
     """
-    Schema for creating a new user.
+    Schema for creating a new user with enhanced registration data.
     """
+    # Basic information
     email: EmailStr
     password: str
-
+    firstName: str
+    lastName: str
+    
+    # Role and company information
+    role: str  # 'user' or 'developer'
+    company: Optional[str] = None
+    phone: Optional[str] = None
+    website: Optional[str] = None
+    experience: Optional[str] = None
+    
     class Config:
         from_attributes = True
 
+# ----------------------------
+# Schema: Basic User Registration (Step 1)
+# ----------------------------
+class BasicUserCreate(BaseModel):
+    """
+    Schema for the first step of registration.
+    """
+    email: EmailStr
+    password: str
+    firstName: str
+    lastName: str
 
 # ----------------------------
 # Schema: User Login (JSON input)
