@@ -17,17 +17,10 @@ export default function HowItWorks() {
         <li>
           <strong>Sign Up:</strong> Create your account and access your dashboard.
         </li>
-        <li>
-          <strong>Choose AI Tools:</strong> Pick from a library of agents tailored to tasks like writing, scoring leads, scheduling, and more.
-        </li>
-        <li>
-          <strong>Automate & Grow:</strong> Launch agents with one click and monitor their performance via your dashboard.
-        </li>
       </ol>
 
       <div className="flex justify-center gap-4">
         <Button onClick={() => navigate("/register")}>Start Now</Button>
-        <Button variant="outline" onClick={() => navigate("/dashboard")}>View Dashboard</Button>
       </div>
     </section>
   );

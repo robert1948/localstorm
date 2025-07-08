@@ -11,6 +11,8 @@ const UserDashboard = lazy(() => import("./pages/UserDashboard"));
 const DeveloperDashboard = lazy(() => import("./pages/DeveloperDashboard"));
 const Logout = lazy(() => import("./pages/Logout"));
 const HowItWorks = lazy(() => import("./pages/HowItWorks"));
+const HowItWorksUser = lazy(() => import("./pages/HowItWorksUser"));
+const HowItWorksDeveloper = lazy(() => import("./pages/HowItWorksDeveloper"));
 const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"));
 
 export default function App() {
@@ -24,6 +26,8 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
+          <Route path="/how-it-works-user" element={<HowItWorksUser />} />
+          <Route path="/how-it-works-developer" element={<HowItWorksDeveloper />} />
           <Route
             path="/dashboard"
             element={

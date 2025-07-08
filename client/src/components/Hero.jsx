@@ -1,4 +1,16 @@
+import { useNavigate } from 'react-router-dom';
+
 export default function Hero() {
+  const navigate = useNavigate();
+
+  const handleSeeHowItWorks = () => {
+    navigate('/how-it-works');
+  };
+
+  const handleTryForFree = () => {
+    navigate('/register');
+  };
+
   return (
     <section className="pt-24 pb-16 px-4 bg-gradient-to-b from-white to-blue-50 text-center min-h-screen flex flex-col justify-center">
       <div className="max-w-4xl mx-auto">
@@ -14,10 +26,16 @@ export default function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12 px-4">
-          <button className="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors text-lg font-semibold">
+          <button 
+            onClick={handleTryForFree}
+            className="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors text-lg font-semibold"
+          >
             Try for Free
           </button>
-          <button className="border border-blue-600 text-blue-600 px-8 py-4 rounded-lg hover:bg-blue-50 transition-colors text-lg font-semibold">
+          <button 
+            onClick={handleSeeHowItWorks}
+            className="border border-blue-600 text-blue-600 px-8 py-4 rounded-lg hover:bg-blue-50 transition-colors text-lg font-semibold"
+          >
             See How It Works
           </button>
         </div>
