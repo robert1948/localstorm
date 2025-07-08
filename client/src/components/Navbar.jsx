@@ -13,13 +13,13 @@ export default function NavBar() {
             <img
               src="https://lightning-s3.s3.amazonaws.com/static/website/img/capecontrol-logo.png"
               alt="CapeControl Logo"
-              className="h-8 w-8"
+              className="h-8 w-8 hidden sm:block"
             />
             <span className="text-xl font-semibold">CapeControl</span>
           </Link>
 
-          {/* Desktop links */}
-          <div className="hidden md:flex space-x-6 items-center">
+          {/* Desktop links - hide on smaller screens */}
+          <div className="hidden lg:flex space-x-6 items-center">
             <Link to="/login" className="hover:underline py-2 px-3 rounded transition-colors hover:bg-blue-700">
               Login
             </Link>
@@ -28,8 +28,8 @@ export default function NavBar() {
             </Link>
           </div>
 
-          {/* Hamburger menu button */}
-          <div className="md:hidden">
+          {/* Hamburger menu button - show on smaller screens */}
+          <div className="lg:hidden">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               className="text-white focus:outline-none p-2 rounded hover:bg-blue-700 transition-colors"
@@ -63,7 +63,7 @@ export default function NavBar() {
 
         {/* Mobile dropdown */}
         {menuOpen && (
-          <div className="md:hidden animate-dropdown bg-blue-600 px-2 pb-3 space-y-2 border-t border-blue-500">
+          <div className="lg:hidden animate-dropdown bg-blue-600 px-2 pb-3 space-y-2 border-t border-blue-500">
             <Link
               to="/login"
               className="block py-3 px-4 text-white hover:bg-blue-700 rounded transition-colors"
