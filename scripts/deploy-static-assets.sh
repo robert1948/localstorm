@@ -24,6 +24,16 @@ else
   echo "⚠️ Skipped: $DASHBOARD not found."
 fi
 
+# === Upload main logo ===
+echo "🏷️ Uploading main logo..."
+MAIN_LOGO="$STATIC_DIR/capecontrol-logo.png"
+if [ -f "$MAIN_LOGO" ]; then
+  aws s3 cp "$MAIN_LOGO" "$S3_BUCKET/capecontrol-logo.png" --content-type "image/png"
+  echo "📤 $MAIN_LOGO ➜ $S3_BUCKET/capecontrol-logo.png"
+else
+  echo "⚠️ Skipped: $MAIN_LOGO not found."
+fi
+
 # === Upload logo variants ===
 echo "🎯 Uploading logo variants..."
 for size in 64 128 192 512; do
