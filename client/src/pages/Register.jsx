@@ -1,6 +1,42 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+// Progress Bar Component
+function ProgressBar({ currentStep, totalSteps }) {
+  const progress = (currentStep / totalSteps) * 100;
+  
+  return (
+    <div className="w-full bg-gray-200 rounded-full h-2 mt-4">
+      <div 
+        className="bg-blue-600 h-2 rounded-full transition-all duration-300 ease-in-out" 
+        style={{ width: `${progress}%` }}
+      ></div>
+    </div>
+  );
+}
+
+// Help Support Component
+function HelpSupport() {
+  return (
+    <div className="text-center mt-6">
+      <a 
+        href="#" 
+        className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800 transition-colors"
+        onClick={(e) => {
+          e.preventDefault();
+          // You can integrate with your support system here
+          alert("Support chat would open here. Contact: support@capecontrol.com");
+        }}
+      >
+        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Need Help?
+      </a>
+    </div>
+  );
+}
+
 // Step 1: Basic Registration Component
 function BasicRegistration({ onNext, formData, setFormData }) {
   const [email, setEmail] = useState(formData.email || "");
@@ -42,9 +78,7 @@ function BasicRegistration({ onNext, formData, setFormData }) {
       <div className="text-center mb-6">
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h2>
         <p className="text-gray-600">Step 1: Basic Information</p>
-        <div className="w-full bg-gray-200 rounded-full h-2 mt-4">
-          <div className="bg-blue-600 h-2 rounded-full w-1/3"></div>
-        </div>
+        <ProgressBar currentStep={1} totalSteps={3} />
       </div>
 
       {error && <p className="text-red-600 text-sm mb-4 text-center bg-red-50 p-3 rounded">{error}</p>}
@@ -121,7 +155,7 @@ function BasicRegistration({ onNext, formData, setFormData }) {
           type="submit"
           className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold"
         >
-          Continue to Role Selection
+          Continue
         </button>
       </form>
 
@@ -131,6 +165,8 @@ function BasicRegistration({ onNext, formData, setFormData }) {
           Sign in
         </a>
       </p>
+      
+      <HelpSupport />
     </div>
   );
 }
@@ -158,9 +194,7 @@ function RoleSelection({ onNext, formData, setFormData }) {
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Choose Your Role</h2>
         <p className="text-gray-600">Step 2: Select how you'll use CapeControl</p>
-        <div className="w-full bg-gray-200 rounded-full h-2 mt-4">
-          <div className="bg-blue-600 h-2 rounded-full w-2/3"></div>
-        </div>
+        <ProgressBar currentStep={2} totalSteps={3} />
       </div>
 
       <div className="grid md:grid-cols-2 gap-6 mb-8">
@@ -174,7 +208,11 @@ function RoleSelection({ onNext, formData, setFormData }) {
           onClick={() => handleRoleSelect("user")}
         >
           <div className="text-center">
-            <div className="text-4xl mb-4">👤</div>
+            <div className="flex justify-center mb-4">
+              <svg className="w-12 h-12 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+            </div>
             <h3 className="text-xl font-semibold mb-2">User</h3>
             <p className="text-gray-600 text-sm">
               I want to use AI agents to automate tasks and boost productivity for my business.
@@ -198,7 +236,11 @@ function RoleSelection({ onNext, formData, setFormData }) {
           onClick={() => handleRoleSelect("developer")}
         >
           <div className="text-center">
-            <div className="text-4xl mb-4">⚡</div>
+            <div className="flex justify-center mb-4">
+              <svg className="w-12 h-12 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+              </svg>
+            </div>
             <h3 className="text-xl font-semibold mb-2">Developer</h3>
             <p className="text-gray-600 text-sm">
               I want to create and sell AI agents on the CapeControl marketplace.
@@ -224,6 +266,8 @@ function RoleSelection({ onNext, formData, setFormData }) {
       >
         Continue to Details
       </button>
+      
+      <HelpSupport />
     </div>
   );
 }
@@ -272,9 +316,7 @@ function DetailedRegistration({ formData, setFormData, onSubmit }) {
         <p className="text-gray-600">
           Step 3: {formData.role === "user" ? "Business" : "Developer"} Details
         </p>
-        <div className="w-full bg-gray-200 rounded-full h-2 mt-4">
-          <div className="bg-blue-600 h-2 rounded-full w-full"></div>
-        </div>
+        <ProgressBar currentStep={3} totalSteps={3} />
       </div>
 
       {error && <p className="text-red-600 text-sm mb-4 text-center bg-red-50 p-3 rounded">{error}</p>}
@@ -365,6 +407,8 @@ function DetailedRegistration({ formData, setFormData, onSubmit }) {
           {loading ? "Creating Account..." : "Create Account"}
         </button>
       </form>
+      
+      <HelpSupport />
     </div>
   );
 }
