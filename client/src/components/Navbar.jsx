@@ -5,11 +5,11 @@ export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 h-16 bg-blue-600 dark:bg-gray-900 text-white shadow-md z-50">
+    <nav className="fixed top-0 left-0 right-0 h-16 bg-blue-600 dark:bg-gray-900 text-white shadow-lg z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo + Brand */}
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2 py-2">
             <img
               src="https://lightning-s3.s3.amazonaws.com/static/website/img/capecontrol-logo.png"
               alt="CapeControl Logo"
@@ -20,15 +20,19 @@ export default function NavBar() {
 
           {/* Desktop links */}
           <div className="hidden md:flex space-x-6 items-center">
-            <Link to="/login" className="hover:underline">Login</Link>
-            <Link to="/register" className="hover:underline">Register</Link>
+            <Link to="/login" className="hover:underline py-2 px-3 rounded transition-colors hover:bg-blue-700">
+              Login
+            </Link>
+            <Link to="/register" className="hover:underline py-2 px-3 rounded transition-colors hover:bg-blue-700">
+              Register
+            </Link>
           </div>
 
           {/* Hamburger menu button */}
           <div className="md:hidden">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="text-white focus:outline-none"
+              className="text-white focus:outline-none p-2 rounded hover:bg-blue-700 transition-colors"
               aria-label="Toggle menu"
             >
               <svg
@@ -59,17 +63,17 @@ export default function NavBar() {
 
         {/* Mobile dropdown */}
         {menuOpen && (
-          <div className="md:hidden animate-dropdown bg-blue-600 px-2 pb-3 space-y-1">
+          <div className="md:hidden animate-dropdown bg-blue-600 px-2 pb-3 space-y-2 border-t border-blue-500">
             <Link
               to="/login"
-              className="block py-2 text-white hover:underline"
+              className="block py-3 px-4 text-white hover:bg-blue-700 rounded transition-colors"
               onClick={() => setMenuOpen(false)}
             >
               Login
             </Link>
             <Link
               to="/register"
-              className="block py-2 text-white hover:underline"
+              className="block py-3 px-4 text-white hover:bg-blue-700 rounded transition-colors"
               onClick={() => setMenuOpen(false)}
             >
               Register
