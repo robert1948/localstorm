@@ -29,6 +29,9 @@ export default function Hero() {
             alt="CapeControl Dashboard Preview"
             className="w-full h-auto"
             loading="lazy"
+            decoding="async"
+            width="800"
+            height="600"
           />
           <div className="py-3 text-sm text-gray-700 font-medium">Dashboard preview</div>
         </div>
