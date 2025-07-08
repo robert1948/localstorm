@@ -1,6 +1,6 @@
 export default function Hero() {
   return (
-    <section className="pt-20 pb-16 px-4 bg-gradient-to-b from-white to-blue-50 text-center min-h-screen flex flex-col justify-center">
+    <section className="pt-24 pb-16 px-4 bg-gradient-to-b from-white to-blue-50 text-center min-h-screen flex flex-col justify-center">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-blue-700 mb-6 leading-tight px-2">
           Empower Your Business with AI Agents—

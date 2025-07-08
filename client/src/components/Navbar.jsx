@@ -5,25 +5,25 @@ export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 h-16 bg-blue-600 dark:bg-gray-900 text-white shadow-lg z-50">
+    <nav className="fixed top-0 left-0 right-0 h-20 bg-blue-600 dark:bg-gray-900 text-white shadow-lg z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo + Brand */}
           <Link to="/" className="flex items-center space-x-2 py-2">
             <img
               src="https://lightning-s3.s3.amazonaws.com/static/website/img/capecontrol-logo.png"
               alt="CapeControl Logo"
-              className="h-8 w-8 hidden sm:block"
+              className="h-10 w-10 hidden sm:block"
             />
-            <span className="text-xl font-semibold">CapeControl</span>
+            <span className="text-2xl font-bold">CapeControl</span>
           </Link>
 
           {/* Desktop links - hide on smaller screens */}
           <div className="hidden lg:flex space-x-6 items-center">
-            <Link to="/login" className="hover:underline py-2 px-3 rounded transition-colors hover:bg-blue-700">
+            <Link to="/login" className="hover:underline py-3 px-4 rounded transition-colors hover:bg-blue-700 text-lg font-medium">
               Login
             </Link>
-            <Link to="/register" className="hover:underline py-2 px-3 rounded transition-colors hover:bg-blue-700">
+            <Link to="/register" className="hover:underline py-3 px-4 rounded transition-colors hover:bg-blue-700 text-lg font-medium">
               Register
             </Link>
           </div>
@@ -32,11 +32,11 @@ export default function NavBar() {
           <div className="lg:hidden">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="text-white focus:outline-none p-2 rounded hover:bg-blue-700 transition-colors"
+              className="text-white focus:outline-none p-3 rounded hover:bg-blue-700 transition-colors"
               aria-label="Toggle menu"
             >
               <svg
-                className="w-6 h-6"
+                className="w-7 h-7"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -66,14 +66,14 @@ export default function NavBar() {
           <div className="lg:hidden animate-dropdown bg-blue-600 px-2 pb-3 space-y-2 border-t border-blue-500">
             <Link
               to="/login"
-              className="block py-3 px-4 text-white hover:bg-blue-700 rounded transition-colors"
+              className="block py-4 px-4 text-white hover:bg-blue-700 rounded transition-colors text-lg font-medium"
               onClick={() => setMenuOpen(false)}
             >
               Login
             </Link>
             <Link
               to="/register"
-              className="block py-3 px-4 text-white hover:bg-blue-700 rounded transition-colors"
+              className="block py-4 px-4 text-white hover:bg-blue-700 rounded transition-colors text-lg font-medium"
               onClick={() => setMenuOpen(false)}
             >
               Register
