@@ -2,9 +2,13 @@ from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from app.routes import auth
 import os
 
 app = FastAPI()
+
+# Include routers
+app.include_router(auth.router, prefix="/api")
 
 # Add CORS middleware
 app.add_middleware(
