@@ -122,6 +122,33 @@ async def enhanced_health_check():
     }
 
 # ================================
+# Debug Endpoint
+# ================================
+
+@router.get("/debug/db-test")
+async def debug_database_test(db: Session = Depends(get_db)):
+    """Debug endpoint to test database connectivity with enhanced models"""
+    try:
+        # Test if we can query the users_v2 table
+        user_count = db.query(UserV2).count()
+        
+        # Test enum values
+        enum_values = [role.value for role in UserRole]
+        
+        return {
+            "status": "success",
+            "users_v2_count": user_count,
+            "enum_values": enum_values,
+            "database_connected": True
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "error": str(e),
+            "database_connected": False
+        }
+
+# ================================
 # Authentication Endpoints
 # ================================
 
