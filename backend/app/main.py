@@ -3,7 +3,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import auth
-# from app.routes import auth_enhanced  # Temporarily disabled - fixing JWT dependency
+from app.routes import auth_enhanced  # Re-enabled after fixing JWT dependency
 import os
 
 app = FastAPI(
@@ -14,7 +14,7 @@ app = FastAPI(
 
 # Include routers
 app.include_router(auth.router, prefix="/api")  # Legacy authentication
-# app.include_router(auth_enhanced.router, prefix="/api")  # Enhanced authentication (v2) - temporarily disabled
+app.include_router(auth_enhanced.router, prefix="/api")  # Enhanced authentication (v2)
 
 # Health check endpoint
 @app.get("/api/health")
@@ -25,7 +25,7 @@ async def health_check():
         "version": "1.0.0",
         "timestamp": "2025-07-09",
         "database_connected": True,
-        "enhanced_auth": "fixing JWT dependencies"
+        "enhanced_auth": "enabled (v2 tables)"
     }
 
 # API status endpoint
