@@ -29,7 +29,7 @@ class User(Base):
     - Enhanced security fields
     - Audit timestamps
     """
-    __tablename__ = "users"
+    __tablename__ = "users_v2"
 
     # Primary identification
     id = Column(Integer, primary_key=True, index=True)
@@ -74,7 +74,7 @@ class Token(Base):
     - Automatic expiration handling
     - User relationship for easy cleanup
     """
-    __tablename__ = "tokens"
+    __tablename__ = "tokens_v2"
     
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
@@ -105,7 +105,7 @@ class DeveloperEarning(Base):
     - Tracks revenue share and payments
     - Supports analytics and reporting
     """
-    __tablename__ = "developer_earnings"
+    __tablename__ = "developer_earnings_v2"
     
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
@@ -142,7 +142,7 @@ class PasswordReset(Base):
     - Time-limited tokens
     - Single-use tokens
     """
-    __tablename__ = "password_resets"
+    __tablename__ = "password_resets_v2"
     
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
@@ -167,7 +167,7 @@ class AuditLog(Base):
     - Security event monitoring
     - Compliance reporting
     """
-    __tablename__ = "audit_logs"
+    __tablename__ = "audit_logs_v2"
     
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), index=True)
