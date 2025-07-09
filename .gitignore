@@ -7,19 +7,58 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# === Python logs & cache ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
 # === Dependency Directories ===
 node_modules/
 backend/.venv/  # Python virtual environment
+backend/venv/
+backend/env/
+
+# === Database files ===
+*.db
+*.sqlite
+*.sqlite3
+capecontrol.db
+backend/capecontrol.db
+
+# === Authentication & Security ===
+backend/.env
+backend/.env.*
+.env
+.env.*          # .env.local, .env.development, etc.
+*.key
+*.pem
+*.crt
+secrets/
+auth_keys/
 
 # === Build Outputs ===
 dist/
 dist-ssr/
 *.local
+build/
+backend/static/assets/  # Generated assets only, keep static templates
 
 # === Optional Runtime Data ===
 *.pid
 *.seed
 *.pid.lock
+
+# === Testing ===
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+coverage.xml
+*.cover
 
 # === Editor Settings ===
 .vscode/
@@ -33,10 +72,10 @@ dist-ssr/
 *.sln
 *.sw?
 
-# === Env Variables ===
-.env
-.env.*          # .env.local, .env.development, etc.
-backend/.env
-
 # === Docker ===
 docker-compose.override.yml
+
+# === Migration & Demo files (keep for reference but exclude data) ===
+# Keep migration scripts but exclude generated data
+backend/test_data.json
+backend/demo_users.json

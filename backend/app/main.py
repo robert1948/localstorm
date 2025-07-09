@@ -3,12 +3,18 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import auth
+from app.routes import auth_enhanced
 import os
 
-app = FastAPI()
+app = FastAPI(
+    title="CapeControl API",
+    description="Secure, scalable authentication system for CapeControl",
+    version="1.0.0"
+)
 
 # Include routers
-app.include_router(auth.router, prefix="/api")
+app.include_router(auth.router, prefix="/api")  # Keep existing auth for migration
+app.include_router(auth_enhanced.router)  # New enhanced authentication system
 
 # Add CORS middleware
 app.add_middleware(
