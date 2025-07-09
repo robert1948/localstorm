@@ -184,7 +184,7 @@ class AuditLog(Base):
     # Status and metadata
     success = Column(Boolean, nullable=False)
     error_message = Column(Text)
-    metadata = Column(Text)  # JSON string for additional data
+    event_metadata = Column(Text)  # JSON string for additional data
     
     # Timestamp
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
