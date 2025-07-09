@@ -107,6 +107,21 @@ def get_client_info(request: Request) -> dict:
     }
 
 # ================================
+# Health Check Endpoint
+# ================================
+
+@router.get("/health")
+async def enhanced_health_check():
+    """Enhanced API health check"""
+    return {
+        "status": "healthy",
+        "service": "Enhanced Authentication API",
+        "version": "2.0.0",
+        "timestamp": datetime.utcnow().isoformat(),
+        "features": ["JWT", "Role-based access", "Audit logging", "Developer earnings"]
+    }
+
+# ================================
 # Authentication Endpoints
 # ================================
 
