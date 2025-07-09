@@ -3,7 +3,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import auth
-from app.routes import auth_enhanced
+# from app.routes import auth_enhanced  # Disabled to prevent table conflicts
 import os
 
 app = FastAPI(
@@ -13,8 +13,10 @@ app = FastAPI(
 )
 
 # Include routers
-app.include_router(auth.router, prefix="/api")  # Keep existing auth for migration
-app.include_router(auth_enhanced.router)  # New enhanced authentication system
+app.include_router(auth.router, prefix="/api")  # Keep existing auth for now
+
+# TODO: Enable enhanced auth after database migration
+# app.include_router(auth_enhanced.router)  # New enhanced authentication system
 
 # Add CORS middleware
 app.add_middleware(
