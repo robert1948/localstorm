@@ -14,7 +14,7 @@ app = FastAPI(
 
 # Include routers
 app.include_router(auth.router, prefix="/api")  # Legacy authentication
-app.include_router(auth_enhanced.router, prefix="/api")  # Enhanced authentication (v2)
+app.include_router(auth_enhanced.router)  # Enhanced authentication (already has /api/enhanced prefix)
 
 # Health check endpoint
 @app.get("/api/health")
