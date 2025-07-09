@@ -3,7 +3,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import auth
-# from app.routes import auth_enhanced  # Disabled to prevent table conflicts
+from app.routes import auth_enhanced  # Re-enabled after successful migration
 import os
 
 app = FastAPI(
@@ -13,7 +13,8 @@ app = FastAPI(
 )
 
 # Include routers
-app.include_router(auth.router, prefix="/api")  # Keep existing auth for now
+app.include_router(auth.router, prefix="/api")  # Legacy authentication
+app.include_router(auth_enhanced.router, prefix="/api")  # Enhanced authentication (v2)
 
 # Health check endpoint
 @app.get("/api/health")
