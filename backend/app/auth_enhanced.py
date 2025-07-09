@@ -10,12 +10,12 @@ This service implements the secure authentication architecture with:
 - Audit logging
 """
 
-import jwt
 import secrets
 import hashlib
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
 from passlib.context import CryptContext
+from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from app.models_enhanced import User, Token, PasswordReset, AuditLog, UserRole
