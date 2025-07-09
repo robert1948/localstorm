@@ -19,7 +19,7 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 from datetime import datetime
 
-from app.models_enhanced import User, DeveloperEarning, UserRole
+from app.models_enhanced import UserV2, DeveloperEarning, UserRole
 from app.schemas_enhanced import (
     UserCreate, UserLogin, UserResponse, TokenResponse, TokenRefresh,
     PasswordResetRequest, PasswordResetConfirm, PasswordResetResponse,
@@ -38,7 +38,7 @@ security = HTTPBearer()
 # ================================
 
 def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security), 
-                    db: Session = Depends(get_db)) -> User:
+                    db: Session = Depends(get_db)) -> UserV2:
     """Get current authenticated user from JWT token"""
     token = credentials.credentials
     
@@ -62,7 +62,7 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
         )
     
     # Get user
-    user = db.query(User).filter(User.id == user_id).first()
+    user = db.query(UserV2).filter(UserV2.id == user_id).first()
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -81,7 +81,7 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
     
     return user
 
-def require_developer(current_user: User = Depends(get_current_user)) -> User:
+def require_developer(current_user: UserV2 = Depends(get_current_user)) -> UserV2:
     """Require user to be a developer"""
     if current_user.role != UserRole.DEVELOPER:
         raise HTTPException(
@@ -90,7 +90,7 @@ def require_developer(current_user: User = Depends(get_current_user)) -> User:
         )
     return current_user
 
-def require_admin(current_user: User = Depends(get_current_user)) -> User:
+def require_admin(current_user: UserV2 = Depends(get_current_user)) -> UserV2:
     """Require user to be an admin"""
     if current_user.role != UserRole.ADMIN:
         raise HTTPException(
@@ -121,7 +121,7 @@ async def register(
     
     try:
         # Check if user already exists
-        existing_user = db.query(User).filter(User.email == user_data.email).first()
+        existing_user = db.query(UserV2).filter(UserV2.email == user_data.email).first()
         if existing_user:
             auth_service.log_event(
                 db, None, "register_attempt", 
@@ -137,7 +137,7 @@ async def register(
         # Create new user
         hashed_password = auth_service.get_password_hash(user_data.password)
         
-        db_user = User(
+        db_user = UserV2(
             email=user_data.email,
             password_hash=hashed_password,
             first_name=user_data.first_name,
@@ -285,7 +285,7 @@ def refresh_token(
 @router.post("/logout", response_model=ApiResponse)
 def logout(
     request: Request,
-    current_user: User = Depends(get_current_user),
+    current_user: UserV2 = Depends(get_current_user),
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db)
 ):
@@ -320,7 +320,7 @@ def logout(
 @router.post("/logout-all", response_model=ApiResponse)
 def logout_all(
     request: Request,
-    current_user: User = Depends(get_current_user),
+    current_user: UserV2 = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Logout from all devices (revoke all tokens)"""
@@ -366,7 +366,7 @@ async def request_password_reset(
     
     try:
         # Find user
-        user = db.query(User).filter(User.email == reset_data.email).first()
+        user = db.query(UserV2).filter(UserV2.email == reset_data.email).first()
         if not user:
             # Don't reveal if email exists
             return PasswordResetResponse(
@@ -448,7 +448,7 @@ def confirm_password_reset(
 # ================================
 
 @router.get("/me", response_model=UserResponse)
-def get_current_user_profile(current_user: User = Depends(get_current_user)):
+def get_current_user_profile(current_user: UserV2 = Depends(get_current_user)):
     """Get current user profile"""
     return UserResponse.from_orm(current_user)
 
@@ -456,7 +456,7 @@ def get_current_user_profile(current_user: User = Depends(get_current_user)):
 def update_user_profile(
     user_update: UserUpdate,
     request: Request,
-    current_user: User = Depends(get_current_user),
+    current_user: UserV2 = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Update user profile"""
@@ -498,7 +498,7 @@ def update_user_profile(
 def change_password(
     password_data: PasswordChange,
     request: Request,
-    current_user: User = Depends(get_current_user),
+    current_user: UserV2 = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Change user password"""
@@ -550,7 +550,7 @@ def change_password(
 
 @router.get("/developer/earnings", response_model=DeveloperEarningsSummary)
 def get_developer_earnings(
-    current_user: User = Depends(require_developer),
+    current_user: UserV2 = Depends(require_developer),
     db: Session = Depends(get_db)
 ):
     """Get developer earnings summary"""

@@ -21,7 +21,7 @@ class UserRole(str, enum.Enum):
     DEVELOPER = "developer" 
     ADMIN = "admin"
 
-class User(Base):
+class UserV2(Base):
     """
     Enhanced Users table with secure architecture
     - Proper role enum with customer/developer/admin
@@ -96,7 +96,7 @@ class Token(Base):
     ip_address = Column(String(45))  # IPv6 compatible
     
     # Relationships
-    user = relationship("User", back_populates="tokens")
+    user = relationship("UserV2", back_populates="tokens")
 
 class DeveloperEarning(Base):
     """
@@ -133,7 +133,7 @@ class DeveloperEarning(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     
     # Relationships
-    user = relationship("User", back_populates="developer_earnings")
+    user = relationship("UserV2", back_populates="developer_earnings")
 
 class PasswordReset(Base):
     """

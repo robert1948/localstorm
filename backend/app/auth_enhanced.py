@@ -18,7 +18,7 @@ from passlib.context import CryptContext
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
-from app.models_enhanced import User, Token, PasswordReset, AuditLog, UserRole
+from app.models_enhanced import UserV2, Token, PasswordReset, AuditLog, UserRole
 from app.schemas_enhanced import UserCreate, TokenResponse, UserResponse
 import os
 
@@ -99,9 +99,9 @@ class AuthService:
     # User Authentication
     # ================================
     
-    def authenticate_user(self, db: Session, email: str, password: str) -> Optional[User]:
+    def authenticate_user(self, db: Session, email: str, password: str) -> Optional[UserV2]:
         """Authenticate a user by email and password"""
-        user = db.query(User).filter(User.email == email).first()
+        user = db.query(UserV2).filter(UserV2.email == email).first()
         if not user:
             return None
         if not self.verify_password(password, user.password_hash):
@@ -113,7 +113,7 @@ class AuthService:
             )
         return user
     
-    def create_user_tokens(self, db: Session, user: User, user_agent: str = None, ip_address: str = None) -> TokenResponse:
+    def create_user_tokens(self, db: Session, user: UserV2, user_agent: str = None, ip_address: str = None) -> TokenResponse:
         """Create access and refresh tokens for a user"""
         # Create token payload
         token_data = {
@@ -187,7 +187,7 @@ class AuthService:
             )
         
         # Get user
-        user = db.query(User).filter(User.id == user_id).first()
+        user = db.query(UserV2).filter(UserV2.id == user_id).first()
         if not user or not user.is_active:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -253,7 +253,7 @@ class AuthService:
         """Generate a secure reset token"""
         return secrets.token_urlsafe(32)
     
-    def create_password_reset(self, db: Session, user: User, ip_address: str = None, user_agent: str = None) -> str:
+    def create_password_reset(self, db: Session, user: UserV2, ip_address: str = None, user_agent: str = None) -> str:
         """Create a password reset token"""
         # Invalidate existing reset tokens
         db.query(PasswordReset).filter(
@@ -277,7 +277,7 @@ class AuthService:
         
         return reset_token
     
-    def verify_reset_token(self, db: Session, token: str) -> User:
+    def verify_reset_token(self, db: Session, token: str) -> UserV2:
         """Verify a password reset token and return the user"""
         db_reset = db.query(PasswordReset).filter(
             PasswordReset.token == token,
@@ -291,7 +291,7 @@ class AuthService:
                 detail="Invalid or expired reset token"
             )
         
-        user = db.query(User).filter(User.id == db_reset.user_id).first()
+        user = db.query(UserV2).filter(UserV2.id == db_reset.user_id).first()
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
