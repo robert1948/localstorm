@@ -17,9 +17,9 @@ from app.database import Base
 
 # Define role enum for type safety
 class UserRole(str, enum.Enum):
-    CUSTOMER = "customer"
-    DEVELOPER = "developer" 
-    ADMIN = "admin"
+    CUSTOMER = "CUSTOMER"
+    DEVELOPER = "DEVELOPER" 
+    ADMIN = "ADMIN"
 
 class UserV2(Base):
     """

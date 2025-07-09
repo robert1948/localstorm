@@ -18,9 +18,9 @@ from enum import Enum
 
 # Role enum for validation
 class UserRole(str, Enum):
-    CUSTOMER = "customer"
-    DEVELOPER = "developer"
-    ADMIN = "admin"
+    CUSTOMER = "CUSTOMER"
+    DEVELOPER = "DEVELOPER"
+    ADMIN = "ADMIN"
 
 class TokenType(str, Enum):
     ACCESS = "access"
@@ -47,6 +47,20 @@ class UserCreate(BaseModel):
     def validate_password(cls, v):
         if len(v) < 8:
             raise ValueError('Password must be at least 8 characters long')
+        return v
+    
+    @validator('role', pre=True)
+    def normalize_role(cls, v):
+        """Accept both uppercase and lowercase role values"""
+        if isinstance(v, str):
+            v = v.upper()
+            # Map to valid enum values
+            role_mapping = {
+                'CUSTOMER': UserRole.CUSTOMER,
+                'DEVELOPER': UserRole.DEVELOPER,
+                'ADMIN': UserRole.ADMIN
+            }
+            return role_mapping.get(v, v)
         return v
     
     @validator('role')
