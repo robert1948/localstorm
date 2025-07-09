@@ -30,7 +30,7 @@ from app.auth_enhanced import auth_service
 from app.dependencies import get_db
 from app.email_service import email_service
 
-router = APIRouter(prefix="/api/auth", tags=["authentication"])
+router = APIRouter(prefix="/api/enhanced", tags=["enhanced-authentication"])
 security = HTTPBearer()
 
 # ================================
