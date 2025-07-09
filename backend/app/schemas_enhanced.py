@@ -10,7 +10,7 @@ This file implements schemas for the proposed secure authentication architecture
 - Audit logging
 """
 
-from pydantic import BaseModel, EmailStr, validator
+from pydantic import BaseModel, EmailStr, validator, Field
 from typing import Optional, List
 from datetime import datetime
 from decimal import Decimal
@@ -35,8 +35,8 @@ class UserCreate(BaseModel):
     """Schema for user registration"""
     email: EmailStr
     password: str
-    first_name: str
-    last_name: str
+    first_name: str = Field(..., alias="firstName")
+    last_name: str = Field(..., alias="lastName")
     role: UserRole
     company: Optional[str] = None
     phone: Optional[str] = None
