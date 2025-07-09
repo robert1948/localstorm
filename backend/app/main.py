@@ -15,6 +15,28 @@ app = FastAPI(
 # Include routers
 app.include_router(auth.router, prefix="/api")  # Keep existing auth for now
 
+# Health check endpoint
+@app.get("/api/health")
+async def health_check():
+    return {
+        "status": "healthy",
+        "message": "CapeControl API is running",
+        "version": "1.0.0",
+        "timestamp": "2025-07-09",
+        "database_connected": True,
+        "enhanced_auth": "disabled (migration pending)"
+    }
+
+# API status endpoint
+@app.get("/api/")
+async def api_root():
+    return {
+        "message": "CapeControl API",
+        "status": "operational",
+        "docs": "/docs",
+        "health": "/api/health"
+    }
+
 # TODO: Enable enhanced auth after database migration
 # app.include_router(auth_enhanced.router)  # New enhanced authentication system
 
