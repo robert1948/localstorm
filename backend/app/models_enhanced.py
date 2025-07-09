@@ -77,7 +77,7 @@ class Token(Base):
     __tablename__ = "tokens_v2"
     
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    user_id = Column(Integer, ForeignKey("users_v2.id", ondelete="CASCADE"), nullable=False, index=True)
     
     # Token details
     token = Column(String(500), nullable=False, index=True)  # JWT or session token
@@ -108,7 +108,7 @@ class DeveloperEarning(Base):
     __tablename__ = "developer_earnings_v2"
     
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    user_id = Column(Integer, ForeignKey("users_v2.id", ondelete="CASCADE"), nullable=False, index=True)
     
     # AI Agent identification
     agent_id = Column(String(100), nullable=False, index=True)  # Identifier for the AI agent
@@ -145,7 +145,7 @@ class PasswordReset(Base):
     __tablename__ = "password_resets_v2"
     
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    user_id = Column(Integer, ForeignKey("users_v2.id", ondelete="CASCADE"), nullable=False, index=True)
     
     # Reset token details
     token = Column(String(255), nullable=False, unique=True, index=True)
@@ -170,7 +170,7 @@ class AuditLog(Base):
     __tablename__ = "audit_logs_v2"
     
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), index=True)
+    user_id = Column(Integer, ForeignKey("users_v2.id", ondelete="SET NULL"), index=True)
     
     # Event details
     event_type = Column(String(50), nullable=False, index=True)  # 'login', 'register', 'password_change', etc.
