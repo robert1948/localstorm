@@ -3,17 +3,17 @@ from pydantic import Field, field_validator
 from typing import List
 
 class Settings(BaseSettings):
-    project_name: str = Field("Tailstorm", alias="PROJECT_NAME")
-    postgres_db: str = Field(..., alias="POSTGRES_DB")
-    postgres_user: str = Field(..., alias="POSTGRES_USER")
-    postgres_password: str = Field(..., alias="POSTGRES_PASSWORD")
-    secret_key: str = Field(..., alias="SECRET_KEY")
+    project_name: str = Field("CapeControl", alias="PROJECT_NAME")
+    postgres_db: str = Field("capecontrol", alias="POSTGRES_DB")
+    postgres_user: str = Field("capecontrol_user", alias="POSTGRES_USER")
+    postgres_password: str = Field("dev-password-123", alias="POSTGRES_PASSWORD")
+    secret_key: str = Field("dev-secret-key-change-in-production", alias="SECRET_KEY")
     env: str = Field("development", alias="ENV")
     debug: bool = Field(True, alias="DEBUG")
     allowed_hosts: List[str] = Field(default_factory=list, alias="ALLOWED_HOSTS")
-    cors_origins: List[str] = Field(default_factory=list, alias="CORS_ORIGINS")  # ← Add this
-    api_url: str = Field(..., alias="API_URL")
-    database_url: str = Field(..., alias="DATABASE_URL")
+    cors_origins: List[str] = Field(default_factory=list, alias="CORS_ORIGINS")
+    api_url: str = Field("http://localhost:8000", alias="API_URL")
+    database_url: str = Field("sqlite:///./capecontrol.db", alias="DATABASE_URL")
 
     @field_validator("allowed_hosts", mode="before")
     @classmethod

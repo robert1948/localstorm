@@ -2,9 +2,12 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-# Patch Heroku DATABASE_URL if needed
-raw_db_url = os.getenv('DATABASE_URL', 'postgresql://postgres:stinkie@localhost:5432/capecontrol')
-DATABASE_URL = raw_db_url.replace("postgres://", "postgresql://", 1)
+# Get DATABASE_URL from environment with fallback to SQLite for development
+DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///./capecontrol.db')
+
+# For PostgreSQL URLs from Heroku, fix the protocol if needed
+if DATABASE_URL.startswith('postgres://'):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 # Create the SQLAlchemy engine
 engine = create_engine(DATABASE_URL)

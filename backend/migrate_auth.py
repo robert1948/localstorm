@@ -19,7 +19,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from app.config import get_database_url
 from app.database import engine, Base
 from app.models import User as OldUser  # Existing user model
-from app.models_enhanced import User as NewUser, UserRole, Token, DeveloperEarning, PasswordReset, AuditLog
+from app.models_enhanced import UserV2 as NewUser, UserRole, Token, DeveloperEarning, PasswordReset, AuditLog
 from app.auth_enhanced import auth_service
 
 # Set up logging
@@ -56,7 +56,7 @@ def migrate_existing_users():
         # Sample admin user
         admin_user = NewUser(
             email="admin@capecontrol.com",
-            password_hash=auth_service.hash_password("AdminPassword123!"),
+            password_hash=auth_service.get_password_hash("AdminPassword123!"),
             role=UserRole.ADMIN,
             first_name="System",
             last_name="Administrator",
@@ -71,7 +71,7 @@ def migrate_existing_users():
         # Sample developer user
         developer_user = NewUser(
             email="developer@capecontrol.com",
-            password_hash=auth_service.hash_password("DevPassword123!"),
+            password_hash=auth_service.get_password_hash("DevPassword123!"),
             role=UserRole.DEVELOPER,
             first_name="Jane",
             last_name="Developer",

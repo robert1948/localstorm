@@ -239,6 +239,57 @@ async def register(
             detail="Registration failed"
         )
 
+@router.post("/register-simple", response_model=TokenResponse)
+async def register_simple(
+    user_data: UserCreate, 
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    """Simplified registration for testing (no email notification)"""
+    client_info = get_client_info(request)
+    
+    try:
+        # Check if user already exists
+        existing_user = db.query(UserV2).filter(UserV2.email == user_data.email).first()
+        if existing_user:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Email already registered"
+            )
+        
+        # Create new user
+        hashed_password = auth_service.get_password_hash(user_data.password)
+        
+        db_user = UserV2(
+            email=user_data.email,
+            password_hash=hashed_password,
+            first_name=user_data.first_name,
+            last_name=user_data.last_name,
+            role=user_data.role,
+            company=user_data.company,
+            phone=user_data.phone,
+            website=user_data.website,
+            experience=user_data.experience,
+            terms_accepted_at=datetime.utcnow()
+        )
+        
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        
+        # Create tokens
+        tokens = auth_service.create_user_tokens(db, db_user, **client_info)
+        
+        return tokens
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Registration failed: {str(e)}"
+        )
+
 @router.post("/login", response_model=TokenResponse)
 def login(
     credentials: UserLogin, 
