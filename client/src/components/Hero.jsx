@@ -12,102 +12,82 @@ export default function Hero() {
   };
 
   return (
-    <section className="pt-24 pb-16 px-4 bg-gradient-to-b from-white to-blue-50 text-center min-h-screen flex flex-col justify-center">
+    <section className="pt-20 pb-12 lg:pt-24 lg:pb-16 px-4 bg-gradient-to-b from-white to-blue-50 text-center min-h-screen flex flex-col justify-center">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-blue-700 mb-6 leading-tight px-2">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-blue-700 mb-4 lg:mb-6 leading-tight px-2">
           Where Intelligence Meets Impact—
           <br className="hidden sm:inline" />
           <span className="text-blue-600">AI Accessible to Everyone.</span>
         </h1>
 
-        <p className="text-gray-600 max-w-2xl mx-auto mb-8 text-base sm:text-lg md:text-xl px-4 leading-relaxed">
+        <p className="text-gray-600 max-w-2xl mx-auto mb-6 lg:mb-8 text-base sm:text-lg md:text-xl px-4 leading-relaxed">
           Democratizing artificial intelligence through our platform that bridges human ambition and technological possibility. 
           Access cutting-edge AI-agents while empowering developers to innovate and earn.
         </p>
 
-        <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12 px-4">
+        <div className="flex flex-col sm:flex-row justify-center gap-3 lg:gap-4 mb-8 lg:mb-12 px-4">
           <button 
             onClick={handleTryForFree}
-            className="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors text-lg font-semibold"
+            className="bg-blue-600 text-white px-6 py-3 lg:px-8 lg:py-4 rounded-lg hover:bg-blue-700 transition-colors text-base lg:text-lg font-semibold"
           >
             Get Started Free
           </button>
           <button 
             onClick={() => navigate('/developers')}
-            className="bg-purple-600 text-white px-8 py-4 rounded-lg hover:bg-purple-700 transition-colors text-lg font-semibold"
+            className="bg-purple-600 text-white px-6 py-3 lg:px-8 lg:py-4 rounded-lg hover:bg-purple-700 transition-colors text-base lg:text-lg font-semibold"
           >
             Join as Developer
           </button>
           <button 
             onClick={handleSeeHowItWorks}
-            className="border border-blue-600 text-blue-600 px-8 py-4 rounded-lg hover:bg-blue-50 transition-colors text-lg font-semibold"
+            className="border border-blue-600 text-blue-600 px-6 py-3 lg:px-8 lg:py-4 rounded-lg hover:bg-blue-50 transition-colors text-base lg:text-lg font-semibold"
           >
             See How It Works
           </button>
         </div>
 
-        {/* Hero visual - hide on mobile, show on tablet and up */}
-        <div className="hidden md:block bg-white rounded-xl shadow-lg mx-auto w-full max-w-3xl overflow-hidden mb-8">
-          {/* Clean, minimalist AI representation */}
-          <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-16 text-center relative overflow-hidden">
-            {/* Background pattern */}
-            <div className="absolute inset-0 opacity-5">
-              <div className="absolute top-4 left-4 w-2 h-2 bg-blue-400 rounded-full"></div>
-              <div className="absolute top-8 right-12 w-1 h-1 bg-purple-400 rounded-full"></div>
-              <div className="absolute bottom-6 left-8 w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
-              <div className="absolute bottom-12 right-6 w-2 h-2 bg-blue-400 rounded-full"></div>
-              <div className="absolute top-1/3 left-1/4 w-1 h-1 bg-purple-400 rounded-full"></div>
-              <div className="absolute top-2/3 right-1/3 w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
-            </div>
-            
-            {/* Main content */}
-            <div className="relative z-10">
-              <div className="text-6xl mb-6 text-blue-600">🤖</div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-3">AI That Understands</h3>
-              <p className="text-gray-600 max-w-lg mx-auto text-sm leading-relaxed">
-                Experience the future of artificial intelligence—context-aware, adaptive, and designed to amplify human potential across every industry.
-              </p>
-              
-              {/* Feature highlights */}
-              <div className="mt-8 grid grid-cols-3 gap-6 max-w-md mx-auto">
-                <div className="text-center">
-                  <div className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-2 text-sm">⚡</div>
-                  <div className="text-xs font-medium text-gray-700">Fast</div>
-                </div>
-                <div className="text-center">
-                  <div className="w-8 h-8 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-2 text-sm">🎯</div>
-                  <div className="text-xs font-medium text-gray-700">Precise</div>
-                </div>
-                <div className="text-center">
-                  <div className="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-2 text-sm">🌐</div>
-                  <div className="text-xs font-medium text-gray-700">Global</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="py-3 text-sm text-gray-700 font-medium bg-gray-50 text-center">
+        {/* Hero visual - Desktop only (hidden on mobile) */}
+        <div className="hidden lg:block bg-white rounded-xl shadow-lg mx-auto w-full max-w-4xl overflow-hidden mb-8">
+          <img
+            src="/static/landing01.png"
+            alt="CapeControl Platform - AI That Understands"
+            className="w-full h-auto"
+            loading="lazy"
+            decoding="async"
+            width="1000"
+            height="600"
+          />
+          <div className="py-4 text-sm text-gray-700 font-medium bg-gray-50 text-center">
             Platform Preview • Where Intelligence Meets Impact
           </div>
         </div>
 
-        {/* Mobile-friendly feature cards */}
-        <div className="md:hidden grid grid-cols-1 gap-4 mb-8 px-4">
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <div className="text-blue-600 font-semibold mb-2 text-lg">🤖 AI That Evolves</div>
-            <div className="text-sm text-gray-600">
-              Experience AI-agents that understand context, anticipate needs, and continuously learn from interactions.
+        {/* Mobile-optimized feature highlights (shows only on mobile/tablet) */}
+        <div className="lg:hidden mb-8 px-4">
+          {/* Simple feature grid for mobile */}
+          <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <div className="text-center mb-6">
+              <div className="text-4xl mb-3 text-blue-600">🤖</div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">AI That Understands</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Experience the future of artificial intelligence—context-aware, adaptive, and designed to amplify human potential.
+              </p>
             </div>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <div className="text-purple-600 font-semibold mb-2 text-lg">💰 Developer Ecosystem</div>
-            <div className="text-sm text-gray-600">
-              Build innovative AI-agents and earn 30% revenue share through our thriving developer platform.
-            </div>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <div className="text-green-600 font-semibold mb-2 text-lg">🌍 Global Impact</div>
-            <div className="text-sm text-gray-600">
-              Join a platform designed to address diverse challenges across industries, geographies, and use cases.
+            
+            {/* Compact feature grid */}
+            <div className="grid grid-cols-3 gap-4 text-center">
+              <div>
+                <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">⚡</div>
+                <div className="text-xs font-medium text-gray-700">Fast</div>
+              </div>
+              <div>
+                <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-2">🎯</div>
+                <div className="text-xs font-medium text-gray-700">Precise</div>
+              </div>
+              <div>
+                <div className="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-2">🌐</div>
+                <div className="text-xs font-medium text-gray-700">Global</div>
+              </div>
             </div>
           </div>
         </div>
