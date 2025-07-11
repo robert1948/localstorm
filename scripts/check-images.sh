@@ -7,7 +7,7 @@ image_urls=(
   "https://lightning-s3.s3.amazonaws.com/static/website/img/logo-128x128.png"
   "https://lightning-s3.s3.amazonaws.com/static/website/img/logo-512x512.png"
   "https://lightning-s3.s3.amazonaws.com/static/website/img/logo-64x64.png"
-  "https://lightning-s3.s3.amazonaws.com/static/website/img/dashboard-preview.png"
+  # "https://lightning-s3.s3.amazonaws.com/static/website/img/dashboard-preview.png" # No longer used
 )
 
 echo "🔍 Checking image URLs..."

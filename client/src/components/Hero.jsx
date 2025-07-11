@@ -46,18 +46,48 @@ export default function Hero() {
           </button>
         </div>
 
-        {/* Dashboard preview - hide on mobile, show on tablet and up */}
+        {/* Hero visual - hide on mobile, show on tablet and up */}
         <div className="hidden md:block bg-white rounded-xl shadow-lg mx-auto w-full max-w-3xl overflow-hidden mb-8">
-          <img
-            src="https://lightning-s3.s3.amazonaws.com/static/website/img/dashboard-preview.png"
-            alt="CapeControl Dashboard Preview"
-            className="w-full h-auto"
-            loading="lazy"
-            decoding="async"
-            width="800"
-            height="600"
-          />
-          <div className="py-3 text-sm text-gray-700 font-medium">Dashboard preview</div>
+          {/* Clean, minimalist AI representation */}
+          <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-16 text-center relative overflow-hidden">
+            {/* Background pattern */}
+            <div className="absolute inset-0 opacity-5">
+              <div className="absolute top-4 left-4 w-2 h-2 bg-blue-400 rounded-full"></div>
+              <div className="absolute top-8 right-12 w-1 h-1 bg-purple-400 rounded-full"></div>
+              <div className="absolute bottom-6 left-8 w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
+              <div className="absolute bottom-12 right-6 w-2 h-2 bg-blue-400 rounded-full"></div>
+              <div className="absolute top-1/3 left-1/4 w-1 h-1 bg-purple-400 rounded-full"></div>
+              <div className="absolute top-2/3 right-1/3 w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
+            </div>
+            
+            {/* Main content */}
+            <div className="relative z-10">
+              <div className="text-6xl mb-6 text-blue-600">🤖</div>
+              <h3 className="text-2xl font-bold text-gray-800 mb-3">AI That Understands</h3>
+              <p className="text-gray-600 max-w-lg mx-auto text-sm leading-relaxed">
+                Experience the future of artificial intelligence—context-aware, adaptive, and designed to amplify human potential across every industry.
+              </p>
+              
+              {/* Feature highlights */}
+              <div className="mt-8 grid grid-cols-3 gap-6 max-w-md mx-auto">
+                <div className="text-center">
+                  <div className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-2 text-sm">⚡</div>
+                  <div className="text-xs font-medium text-gray-700">Fast</div>
+                </div>
+                <div className="text-center">
+                  <div className="w-8 h-8 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-2 text-sm">🎯</div>
+                  <div className="text-xs font-medium text-gray-700">Precise</div>
+                </div>
+                <div className="text-center">
+                  <div className="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-2 text-sm">🌐</div>
+                  <div className="text-xs font-medium text-gray-700">Global</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="py-3 text-sm text-gray-700 font-medium bg-gray-50 text-center">
+            Platform Preview • Where Intelligence Meets Impact
+          </div>
         </div>
 
         {/* Mobile-friendly feature cards */}

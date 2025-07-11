@@ -15,14 +15,7 @@ else
   echo "⚠️ Skipped: $MANIFEST_FILE not found."
 fi
 
-# === Upload dashboard preview ===
-echo "📸 Uploading dashboard preview..."
-DASHBOARD="$STATIC_DIR/dashboard-preview.png"
-if [ -f "$DASHBOARD" ]; then
-  aws s3 cp "$DASHBOARD" "$S3_BUCKET/dashboard-preview.png" --content-type "image/png"
-else
-  echo "⚠️ Skipped: $DASHBOARD not found."
-fi
+# Dashboard preview no longer used - replaced with CSS-based hero visual
 
 # === Upload main logo ===
 echo "🏷️ Uploading main logo..."
