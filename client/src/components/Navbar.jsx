@@ -20,11 +20,20 @@ export default function NavBar() {
 
           {/* Desktop links - hide on smaller screens */}
           <div className="hidden lg:flex space-x-6 items-center">
+            <Link to="/vision" className="hover:underline py-3 px-4 rounded transition-colors hover:bg-blue-700 text-lg font-medium">
+              Vision
+            </Link>
+            <Link to="/platform" className="hover:underline py-3 px-4 rounded transition-colors hover:bg-blue-700 text-lg font-medium">
+              Platform
+            </Link>
+            <Link to="/developers" className="hover:underline py-3 px-4 rounded transition-colors hover:bg-blue-700 text-lg font-medium">
+              Developers
+            </Link>
             <Link to="/login" className="hover:underline py-3 px-4 rounded transition-colors hover:bg-blue-700 text-lg font-medium">
               Login
             </Link>
-            <Link to="/register" className="hover:underline py-3 px-4 rounded transition-colors hover:bg-blue-700 text-lg font-medium">
-              Register
+            <Link to="/register" className="bg-white text-blue-600 hover:bg-gray-100 py-3 px-6 rounded-lg transition-colors text-lg font-semibold">
+              Get Started
             </Link>
           </div>
 
@@ -65,6 +74,27 @@ export default function NavBar() {
         {menuOpen && (
           <div className="lg:hidden animate-dropdown bg-blue-600 px-2 pb-3 space-y-2 border-t border-blue-500">
             <Link
+              to="/vision"
+              className="block py-4 px-4 text-white hover:bg-blue-700 rounded transition-colors text-lg font-medium"
+              onClick={() => setMenuOpen(false)}
+            >
+              Vision
+            </Link>
+            <Link
+              to="/platform"
+              className="block py-4 px-4 text-white hover:bg-blue-700 rounded transition-colors text-lg font-medium"
+              onClick={() => setMenuOpen(false)}
+            >
+              Platform
+            </Link>
+            <Link
+              to="/developers"
+              className="block py-4 px-4 text-white hover:bg-blue-700 rounded transition-colors text-lg font-medium"
+              onClick={() => setMenuOpen(false)}
+            >
+              Developers
+            </Link>
+            <Link
               to="/login"
               className="block py-4 px-4 text-white hover:bg-blue-700 rounded transition-colors text-lg font-medium"
               onClick={() => setMenuOpen(false)}
@@ -73,10 +103,10 @@ export default function NavBar() {
             </Link>
             <Link
               to="/register"
-              className="block py-4 px-4 text-white hover:bg-blue-700 rounded transition-colors text-lg font-medium"
+              className="block py-4 px-4 text-white bg-white/10 hover:bg-white/20 rounded transition-colors text-lg font-semibold"
               onClick={() => setMenuOpen(false)}
             >
-              Register
+              Get Started
             </Link>
           </div>
         )}

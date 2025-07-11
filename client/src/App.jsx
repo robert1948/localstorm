@@ -13,6 +13,9 @@ const Logout = lazy(() => import("./pages/Logout"));
 const HowItWorks = lazy(() => import("./pages/HowItWorks"));
 const HowItWorksUser = lazy(() => import("./pages/HowItWorksUser"));
 const HowItWorksDeveloper = lazy(() => import("./pages/HowItWorksDeveloper"));
+const Vision = lazy(() => import("./pages/Vision"));
+const Platform = lazy(() => import("./pages/Platform"));
+const Developers = lazy(() => import("./pages/Developers"));
 const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"));
 
 export default function App() {
@@ -22,6 +25,9 @@ export default function App() {
       <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
         <Routes>
           <Route path="/" element={<Landing />} />
+          <Route path="/vision" element={<Vision />} />
+          <Route path="/platform" element={<Platform />} />
+          <Route path="/developers" element={<Developers />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/logout" element={<Logout />} />
