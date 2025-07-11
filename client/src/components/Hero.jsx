@@ -15,14 +15,14 @@ export default function Hero() {
     <section className="pt-24 pb-16 px-4 bg-gradient-to-b from-white to-blue-50 text-center min-h-screen flex flex-col justify-center">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-blue-700 mb-6 leading-tight px-2">
-          Empower Your Business with AI Agents—
+          Where Intelligence Meets Impact—
           <br className="hidden sm:inline" />
-          <span className="text-blue-600">Fast, Affordable, and Simple.</span>
+          <span className="text-blue-600">AI Accessible to Everyone.</span>
         </h1>
 
         <p className="text-gray-600 max-w-2xl mx-auto mb-8 text-base sm:text-lg md:text-xl px-4 leading-relaxed">
-          Access a curated library of AI-driven tools to automate tasks, boost productivity,
-          and grow your business—no coding required.
+          Democratizing artificial intelligence through our platform that bridges human ambition and technological possibility. 
+          Access cutting-edge AI-agents while empowering developers to innovate and earn.
         </p>
 
         <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12 px-4">
@@ -30,7 +30,13 @@ export default function Hero() {
             onClick={handleTryForFree}
             className="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors text-lg font-semibold"
           >
-            Try for Free
+            Get Started Free
+          </button>
+          <button 
+            onClick={() => navigate('/developers')}
+            className="bg-purple-600 text-white px-8 py-4 rounded-lg hover:bg-purple-700 transition-colors text-lg font-semibold"
+          >
+            Join as Developer
           </button>
           <button 
             onClick={handleSeeHowItWorks}
@@ -57,15 +63,21 @@ export default function Hero() {
         {/* Mobile-friendly feature cards */}
         <div className="md:hidden grid grid-cols-1 gap-4 mb-8 px-4">
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <div className="text-blue-600 font-semibold mb-2 text-lg">⚡ Powerful Dashboard</div>
+            <div className="text-blue-600 font-semibold mb-2 text-lg">🤖 AI That Evolves</div>
             <div className="text-sm text-gray-600">
-              Access your AI agent control center with an intuitive interface designed for speed and simplicity.
+              Experience AI-agents that understand context, anticipate needs, and continuously learn from interactions.
             </div>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <div className="text-blue-600 font-semibold mb-2 text-lg">🤖 AI-Powered Tools</div>
+            <div className="text-purple-600 font-semibold mb-2 text-lg">💰 Developer Ecosystem</div>
             <div className="text-sm text-gray-600">
-              Leverage cutting-edge AI to automate tasks and boost your productivity effortlessly.
+              Build innovative AI-agents and earn 30% revenue share through our thriving developer platform.
+            </div>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <div className="text-green-600 font-semibold mb-2 text-lg">🌍 Global Impact</div>
+            <div className="text-sm text-gray-600">
+              Join a platform designed to address diverse challenges across industries, geographies, and use cases.
             </div>
           </div>
         </div>
@@ -73,18 +85,68 @@ export default function Hero() {
         {/* Trust indicator */}
         <div className="mt-8 text-gray-500 text-sm sm:text-base flex justify-center items-center gap-2 px-4">
           <span className="text-yellow-500">⭐</span>
-          <span className="text-center">Trusted by 1,200+ freelancers and small businesses</span>
+          <span className="text-center">Empowering developers and businesses across industries worldwide</span>
         </div>
 
         {/* Testimonial */}
         <div className="mt-8 max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md text-gray-700 italic mx-4">
           <span className="text-blue-500 text-2xl">"</span>
           <div className="text-base sm:text-lg leading-relaxed">
-            CapeControl helped us streamline our workflow in ways we didn't think possible.
-            The AI tools feel like extra team members!
+            CapeControl is more than a service—it's a showcase of what AI can achieve. 
+            The platform's intelligence and responsiveness demonstrate the transformative potential of AI.
           </div>
           <div className="mt-3 text-right text-sm font-medium">
-            — Alex M., Founder of SmartEdge
+            — From our Vision Statement
+          </div>
+        </div>
+
+        {/* Vision tagline */}
+        <div className="mt-8 text-center">
+          <p className="text-lg font-medium text-blue-700">
+            "Where intelligence meets impact, and possibilities become realities."
+          </p>
+        </div>
+
+        {/* Dual audience section */}
+        <div className="hidden md:block mt-16 grid md:grid-cols-2 gap-8 px-4">
+          <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-lg text-left">
+            <div className="text-3xl mb-4">🚀</div>
+            <h3 className="text-xl font-bold text-blue-700 mb-3">For Businesses & Individuals</h3>
+            <p className="text-gray-700 mb-4">
+              Transform your operations with AI-agents that understand context, anticipate needs, and deliver personalized solutions—no technical expertise required.
+            </p>
+            <ul className="text-sm text-gray-600 space-y-2 mb-4">
+              <li>• Streamline operations and boost productivity</li>
+              <li>• Access cutting-edge AI without complexity</li>
+              <li>• Scale from startups to enterprises</li>
+              <li>• Global solutions with local relevance</li>
+            </ul>
+            <button 
+              onClick={handleTryForFree}
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Start Your Journey
+            </button>
+          </div>
+
+          <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-8 rounded-lg text-left">
+            <div className="text-3xl mb-4">💡</div>
+            <h3 className="text-xl font-bold text-purple-700 mb-3">For AI Developers</h3>
+            <p className="text-gray-700 mb-4">
+              Build innovative AI-agents, earn passive income through revenue sharing, and contribute to a platform that showcases AI excellence.
+            </p>
+            <ul className="text-sm text-gray-600 space-y-2 mb-4">
+              <li>• Earn 30% revenue share from your agents</li>
+              <li>• Access comprehensive developer tools</li>
+              <li>• Join a thriving developer community</li>
+              <li>• Real-time earnings and analytics</li>
+            </ul>
+            <button 
+              onClick={() => navigate('/developers')}
+              className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+            >
+              Join Developer Program
+            </button>
           </div>
         </div>
       </div>
