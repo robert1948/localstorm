@@ -1,0 +1,1 @@
+import{r as n,A as o,j as e,N as s}from"./index-D2ZcyLPd.js";function i({children:r}){const{user:t}=n.useContext(o);return t===void 0?e.jsx("div",{className:"p-4 text-center",children:"Checking authentication..."}):t?r:e.jsx(s,{to:"/login",replace:!0})}export{i as default};

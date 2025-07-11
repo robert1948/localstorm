@@ -14,7 +14,7 @@ export default function Hero() {
   return (
     <section className="min-h-screen bg-gradient-to-b from-white to-blue-50 flex flex-col">
       {/* Mobile-first layout with proper spacing */}
-      <div className="flex-1 flex flex-col justify-center px-4 py-8 lg:py-16">
+      <div className="flex-1 flex flex-col justify-center px-4 pt-24 pb-8 lg:pt-32 lg:pb-16">
         <div className="max-w-4xl mx-auto w-full">
           
           {/* Main heading - optimized for mobile */}
