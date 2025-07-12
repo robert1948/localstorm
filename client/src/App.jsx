@@ -6,6 +6,12 @@ import Navbar from "./components/Navbar";
 const Landing = lazy(() => import("./pages/Landing"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
+// Phase 2 Registration Pages
+const Phase2CustomerRegistration = lazy(() => import("./pages/Phase2CustomerRegistration"));
+const Phase2DeveloperRegistration = lazy(() => import("./pages/Phase2DeveloperRegistration"));
+// Separate Login Pages
+const LoginCustomer = lazy(() => import("./pages/LoginCustomer"));
+const LoginDeveloper = lazy(() => import("./pages/LoginDeveloper"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const UserDashboard = lazy(() => import("./pages/UserDashboard"));
 const DeveloperDashboard = lazy(() => import("./pages/DeveloperDashboard"));
@@ -30,6 +36,12 @@ export default function App() {
           <Route path="/developers" element={<Developers />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          {/* Phase 2 Registration Routes */}
+          <Route path="/phase2-customer" element={<Phase2CustomerRegistration />} />
+          <Route path="/phase2-developer" element={<Phase2DeveloperRegistration />} />
+          {/* Separate Login Routes */}
+          <Route path="/login-customer" element={<LoginCustomer />} />
+          <Route path="/login-developer" element={<LoginDeveloper />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/how-it-works-user" element={<HowItWorksUser />} />

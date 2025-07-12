@@ -436,11 +436,17 @@ export default function Register() {
         throw new Error(data.detail || "Registration failed");
       }
 
-      // Registration successful - redirect based on role
+      const userData = await res.json();
+
+      // Registration successful - redirect to Phase 2 based on role
       if (finalData.role === "user") {
-        navigate("/dashboard/user");
+        navigate("/phase2-customer", { 
+          state: { userData: { ...finalData, ...userData } }
+        });
       } else {
-        navigate("/dashboard/developer");
+        navigate("/phase2-developer", { 
+          state: { userData: { ...finalData, ...userData } }
+        });
       }
     } catch (err) {
       throw err;
