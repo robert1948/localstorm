@@ -69,6 +69,36 @@ class UserCreate(BaseModel):
             raise ValueError('Role must be customer or developer for registration')
         return v
 
+class Phase2ProfileComplete(BaseModel):
+    """Schema for completing Phase 2 profile"""
+    # Common fields
+    profile_completed: Optional[bool] = Field(True, alias="profileCompleted")
+    phase2_completed: Optional[bool] = Field(True, alias="phase2Completed")
+    
+    # Customer-specific fields
+    company_name: Optional[str] = Field(None, alias="companyName")
+    industry: Optional[str] = None
+    company_size: Optional[str] = Field(None, alias="companySize")
+    business_type: Optional[str] = Field(None, alias="businessType")
+    use_case: Optional[str] = Field(None, alias="useCase")
+    budget: Optional[str] = None
+    goals: Optional[List[str]] = None
+    preferred_integrations: Optional[List[str]] = Field(None, alias="preferredIntegrations")
+    timeline: Optional[str] = None
+    
+    # Developer-specific fields
+    experience_level: Optional[str] = Field(None, alias="experienceLevel")
+    primary_languages: Optional[List[str]] = Field(None, alias="primaryLanguages")
+    specializations: Optional[List[str]] = None
+    github_profile: Optional[str] = Field(None, alias="githubProfile")
+    portfolio_url: Optional[str] = Field(None, alias="portfolioUrl")
+    social_links: Optional[dict] = Field(None, alias="socialLinks")
+    previous_projects: Optional[str] = Field(None, alias="previousProjects")
+    availability: Optional[str] = None
+    hourly_rate: Optional[str] = Field(None, alias="hourlyRate")
+    earnings_target: Optional[str] = Field(None, alias="earningsTarget")
+    revenue_share: Optional[float] = Field(None, alias="revenueShare")
+
 class UserLogin(BaseModel):
     """Schema for user login"""
     email: EmailStr
@@ -89,6 +119,34 @@ class UserResponse(BaseModel):
     is_verified: bool
     created_at: datetime
     last_login_at: Optional[datetime] = None
+    
+    # Phase 2 profile completion status
+    profile_completed: Optional[bool] = None
+    phase2_completed: Optional[bool] = None
+    
+    # Customer-specific fields (only returned if user is customer)
+    company_name: Optional[str] = None
+    industry: Optional[str] = None
+    company_size: Optional[str] = None
+    business_type: Optional[str] = None
+    use_case: Optional[str] = None
+    budget: Optional[str] = None
+    goals: Optional[List[str]] = None
+    preferred_integrations: Optional[List[str]] = None
+    timeline: Optional[str] = None
+    
+    # Developer-specific fields (only returned if user is developer)
+    experience_level: Optional[str] = None
+    primary_languages: Optional[List[str]] = None
+    specializations: Optional[List[str]] = None
+    github_profile: Optional[str] = None
+    portfolio_url: Optional[str] = None
+    social_links: Optional[dict] = None
+    previous_projects: Optional[str] = None
+    availability: Optional[str] = None
+    hourly_rate: Optional[str] = None
+    earnings_target: Optional[str] = None
+    revenue_share: Optional[float] = None
     
     class Config:
         from_attributes = True

@@ -9,7 +9,7 @@ This file implements the proposed secure authentication architecture with:
 - Proper relationships and constraints
 """
 
-from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean, ForeignKey, Enum, Numeric
+from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean, ForeignKey, Enum, Numeric, JSON
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 import enum
@@ -53,6 +53,34 @@ class UserV2(Base):
     
     # Experience level (for both customers and developers)
     experience = Column(String(20))  # 'beginner', 'intermediate', 'advanced', 'expert'
+    
+    # Phase 2 Profile Completion Status
+    profile_completed = Column(Boolean, default=False, nullable=False)
+    phase2_completed = Column(Boolean, default=False, nullable=False)
+    
+    # Customer-specific Phase 2 fields
+    company_name = Column(String(255))
+    industry = Column(String(100))
+    company_size = Column(String(50))
+    business_type = Column(String(50))
+    use_case = Column(String(100))
+    budget = Column(String(50))
+    goals = Column(JSON)  # Array of customer goals
+    preferred_integrations = Column(JSON)  # Array of preferred integrations
+    timeline = Column(String(50))
+    
+    # Developer-specific Phase 2 fields
+    experience_level = Column(String(50))  # Developer-specific experience level
+    primary_languages = Column(JSON)  # Array of programming languages
+    specializations = Column(JSON)  # Array of developer specializations
+    github_profile = Column(String(255))
+    portfolio_url = Column(String(255))
+    social_links = Column(JSON)  # Object with social media links
+    previous_projects = Column(Text)  # Description of previous projects
+    availability = Column(String(50))
+    hourly_rate = Column(String(50))
+    earnings_target = Column(String(50))
+    revenue_share = Column(Numeric(5, 4), default=0.3000)  # Revenue share percentage
     
     # Audit fields
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)

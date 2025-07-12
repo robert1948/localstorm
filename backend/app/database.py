@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 # Get DATABASE_URL from environment with fallback to SQLite for development
-DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///./capecontrol.db')
+DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///./localstorm.db')
 
 # For PostgreSQL URLs from Heroku, fix the protocol if needed
 if DATABASE_URL.startswith('postgres://'):

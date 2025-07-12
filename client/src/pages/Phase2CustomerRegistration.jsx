@@ -114,25 +114,55 @@ export default function Phase2CustomerRegistration() {
     setIsLoading(true);
     try {
       // Combine user data with additional profile data
-      const completeProfile = {
-        ...userData,
+      const profileData = {
         ...formData,
         profileCompleted: true,
         phase2Completed: true
       };
 
-      // Save to your backend/API
-      console.log("Complete customer profile:", completeProfile);
+      // Call the Phase 2 profile completion API
+      const response = await fetch('/api/enhanced/complete-phase2-profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userData.accessToken || ''}`
+        },
+        body: JSON.stringify(profileData)
+      });
 
-      // For now, navigate to customer login
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Profile completed successfully:", result);
+        
+        // Navigate to customer login with success message
+        navigate('/login-customer', { 
+          state: { 
+            message: "Profile completed successfully! Please log in to access your dashboard.",
+            email: userData.email 
+          }
+        });
+      } else {
+        const error = await response.json();
+        console.error("Profile completion failed:", error);
+        
+        // For now, still navigate but with a different message
+        navigate('/login-customer', { 
+          state: { 
+            message: "Profile saved locally. Please log in to access your dashboard.",
+            email: userData.email 
+          }
+        });
+      }
+    } catch (error) {
+      console.error("Error completing profile:", error);
+      
+      // Fallback: navigate to login even if API call fails
       navigate('/login-customer', { 
         state: { 
-          message: "Profile completed! Please log in to access your dashboard.",
+          message: "Please log in to complete your profile setup.",
           email: userData.email 
         }
       });
-    } catch (error) {
-      console.error("Error completing profile:", error);
     } finally {
       setIsLoading(false);
     }

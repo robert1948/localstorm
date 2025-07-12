@@ -24,7 +24,7 @@ from app.schemas_enhanced import (
     UserCreate, UserLogin, UserResponse, TokenResponse, TokenRefresh,
     PasswordResetRequest, PasswordResetConfirm, PasswordResetResponse,
     DeveloperEarningsSummary, DeveloperEarningResponse, UserUpdate,
-    PasswordChange, ApiResponse, ErrorResponse
+    PasswordChange, ApiResponse, ErrorResponse, Phase2ProfileComplete
 )
 from app.auth_enhanced import auth_service
 from app.dependencies import get_db
@@ -585,6 +585,76 @@ def update_user_profile(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Profile update failed"
+        )
+
+@router.post("/complete-phase2-profile", response_model=UserResponse)
+def complete_phase2_profile(
+    profile_data: Phase2ProfileComplete,
+    request: Request,
+    current_user: UserV2 = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Complete Phase 2 profile onboarding"""
+    client_info = get_client_info(request)
+    
+    try:
+        # Update user with Phase 2 profile data
+        update_data = profile_data.dict(exclude_unset=True, by_alias=False)
+        
+        # Convert camelCase to snake_case for database fields
+        field_mappings = {
+            'profileCompleted': 'profile_completed',
+            'phase2Completed': 'phase2_completed',
+            'companyName': 'company_name',
+            'companySize': 'company_size',
+            'businessType': 'business_type',
+            'useCase': 'use_case',
+            'preferredIntegrations': 'preferred_integrations',
+            'experienceLevel': 'experience_level',
+            'primaryLanguages': 'primary_languages',
+            'githubProfile': 'github_profile',
+            'portfolioUrl': 'portfolio_url',
+            'socialLinks': 'social_links',
+            'previousProjects': 'previous_projects',
+            'hourlyRate': 'hourly_rate',
+            'earningsTarget': 'earnings_target',
+            'revenueShare': 'revenue_share'
+        }
+        
+        # Apply field mappings
+        for camel_key, snake_key in field_mappings.items():
+            if camel_key in update_data:
+                update_data[snake_key] = update_data.pop(camel_key)
+        
+        # Update user fields
+        for field, value in update_data.items():
+            if hasattr(current_user, field):
+                setattr(current_user, field, value)
+        
+        current_user.updated_at = datetime.utcnow()
+        db.commit()
+        db.refresh(current_user)
+        
+        # Log profile completion
+        auth_service.log_event(
+            db, current_user.id, "phase2_profile_complete", 
+            f"Phase 2 profile completed for {current_user.email} (role: {current_user.role})",
+            success=True, **client_info, endpoint="/api/enhanced/complete-phase2-profile",
+            metadata={"role": current_user.role.value, "fields_updated": list(update_data.keys())}
+        )
+        
+        return UserResponse.from_orm(current_user)
+        
+    except Exception as e:
+        auth_service.log_event(
+            db, current_user.id, "phase2_profile_error", 
+            f"Phase 2 profile completion error for {current_user.email}",
+            success=False, **client_info, endpoint="/api/enhanced/complete-phase2-profile",
+            error_message=str(e)
+        )
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Phase 2 profile completion failed"
         )
 
 @router.post("/change-password", response_model=ApiResponse)
