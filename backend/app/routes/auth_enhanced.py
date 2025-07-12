@@ -107,6 +107,38 @@ def get_client_info(request: Request) -> dict:
     }
 
 # ================================
+# Root API Information Endpoint
+# ================================
+
+@router.get("/")
+async def enhanced_api_root():
+    """Enhanced Authentication API root endpoint"""
+    return {
+        "service": "Enhanced Authentication API",
+        "version": "2.0.0", 
+        "status": "operational",
+        "description": "Secure, scalable authentication with JWT, role-based access, and Phase 2 onboarding",
+        "features": [
+            "JWT authentication",
+            "Role-based access control", 
+            "Phase 2 customer/developer onboarding",
+            "Audit logging",
+            "Developer earnings tracking",
+            "Password reset",
+            "Token refresh"
+        ],
+        "endpoints": {
+            "register": "POST /register",
+            "login": "POST /login", 
+            "profile": "GET /me",
+            "phase2_complete": "POST /complete-phase2-profile",
+            "health": "GET /health",
+            "docs": "/docs"
+        },
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
+# ================================
 # Health Check Endpoint
 # ================================
 
