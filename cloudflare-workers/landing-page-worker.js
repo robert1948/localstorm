@@ -26,6 +26,11 @@ export default {
       return new Response(null, { status: 204 })
     }
     
+    // Handle app route - redirect to actual application
+    if (url.pathname === '/app' || url.pathname.startsWith('/app/')) {
+      return Response.redirect('https://your-actual-app-url.com', 302)
+    }
+    
     // API requests - proxy to Heroku
     if (url.pathname.startsWith('/api/')) {
       try {
