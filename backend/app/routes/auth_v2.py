@@ -4,6 +4,7 @@ from sqlalchemy.exc import IntegrityError
 import os
 import re
 from typing import Optional
+from datetime import datetime
 
 from app import models, schemas
 from app.dependencies import get_db
@@ -131,19 +132,19 @@ async def register_v2(
         # Hash password with enhanced security
         hashed_password = get_password_hash(user.password)
         
-        # Create user record
+        # Create user record with production schema
         db_user = models.User(
             email=normalized_email,
-            hashed_password=hashed_password,
-            first_name=user.firstName.strip(),
-            last_name=user.lastName.strip(),
-            role=user.role,
-            company=user.company.strip() if user.company else None,
+            password_hash=hashed_password,  # Use production column name
+            full_name=f"{user.firstName.strip()} {user.lastName.strip()}",  # Combine for production
+            user_role=user.role,  # Use production column name
+            company_name=user.company.strip() if user.company else None,  # Use production column name
             phone=user.phone.strip() if user.phone else None,
             website=user.website if user.website else None,
             experience=user.experience if user.experience else None,
             is_active=True,
-            is_verified=False  # Will be verified via email
+            is_verified=False,  # Will be verified via email
+            tos_accepted_at=datetime.utcnow()  # Use production column name
         )
         
         # Save to database
@@ -230,8 +231,8 @@ async def login_v2(payload: schemas.LoginInput, db: Session = Depends(get_db)):
                 detail="Invalid email or password"
             )
         
-        # Verify password
-        if not verify_password(payload.password, user.hashed_password):
+        # Verify password using production column name
+        if not verify_password(payload.password, user.password_hash):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid email or password"
@@ -244,15 +245,20 @@ async def login_v2(payload: schemas.LoginInput, db: Session = Depends(get_db)):
                 detail="Account is deactivated. Please contact support."
             )
         
-        # Create access token
+        # Create access token using production schema
         token_data = {
             "sub": user.email,
             "user_id": user.id,
-            "role": user.role
+            "role": user.user_role  # Use production column name
         }
         access_token = create_access_token(token_data, SECRET_KEY, ALGORITHM)
         
         print(f"✅ User logged in: {user.email}")
+        
+        # Parse full_name back to firstName/lastName for frontend compatibility
+        name_parts = user.full_name.split(' ', 1) if user.full_name else ['', '']
+        first_name = name_parts[0] if len(name_parts) > 0 else ''
+        last_name = name_parts[1] if len(name_parts) > 1 else ''
         
         return {
             "access_token": access_token,
@@ -260,9 +266,9 @@ async def login_v2(payload: schemas.LoginInput, db: Session = Depends(get_db)):
             "user": {
                 "id": user.id,
                 "email": user.email,
-                "firstName": user.first_name,
-                "lastName": user.last_name,
-                "role": user.role
+                "firstName": first_name,
+                "lastName": last_name,
+                "role": user.user_role  # Use production column name
             }
         }
         
