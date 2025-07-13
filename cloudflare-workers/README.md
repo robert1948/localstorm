@@ -40,8 +40,8 @@ An enhanced version with additional caching features and error handling.
 1. **Create/Access Cloudflare Worker:**
    - Go to Cloudflare Dashboard → Workers & Pages
    - Edit existing `capecontrol-api-zeonita` worker or create new one
-   - Copy the code from `landing-page-worker.js` (RECOMMENDED)
-   - Alternative: Use `corrected-worker.js` for full features
+   - Copy the code from `ai-agents-landing-worker.js` (RECOMMENDED - Latest AI-focused version)
+   - Alternative: Use `landing-page-worker.js` for simpler version
 
 2. **Set up Routes:**
    - Domain: `cape-control.com/*` → worker-name
@@ -61,11 +61,13 @@ An enhanced version with additional caching features and error handling.
 ## Features
 
 - **API Proxy**: Seamless proxying to Heroku backend
-- **Landing Page**: Professional CapeControl branding
+- **AI-Agents Branding**: Professional CapeControl AI platform messaging
 - **Security**: CORS, XSS protection, content type options
 - **Caching**: Smart caching for API endpoints
 - **Error Handling**: Graceful fallbacks for backend issues
 - **Mobile Responsive**: Optimized for all devices
+- **SEO Optimized**: AI/automation focused keywords and meta tags
+- **S3 Favicon**: Professional logo integration
 
 ## Current Status
 
@@ -86,40 +88,40 @@ An enhanced version with additional caching features and error handling.
 - **Backend Direct:** https://capecraft-65eeb6ddf78b.herokuapp.com/api/health
 
 ### Future Improvements:
-- 🔧 Deploy favicon fix (minor cosmetic enhancement)
-- 🎨 Landing page content updates (as needed)
-- 🚀 Additional features and integrations
+- ✅ **COMPLETED: AI-Agents landing page with S3 favicon**
+- 🎨 Additional landing page content (testimonials, pricing)
+- 🚀 Additional AI-agents features and integrations
 
 ### Development Roadmap:
 
-#### **Phase 1: Landing Page Enhancements**
-- 📸 Add hero images/screenshots of drone operations
-- 🎯 More detailed feature descriptions
-- 💰 Pricing section
-- 📧 Contact form integration
-- 📱 Better mobile optimization
-- 🎨 Custom favicon and branding assets
+#### **Phase 1: AI-Agents Platform Enhancements**
+- 🤖 Enhanced AI-agent demonstrations and showcases
+- 🎯 More detailed AI capabilities descriptions
+- 💰 Pricing section for AI-agent subscriptions
+- 📧 Contact form integration for AI consultations
+- 📱 Better mobile optimization for AI interactions
+- 🎨 Enhanced AI-focused branding assets
 
-#### **Phase 2: Static Website Expansion**
-- 📄 About page (`/about`)
-- 🛠️ Services page (`/services`)
-- 📞 Contact page (`/contact`)
+#### **Phase 2: AI Platform Expansion**
+- 📄 About page (`/about`) - AI vision and team
+- 🛠️ AI Services page (`/services`) - Agent capabilities
+- 📞 Contact page (`/contact`) - AI consultation requests
 - 📝 Blog/News section (`/blog`)
 - 💼 Case studies (`/case-studies`)
 
-#### **Phase 3: Dynamic Web Application**
-- 🔐 User authentication and dashboards
-- 📊 Real-time drone data visualization
-- 🗺️ Interactive mission planning maps
-- 📱 Progressive Web App (PWA) features
-- 🔄 Real-time updates via WebSockets
+#### **Phase 3: Dynamic AI Application**
+- 🔐 User authentication and AI-agent dashboards
+- 📊 Real-time AI analytics and insights visualization
+- 🤖 Interactive AI-agent chat interfaces
+- 📱 Progressive Web App (PWA) for AI interactions
+- 🔄 Real-time AI updates via WebSockets
 
-#### **Phase 4: Full Platform Integration**
-- 🚁 Connect to actual drone hardware APIs
-- 📡 IoT device management
-- 🤖 AI-powered analytics
-- 📊 Advanced reporting and exports
-- 🔗 Third-party integrations (weather, maps, etc.)
+#### **Phase 4: Full AI Platform Integration**
+- 🧠 Connect to actual AI-agent APIs and models
+- 📡 AI workflow management and orchestration
+- 🤖 Advanced AI-powered analytics and predictions
+- 📊 AI performance reporting and exports
+- 🔗 Third-party AI integrations (OpenAI, Anthropic, etc.)
 
 ## Troubleshooting
 
