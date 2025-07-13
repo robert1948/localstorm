@@ -4,13 +4,20 @@ This directory contains Cloudflare Workers for the CapeControl production deploy
 
 ## Files
 
-### `corrected-worker.js` (PRODUCTION)
-The main production worker that:
+### `landing-page-worker.js` (RECOMMENDED FOR DEPLOYMENT)
+**Streamlined production worker (95 lines)** - Easier to deploy:
 - Proxies `/api/*` requests to Heroku backend (`https://capecraft-65eeb6ddf78b.herokuapp.com`)
 - Serves a professional landing page for all other requests
 - Adds security headers (CORS, XSS protection, etc.)
 - Implements caching for API endpoints
 - Handles CORS preflight requests
+- **Optimized for manual copy/paste deployment**
+
+### `corrected-worker.js` (FULL PRODUCTION)
+Complete production worker with all features (188 lines):
+- All features of landing-page-worker.js
+- Extended HTML landing page with more features
+- Additional error handling and caching logic
 
 ### `simple-test-worker.js`
 A basic test worker that returns JSON status - useful for testing deployment and routing.
@@ -22,8 +29,9 @@ An enhanced version with additional caching features and error handling.
 
 1. **Create/Access Cloudflare Worker:**
    - Go to Cloudflare Dashboard → Workers & Pages
-   - Create a new worker or edit existing one
-   - Copy the code from `corrected-worker.js`
+   - Edit existing `capecontrol-api-zeonita` worker or create new one
+   - Copy the code from `landing-page-worker.js` (RECOMMENDED)
+   - Alternative: Use `corrected-worker.js` for full features
 
 2. **Set up Routes:**
    - Domain: `cape-control.com/*` → worker-name
@@ -52,10 +60,20 @@ An enhanced version with additional caching features and error handling.
 ## Current Status
 
 - ✅ Workers created and tested
-- ✅ DNS configured
+- ✅ DNS configured 
 - ✅ Routes set up
-- ⚠️ Need to deploy production worker code
-- ⚠️ Resolve 522 connection timeout issues
+- ✅ Heroku backend healthy and running
+- ✅ Domain routing working
+- ❌ **ISSUE: Test worker deployed instead of production worker**
+- 🎯 **NEXT: Deploy `landing-page-worker.js` to serve landing page**
+
+### Current Behavior:
+- `cape-control.com/` → Returns test JSON (should be landing page)
+- `cape-control.com/api/health` → Returns test JSON (should proxy to Heroku)
+
+### Deployment Ready:
+- ✅ `landing-page-worker.js` - Streamlined, production-ready (95 lines)
+- ✅ `corrected-worker.js` - Full-featured alternative (188 lines)
 
 ## Troubleshooting
 
