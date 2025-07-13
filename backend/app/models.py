@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean
 from sqlalchemy.sql import func
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 from app.database import Base  # Updated import for new structure
 
 class User(Base):
@@ -11,14 +13,14 @@ class User(Base):
     __tablename__ = "users"
 
     # Production database columns only
-    id = Column(String, primary_key=True, index=True)  # UUID in production
+    id = Column(String, primary_key=True, index=True, default=lambda: str(uuid.uuid4()))  # UUID generator
     email = Column(String(255), unique=True, index=True)
     password_hash = Column(String(60))
     user_role = Column(String(20))
     full_name = Column(String(100))
     tos_accepted_at = Column(DateTime(timezone=True))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     company_name = Column(String)
     industry = Column(String)
     project_budget = Column(String)
