@@ -154,3 +154,87 @@ class UserOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+# ----------------------------
+# Schema: Production Database Compatible Registration
+# ----------------------------
+class UserCreateV2Production(BaseModel):
+    """
+    Schema for creating a new user that matches production database schema.
+    Updated for production compatibility - July 13, 2025
+    """
+    # Basic information - matches production columns
+    email: EmailStr
+    password: str
+    full_name: str  # Single field instead of firstName/lastName
+    
+    # Role and company information - matches production columns
+    user_role: str  # 'client' or 'developer' 
+    company_name: Optional[str] = None
+    
+    # Production database additional fields
+    industry: Optional[str] = None
+    project_budget: Optional[str] = None
+    skills: Optional[str] = None
+    portfolio: Optional[str] = None
+    github: Optional[str] = None
+    
+    # Terms acceptance
+    tos_accepted: bool
+    
+    @validator('password')
+    def validate_password(cls, v):
+        """Enhanced password validation for V2 registration"""
+        if len(v) < 8:  # Reduced from 12 for production compatibility
+            raise ValueError('Password must be at least 8 characters long')
+        
+        if not re.search(r'[A-Z]', v):
+            raise ValueError('Password must contain at least one uppercase letter')
+            
+        if not re.search(r'[a-z]', v):
+            raise ValueError('Password must contain at least one lowercase letter')
+            
+        if not re.search(r'[0-9]', v):
+            raise ValueError('Password must contain at least one number')
+            
+        return v
+    
+    @validator('full_name')
+    def validate_full_name(cls, v):
+        """Validate and sanitize full name"""
+        if not v or not v.strip():
+            raise ValueError('Full name cannot be empty')
+        
+        # Remove extra whitespace and limit length
+        cleaned = v.strip()
+        if len(cleaned) > 100:  # Match database column length
+            raise ValueError('Full name must be 100 characters or less')
+            
+        return cleaned
+    
+    @validator('company_name')
+    def validate_company_name(cls, v):
+        """Validate and sanitize company name"""
+        if v:
+            cleaned = v.strip()
+            if len(cleaned) > 255:  # Reasonable limit
+                raise ValueError('Company name must be 255 characters or less')
+            return cleaned
+        return v
+    
+    @validator('user_role')
+    def validate_user_role(cls, v):
+        """Validate role selection"""
+        if v not in ['client', 'developer']:
+            raise ValueError('Role must be either "client" or "developer"')
+        return v
+    
+    @validator('tos_accepted')
+    def validate_tos_accepted(cls, v):
+        """Ensure terms of service are accepted"""
+        if not v:
+            raise ValueError('Terms of service must be accepted')
+        return v
+    
+    class Config:
+        from_attributes = True

@@ -107,7 +107,7 @@ async def validate_password(password_data: dict):
 # ----------------------------
 @router.post("/auth/v2/register", response_model=schemas.UserOut, tags=["auth-v2"])
 async def register_v2(
-    user: schemas.UserCreateV2, 
+    user: schemas.UserCreateV2Production, 
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db)
 ):
@@ -135,16 +135,16 @@ async def register_v2(
         # Create user record with production schema
         db_user = models.User(
             email=normalized_email,
-            password_hash=hashed_password,  # Use production column name
-            full_name=f"{user.firstName.strip()} {user.lastName.strip()}",  # Combine for production
-            user_role=user.role,  # Use production column name
-            company_name=user.company.strip() if user.company else None,  # Use production column name
-            phone=user.phone.strip() if user.phone else None,
-            website=user.website if user.website else None,
-            experience=user.experience if user.experience else None,
-            is_active=True,
-            is_verified=False,  # Will be verified via email
-            tos_accepted_at=datetime.utcnow()  # Use production column name
+            password_hash=hashed_password,  # Production column name
+            full_name=user.full_name.strip(),  # Production field
+            user_role=user.user_role,  # Production column name
+            company_name=user.company_name.strip() if user.company_name else None,  # Production column name
+            industry=user.industry.strip() if user.industry else None,
+            project_budget=user.project_budget.strip() if user.project_budget else None,
+            skills=user.skills.strip() if user.skills else None,
+            portfolio=user.portfolio.strip() if user.portfolio else None,
+            github=user.github.strip() if user.github else None,
+            tos_accepted_at=datetime.utcnow()  # Production column name
         )
         
         # Save to database
@@ -156,19 +156,20 @@ async def register_v2(
         background_tasks.add_task(
             send_welcome_email_task,
             {
-                'firstName': user.firstName,
-                'lastName': user.lastName,
+                'full_name': user.full_name,
                 'email': user.email,
-                'role': user.role,
-                'company': user.company or '',
-                'phone': user.phone or '',
-                'website': user.website or '',
-                'experience': user.experience or '',
+                'user_role': user.user_role,
+                'company_name': user.company_name or '',
+                'industry': user.industry or '',
+                'project_budget': user.project_budget or '',
+                'skills': user.skills or '',
+                'portfolio': user.portfolio or '',
+                'github': user.github or '',
                 'userId': db_user.id
             }
         )
         
-        print(f"✅ User registered successfully: {user.email} as {user.role}")
+        print(f"✅ User registered successfully: {user.email} as {user.user_role}")
         
         return db_user
         
