@@ -4,17 +4,19 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import auth
 from app.routes import auth_enhanced  # Re-enabled after fixing JWT dependency
+from app.routes import auth_v2  # New V2 registration system
 import os
 
 app = FastAPI(
     title="CapeControl API",
     description="Secure, scalable authentication system for CapeControl",
-    version="1.0.0"
+    version="2.0.0"
 )
 
 # Include routers
 app.include_router(auth.router, prefix="/api")  # Legacy authentication
 app.include_router(auth_enhanced.router)  # Enhanced authentication (already has /api/enhanced prefix)
+app.include_router(auth_v2.router, prefix="/api")  # V2 registration system
 
 # Health check endpoint
 @app.get("/api/health")
@@ -22,10 +24,11 @@ async def health_check():
     return {
         "status": "healthy",
         "message": "CapeControl API is running",
-        "version": "1.0.0",
-        "timestamp": "2025-07-09",
+        "version": "2.0.0",
+        "timestamp": "2025-07-13",
         "database_connected": True,
-        "enhanced_auth": "enabled (v2 tables)"
+        "enhanced_auth": "enabled (v2 tables)",
+        "registration_v2": "enabled (2-step flow)"
     }
 
 # API status endpoint

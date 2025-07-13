@@ -82,3 +82,97 @@ def login(payload: schemas.LoginInput, db: Session = Depends(get_db)):
         )
     token = create_access_token({"sub": user.email}, SECRET_KEY, ALGORITHM)
     return {"access_token": token, "token_type": "bearer"}
+
+# ----------------------------
+# Email Validation Route (V2)
+# ----------------------------
+@router.get("/auth/validate-email/{email}", tags=["auth"])
+async def validate_email(email: str, db: Session = Depends(get_db)):
+    """
+    Check if email is available for registration
+    """
+    try:
+        # Validate email format
+        from pydantic import EmailStr, ValidationError
+        try:
+            EmailStr.validate(email)
+        except ValidationError:
+            return {"available": False, "reason": "invalid_format"}
+        
+        # Check if email exists
+        existing_user = db.query(models.User).filter(models.User.email == email.lower()).first()
+        if existing_user:
+            return {"available": False, "reason": "already_exists"}
+        
+        return {"available": True}
+        
+    except Exception as e:
+        print(f"Email validation error: {e}")
+        return {"available": None, "reason": "validation_error"}
+
+# ----------------------------
+# Enhanced Registration Route (V2)
+# ----------------------------
+@router.post("/auth/register/v2", response_model=schemas.UserOut, tags=["auth"])
+async def register_v2(user: schemas.UserCreateV2, db: Session = Depends(get_db)):
+    """
+    Enhanced registration with stronger validation (V2 flow)
+    """
+    # Check for existing user
+    existing_user = db.query(models.User).filter(models.User.email == user.email.lower()).first()
+    if existing_user:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Email already registered. Please use a different email or try logging in."
+        )
+    
+    # Hash password with enhanced security
+    hashed = get_password_hash(user.password)
+    
+    # Create user with enhanced validation
+    db_user = models.User(
+        email=user.email.lower().strip(),
+        hashed_password=hashed,
+        first_name=user.firstName.strip(),
+        last_name=user.lastName.strip(),
+        role=user.role,
+        company=user.company.strip() if user.company else None,
+        phone=user.phone.strip() if user.phone else None,
+        website=user.website if user.website else None,
+        experience=user.experience if user.experience else None
+    )
+    
+    try:
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        
+        # Send registration notification email (async)
+        try:
+            user_data = {
+                'firstName': user.firstName,
+                'lastName': user.lastName,
+                'email': user.email,
+                'role': user.role,
+                'company': user.company or '',
+                'phone': user.phone or '',
+                'website': user.website or '',
+                'experience': user.experience or ''
+            }
+            
+            await email_service.send_registration_notification(user_data)
+            print(f"✅ Registration notification sent for {user.email}")
+            
+        except Exception as e:
+            # Don't fail registration if email fails
+            print(f"⚠️  Failed to send registration notification: {e}")
+        
+        return db_user
+        
+    except Exception as e:
+        db.rollback()
+        print(f"Registration error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Registration failed. Please try again."
+        )

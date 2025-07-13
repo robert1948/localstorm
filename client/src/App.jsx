@@ -5,7 +5,8 @@ import Navbar from "./components/Navbar";
 // ✅ Lazy-loaded pages
 const Landing = lazy(() => import("./pages/Landing"));
 const Login = lazy(() => import("./pages/Login"));
-const Register = lazy(() => import("./pages/Register"));
+const Register = lazy(() => import("./pages/RegisterV2")); // Updated to use V2
+const RegisterLegacy = lazy(() => import("./pages/Register")); // Keep legacy for compatibility
 // Phase 2 Registration Pages
 const Phase2CustomerRegistration = lazy(() => import("./pages/Phase2CustomerRegistration"));
 const Phase2DeveloperRegistration = lazy(() => import("./pages/Phase2DeveloperRegistration"));
@@ -36,6 +37,7 @@ export default function App() {
           <Route path="/developers" element={<Developers />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/register-legacy" element={<RegisterLegacy />} /> {/* Legacy registration flow */}
           {/* Phase 2 Registration Routes */}
           <Route path="/phase2-customer" element={<Phase2CustomerRegistration />} />
           <Route path="/phase2-developer" element={<Phase2DeveloperRegistration />} />
