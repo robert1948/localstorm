@@ -21,8 +21,25 @@ export default {
       return new Response(null, { status: 204, headers: securityHeaders })
     }
     
-    // Handle favicon requests
+    // Handle favicon requests - serve directly to avoid 522 errors
     if (url.pathname === '/favicon.ico') {
+      try {
+        const faviconResponse = await fetch('https://lightning-s3.s3.us-east-1.amazonaws.com/static/website/img/logo-64x64.png')
+        if (faviconResponse.ok) {
+          return new Response(faviconResponse.body, {
+            status: 200,
+            headers: {
+              'Content-Type': 'image/png',
+              'Cache-Control': 'public, max-age=86400',
+              'Access-Control-Allow-Origin': '*',
+              ...securityHeaders
+            }
+          })
+        }
+      } catch (error) {
+        console.error('Favicon fetch error:', error)
+      }
+      // Fallback to a simple redirect if fetch fails
       return Response.redirect('https://lightning-s3.s3.us-east-1.amazonaws.com/static/website/img/logo-64x64.png', 301)
     }
     
