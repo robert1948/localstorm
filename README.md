@@ -2,10 +2,6 @@
 
 CapeControl is a modern AI-powered platform designed to give individuals and businesses access to intelligent automation and control systems.
 
-# 🌩️ CapeControl V5
-
-CapeControl is a modern AI-powered platform designed to give individuals and businesses access to intelligent automation and control systems.
-
 ## 🎉 Latest Update: 2-Step Registration Flow ✅
 
 **Implementation Completed: July 13, 2025**
