@@ -2,11 +2,52 @@
 
 CapeControl is a modern AI-powered platform designed to give individuals and businesses access to intelligent automation and control systems.
 
-## 🎉 Latest Update: Enhanced Authentication System ✅
+# 🌩️ CapeControl V5
+
+CapeControl is a modern AI-powered platform designed to give individuals and businesses access to intelligent automation and control systems.
+
+## 🎉 Latest Update: 2-Step Registration Flow ✅
+
+**Implementation Completed: July 13, 2025**
+
+CapeControl now features a **modern, streamlined 2-step registration system** with:
+
+### ✨ User Experience Improvements
+- **Streamlined Process**: Reduced from 3 steps to 2 for better conversion
+- **Real-Time Validation**: Instant email availability and password strength checking
+- **Modern UI**: Beautiful role selection cards with clear feature descriptions
+- **Mobile Responsive**: Optimized design for all device sizes
+- **Progressive Enhancement**: Loading states and smooth transitions
+
+### 🔒 Enhanced Security Features
+- **Strong Password Requirements**: 12+ characters with complexity rules
+- **Real-Time Email Validation**: Prevents duplicate registrations
+- **Input Sanitization**: Protection against malicious input
+- **API-Driven Validation**: Backend validation for all critical fields
+
+### 🎨 Registration Flow
+1. **Step 1**: Basic Info + Role Selection (Customer/Developer)
+2. **Step 2**: Detailed role-specific information and terms acceptance
+
+### 🔧 Technical Implementation
+- **V2 API Endpoints**: Enhanced validation and registration APIs
+- **React Components**: Modern, maintainable frontend architecture
+- **Database Schema**: Enhanced user model with validation
+- **Backward Compatibility**: Legacy registration flow preserved
+
+### 📋 Key Files
+- `client/src/pages/RegisterV2.jsx` - New 2-step registration component
+- `backend/app/routes/auth_v2.py` - Enhanced V2 API endpoints
+- `registration.md` - Comprehensive registration specification
+- `REGISTRATION_DEVELOPMENT_ROADMAP.md` - Development roadmap
+
+---
+
+## 🔐 Previous Update: Enhanced Authentication System
 
 **Implementation Completed: July 10, 2025**
 
-CapeControl now features a **complete enterprise-grade authentication system** with:
+CapeControl features a **complete enterprise-grade authentication system** with:
 
 ### 🔐 Core Features
 - **JWT-based Authentication**: Secure token-based authentication with access and refresh tokens
