@@ -1,17 +1,27 @@
-# CapeControl Cloudflare Workers
+# CapeControl AI-Agents Platform - Cloudflare Workers
 
-This directory contains Cloudflare Workers for the CapeControl production deployment.
+This directory contains Cloudflare Workers for the CapeControl AI-Agents platform deployment.
+
+## About CapeControl
+
+CapeControl is an **AI-Agents platform** that democratizes artificial intelligence, making advanced AI accessible to everyone from startups to enterprises. Our intelligent agents understand context, adapt to needs, and evolve with users to transform ideas into reality.
 
 ## Files
 
-### `landing-page-worker.js` (RECOMMENDED FOR DEPLOYMENT)
-**Streamlined production worker (95 lines)** - Easier to deploy:
-- Proxies `/api/*` requests to Heroku backend (`https://capecraft-65eeb6ddf78b.herokuapp.com`)
-- Serves a professional landing page for all other requests
-- Adds security headers (CORS, XSS protection, etc.)
-- Implements caching for API endpoints
-- Handles CORS preflight requests
-- **Optimized for manual copy/paste deployment**
+### `ai-agents-landing-worker.js` (NEW PRODUCTION VERSION)
+**Latest AI-Agents platform landing page** - Reflects true vision:
+- Professional AI-focused branding and messaging
+- Showcases CapeControl's AI-agents capabilities
+- Uses proper favicon from S3 bucket
+- Enhanced responsive design with animations
+- Detailed feature descriptions and vision content
+- SEO optimized for AI/automation keywords
+
+### `landing-page-worker.js` (PREVIOUS VERSION)
+**Streamlined production worker** - Original version:
+- Basic landing page functionality
+- API proxy capabilities
+- Security headers and CORS support
 
 ### `corrected-worker.js` (FULL PRODUCTION)
 Complete production worker with all features (188 lines):
@@ -79,6 +89,37 @@ An enhanced version with additional caching features and error handling.
 - 🔧 Deploy favicon fix (minor cosmetic enhancement)
 - 🎨 Landing page content updates (as needed)
 - 🚀 Additional features and integrations
+
+### Development Roadmap:
+
+#### **Phase 1: Landing Page Enhancements**
+- 📸 Add hero images/screenshots of drone operations
+- 🎯 More detailed feature descriptions
+- 💰 Pricing section
+- 📧 Contact form integration
+- 📱 Better mobile optimization
+- 🎨 Custom favicon and branding assets
+
+#### **Phase 2: Static Website Expansion**
+- 📄 About page (`/about`)
+- 🛠️ Services page (`/services`)
+- 📞 Contact page (`/contact`)
+- 📝 Blog/News section (`/blog`)
+- 💼 Case studies (`/case-studies`)
+
+#### **Phase 3: Dynamic Web Application**
+- 🔐 User authentication and dashboards
+- 📊 Real-time drone data visualization
+- 🗺️ Interactive mission planning maps
+- 📱 Progressive Web App (PWA) features
+- 🔄 Real-time updates via WebSockets
+
+#### **Phase 4: Full Platform Integration**
+- 🚁 Connect to actual drone hardware APIs
+- 📡 IoT device management
+- 🤖 AI-powered analytics
+- 📊 Advanced reporting and exports
+- 🔗 Third-party integrations (weather, maps, etc.)
 
 ## Troubleshooting
 
