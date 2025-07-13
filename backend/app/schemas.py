@@ -148,8 +148,9 @@ class LoginInput(BaseModel):
 class UserOut(BaseModel):
     """
     Schema for returning user information (excluding sensitive data).
+    Updated for production database compatibility - July 13, 2025
     """
-    id: int
+    id: str  # UUID string in production database
     email: EmailStr
 
     class Config:
