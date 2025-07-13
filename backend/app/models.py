@@ -5,7 +5,7 @@ from app.database import Base  # Updated import for new structure
 class User(Base):
     """
     SQLAlchemy model for the users table.
-    Stores user credentials, profile information, and role-based details.
+    Updated for production schema compatibility - July 13, 2025
     """
     __tablename__ = "users"
 
@@ -30,7 +30,7 @@ class User(Base):
     skills = Column(String)
     portfolio = Column(String)
     github = Column(String)
-    tos_accepted_at = Column(DateTime(timezone=True))
+    
     # Status and timestamps - match production schema
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
