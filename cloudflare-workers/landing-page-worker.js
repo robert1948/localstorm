@@ -21,6 +21,11 @@ export default {
       return new Response(null, { status: 204, headers: securityHeaders })
     }
     
+    // Handle favicon requests
+    if (url.pathname === '/favicon.ico') {
+      return new Response(null, { status: 204 })
+    }
+    
     // API requests - proxy to Heroku
     if (url.pathname.startsWith('/api/')) {
       try {
@@ -58,6 +63,7 @@ export default {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CapeControl - Drone Operations Platform</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚁</text></svg>">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
