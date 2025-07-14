@@ -239,3 +239,25 @@ class UserCreateV2Production(BaseModel):
     
     class Config:
         from_attributes = True
+
+# ----------------------------
+# Schema: 2-Step Registration Requests
+# ----------------------------
+class RegisterStep1Request(BaseModel):
+    """Step 1: Email validation request"""
+    email: EmailStr
+
+class RegisterStep2Request(BaseModel):
+    """Step 2: Complete registration request"""
+    email: EmailStr
+    password: str
+    full_name: str
+    user_role: Optional[str] = "customer"
+    company_name: Optional[str] = None
+    
+    @validator('password')
+    def validate_password(cls, v):
+        """Password validation for step 2"""
+        if len(v) < 8:
+            raise ValueError('Password must be at least 8 characters long')
+        return v

@@ -282,3 +282,124 @@ async def login_v2(payload: schemas.LoginInput, db: Session = Depends(get_db)):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Login failed. Please try again."
         )
+
+# ----------------------------
+# 2-Step Registration Endpoints (Frontend Compatibility)
+# ----------------------------
+@router.post("/auth/register/step1", tags=["auth-v2"])
+async def register_step1(request: schemas.RegisterStep1Request, db: Session = Depends(get_db)):
+    """
+    Step 1: Validate email and basic info, create pending user
+    """
+    try:
+        # Validate email format
+        email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if not re.match(email_pattern, request.email):
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid email format"
+            )
+        
+        # Check if email already exists
+        existing_user = db.query(models.User).filter(
+            models.User.email == request.email.lower().strip()
+        ).first()
+        
+        if existing_user:
+            raise HTTPException(
+                status_code=400,
+                detail="Email already registered"
+            )
+        
+        return {
+            "success": True,
+            "message": "Email validated successfully",
+            "step": 1,
+            "next_step": "/api/auth/register/step2"
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Step 1 validation failed: {str(e)}"
+        )
+
+@router.post("/auth/register/step2", response_model=schemas.UserOut, tags=["auth-v2"])
+async def register_step2(request: schemas.RegisterStep2Request, db: Session = Depends(get_db)):
+    """
+    Step 2: Complete registration with full user data
+    """
+    try:
+        # Validate required fields
+        if not all([request.email, request.password, request.full_name]):
+            raise HTTPException(
+                status_code=400,
+                detail="Email, password, and full name are required"
+            )
+        
+        # Check email again (defensive programming)
+        existing_user = db.query(models.User).filter(
+            models.User.email == request.email.lower().strip()
+        ).first()
+        
+        if existing_user:
+            raise HTTPException(
+                status_code=400,
+                detail="Email already registered"
+            )
+        
+        # Parse names if full_name provided
+        name_parts = request.full_name.strip().split()
+        first_name = name_parts[0] if name_parts else ""
+        last_name = " ".join(name_parts[1:]) if len(name_parts) > 1 else ""
+        
+        # Create new user
+        hashed_password = get_password_hash(request.password)
+        
+        db_user = models.User(
+            email=request.email.lower().strip(),
+            password_hash=hashed_password,
+            first_name=first_name,
+            last_name=last_name,
+            full_name=request.full_name.strip(),
+            user_role=getattr(request, 'user_role', 'customer'),
+            company_name=getattr(request, 'company_name', None),
+            tos_accepted_at=datetime.utcnow()
+        )
+        
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        
+        # Generate access token
+        access_token = create_access_token(data={"sub": db_user.email})
+        
+        return schemas.UserOut(
+            id=str(db_user.id),
+            email=db_user.email,
+            first_name=db_user.first_name,
+            last_name=db_user.last_name,
+            full_name=db_user.full_name,
+            user_role=db_user.user_role,
+            company_name=db_user.company_name,
+            access_token=access_token,
+            is_active=db_user.is_active,
+            created_at=db_user.created_at
+        )
+        
+    except HTTPException:
+        raise
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=400,
+            detail="Email already registered"
+        )
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail=f"Registration failed: {str(e)}"
+        )
