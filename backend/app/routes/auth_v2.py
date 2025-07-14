@@ -171,7 +171,8 @@ async def register_v2(
         
         print(f"✅ User registered successfully: {user.email} as {user.user_role}")
         
-        return db_user
+        # Return user with explicit string conversion for UUID
+        return {"id": str(db_user.id), "email": db_user.email}
         
     except HTTPException:
         # Re-raise HTTP exceptions
