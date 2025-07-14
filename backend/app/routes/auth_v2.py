@@ -350,19 +350,12 @@ async def register_step2(request: schemas.RegisterStep2Request, db: Session = De
                 detail="Email already registered"
             )
         
-        # Parse names if full_name provided
-        name_parts = request.full_name.strip().split()
-        first_name = name_parts[0] if name_parts else ""
-        last_name = " ".join(name_parts[1:]) if len(name_parts) > 1 else ""
-        
-        # Create new user
+        # Create new user with production schema fields
         hashed_password = get_password_hash(request.password)
         
         db_user = models.User(
             email=request.email.lower().strip(),
             password_hash=hashed_password,
-            first_name=first_name,
-            last_name=last_name,
             full_name=request.full_name.strip(),
             user_role=getattr(request, 'user_role', 'customer'),
             company_name=getattr(request, 'company_name', None),
@@ -379,13 +372,10 @@ async def register_step2(request: schemas.RegisterStep2Request, db: Session = De
         return schemas.UserOut(
             id=str(db_user.id),
             email=db_user.email,
-            first_name=db_user.first_name,
-            last_name=db_user.last_name,
             full_name=db_user.full_name,
             user_role=db_user.user_role,
             company_name=db_user.company_name,
             access_token=access_token,
-            is_active=db_user.is_active,
             created_at=db_user.created_at
         )
         

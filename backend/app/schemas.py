@@ -152,6 +152,11 @@ class UserOut(BaseModel):
     """
     id: str  # UUID string in production database
     email: EmailStr
+    full_name: Optional[str] = None
+    user_role: Optional[str] = None
+    company_name: Optional[str] = None
+    access_token: Optional[str] = None
+    created_at: Optional[datetime] = None
 
     class Config:
         from_attributes = True
