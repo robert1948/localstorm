@@ -361,7 +361,16 @@ async def register_step2(request: schemas.RegisterStep2Request, db: Session = De
             )
         
         # Create new user with production schema fields
-        hashed_password = get_password_hash(request.password)
+        print(f"🔐 Step2 Debug: About to hash password for '{normalized_email}'")
+        try:
+            hashed_password = get_password_hash(request.password)
+            print(f"✅ Step2 Debug: Password hashed successfully")
+        except Exception as hash_error:
+            print(f"❌ Step2 Debug: Password hashing failed: {hash_error}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Password hashing failed: {str(hash_error)}"
+            )
         
         db_user = models.User(
             email=request.email.lower().strip(),
