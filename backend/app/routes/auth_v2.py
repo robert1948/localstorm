@@ -301,15 +301,20 @@ async def register_step1(request: schemas.RegisterStep1Request, db: Session = De
             )
         
         # Check if email already exists
+        normalized_email = request.email.lower().strip()
         existing_user = db.query(models.User).filter(
-            models.User.email == request.email.lower().strip()
+            models.User.email == normalized_email
         ).first()
         
         if existing_user:
+            print(f"❌ Step1 Debug: Email '{normalized_email}' found in database")
+            print(f"   - Existing user ID: {existing_user.id}")
             raise HTTPException(
                 status_code=400,
                 detail="Email already registered"
             )
+        
+        print(f"✅ Step1 Debug: Email '{normalized_email}' is available")
         
         return {
             "success": True,
@@ -340,14 +345,19 @@ async def register_step2(request: schemas.RegisterStep2Request, db: Session = De
             )
         
         # Check email again (defensive programming)
+        normalized_email = request.email.lower().strip()
         existing_user = db.query(models.User).filter(
-            models.User.email == request.email.lower().strip()
+            models.User.email == normalized_email
         ).first()
         
         if existing_user:
+            # Add debug info to understand why this is happening
+            print(f"❌ Step2 Debug: Email '{normalized_email}' found in database")
+            print(f"   - Existing user ID: {existing_user.id}")
+            print(f"   - Existing user email: '{existing_user.email}'")
             raise HTTPException(
                 status_code=400,
-                detail="Email already registered"
+                detail=f"Email already registered: {normalized_email}"
             )
         
         # Create new user with production schema fields
