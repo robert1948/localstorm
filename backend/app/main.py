@@ -2,9 +2,9 @@ from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import auth
-from app.routes import auth_enhanced  # Re-enabled after fixing JWT dependency
-from app.routes import auth_v2  # New V2 registration system
+# from app.routes import auth  # Legacy - DISABLED
+# from app.routes import auth_enhanced  # Enhanced - DISABLED
+from app.routes import auth_v2  # V2 registration system - ACTIVE
 import os
 
 app = FastAPI(
@@ -13,10 +13,10 @@ app = FastAPI(
     version="2.0.0"
 )
 
-# Include routers
-app.include_router(auth.router, prefix="/api")  # Legacy authentication
-app.include_router(auth_enhanced.router)  # Enhanced authentication (already has /api/enhanced prefix)
-app.include_router(auth_v2.router, prefix="/api")  # V2 registration system
+# Include routers - Production V2 only
+# app.include_router(auth.router, prefix="/api")  # Legacy authentication - DISABLED
+# app.include_router(auth_enhanced.router)  # Enhanced authentication - DISABLED
+app.include_router(auth_v2.router, prefix="/api")  # V2 registration system - ACTIVE
 
 # Health check endpoint
 @app.get("/api/health")
