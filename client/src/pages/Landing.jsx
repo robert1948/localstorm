@@ -1,12 +1,15 @@
-// client/src/pages/Landing.jsx
-import React from "react";
-import Hero from "../components/Hero"; // Ensure the path matches the file name
+import { useEffect } from 'react';
+import useAuth from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
-export default function Landing() {
-  return (
-    <main>
-      <Hero />
-      {/* Optionally add Testimonials or Feature sections here */}
-    </main>
-  );
+export default function Logout() {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    logout();
+    navigate('/');
+  }, [logout, navigate]);
+
+  return <div className="p-4 text-center">Logging out...</div>;
 }

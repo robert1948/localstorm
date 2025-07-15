@@ -8,6 +8,7 @@
     "start": "vite preview",
     "build": "vite build && npm run cache-bust && npm run copy",
 
+
     "cache-bust": "node ../scripts/cache-bust.cjs",
     "copy": "if [ \"$INSIDE_DOCKER\" != \"true\" ]; then echo '📦 Copying to backend...'; mkdir -p ../backend/app/static && rm -rf ../backend/app/static/* && cp -a dist/. ../backend/app/static/; else echo '🚫 Skipping copy in Docker'; fi",
 

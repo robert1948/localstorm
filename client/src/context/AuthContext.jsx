@@ -1,8 +1,9 @@
+// client/src/context/AuthContext.jsx
 import { createContext, useState, useEffect } from 'react';
 import { getCurrentUser } from '../api/user';
 import { getToken, clearToken } from '../utils/token';
 
-// Create context with default values to prevent useContext errors
+// Initial context to avoid undefined errors
 export const AuthContext = createContext({
   user: null,
   setUser: () => {},
@@ -14,39 +15,37 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const handleLogout = () => {
+  const logout = () => {
     clearToken();
     setUser(null);
   };
 
   useEffect(() => {
     const initializeUser = async () => {
+      const token = getToken();
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
       try {
-        const token = getToken();
-        if (token) {
-          try {
-            const currentUser = await getCurrentUser();
-            setUser(currentUser);
-          } catch (err) {
-            console.warn('Auto-login failed:', err.message);
-            handleLogout();
-          }
-        }
-      } catch (error) {
-        console.error('Auth initialization error:', error);
+        const currentUser = await getCurrentUser();
+        setUser(currentUser);
+      } catch (err) {
+        console.warn('⚠️ Auto-login failed:', err.message);
+        logout();
       } finally {
         setLoading(false);
       }
     };
-    
+
     initializeUser();
   }, []);
 
-  // Always provide the context with all required values
   const contextValue = {
     user,
     setUser,
-    logout: handleLogout,
+    logout,
     loading,
   };
 
