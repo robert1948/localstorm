@@ -77,6 +77,20 @@ async def robots_txt():
 async def sitemap_xml():
     return FileResponse(os.path.join(FRONTEND_DIST, "sitemap.xml"), media_type="application/xml")
 
+# ✅ Serve site.webmanifest with correct MIME type
+@app.get("/site.webmanifest")
+async def site_webmanifest():
+    return FileResponse(os.path.join(FRONTEND_DIST, "site.webmanifest"), media_type="application/manifest+json")
+
+# ✅ Serve favicon files
+@app.get("/favicon.ico")
+async def favicon():
+    return FileResponse(os.path.join(FRONTEND_DIST, "favicon.ico"), media_type="image/x-icon")
+
+@app.get("/apple-touch-icon.png")  
+async def apple_touch_icon():
+    return FileResponse(os.path.join(FRONTEND_DIST, "apple-touch-icon.png"), media_type="image/png")
+
 # ✅ Serve SPA entry point (index.html)
 @app.get("/{full_path:path}")
 async def serve_spa(full_path: str, request: Request):

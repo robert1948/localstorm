@@ -1,6 +1,8 @@
 // client/src/api/auth.js
 
-const API_BASE = 'http://localhost:8001';
+const API_BASE = process.env.NODE_ENV === 'production' 
+  ? 'https://www.cape-control.com/api' 
+  : 'http://localhost:8001';
 
 export async function loginUser(email, password) {
   const response = await fetch(`${API_BASE}/token`, {
