@@ -29,55 +29,53 @@ import { AuthProvider } from "./context/AuthContext";
 
 export default function App() {
   return (
-    <AuthProvider>
-      <div className="min-h-screen bg-gray-100 text-gray-900">
-        <Navbar />
-        <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/vision" element={<Vision />} />
-            <Route path="/platform" element={<Platform />} />
-            <Route path="/developers" element={<Developers />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/register-legacy" element={<RegisterLegacy />} /> {/* Legacy registration flow */}
-            {/* Phase 2 Registration Routes */}
-            <Route path="/phase2-customer" element={<Phase2CustomerRegistration />} />
-            <Route path="/phase2-developer" element={<Phase2DeveloperRegistration />} />
-            {/* Separate Login Routes */}
-            <Route path="/login-customer" element={<LoginCustomer />} />
-            <Route path="/login-developer" element={<LoginDeveloper />} />
-            <Route path="/logout" element={<Logout />} />
-            <Route path="/how-it-works" element={<HowItWorks />} />
-            <Route path="/how-it-works-user" element={<HowItWorksUser />} />
-            <Route path="/how-it-works-developer" element={<HowItWorksDeveloper />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard/user"
-              element={
-                <ProtectedRoute>
-                  <UserDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard/developer"
-              element={
-                <ProtectedRoute>
-                  <DeveloperDashboard />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </Suspense>
-      </div>
-    </AuthProvider>
+    <div className="min-h-screen bg-gray-100 text-gray-900">
+      <Navbar />
+      <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/vision" element={<Vision />} />
+          <Route path="/platform" element={<Platform />} />
+          <Route path="/developers" element={<Developers />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/register-legacy" element={<RegisterLegacy />} /> {/* Legacy registration flow */}
+          {/* Phase 2 Registration Routes */}
+          <Route path="/phase2-customer" element={<Phase2CustomerRegistration />} />
+          <Route path="/phase2-developer" element={<Phase2DeveloperRegistration />} />
+          {/* Separate Login Routes */}
+          <Route path="/login-customer" element={<LoginCustomer />} />
+          <Route path="/login-developer" element={<LoginDeveloper />} />
+          <Route path="/logout" element={<Logout />} />
+          <Route path="/how-it-works" element={<HowItWorks />} />
+          <Route path="/how-it-works-user" element={<HowItWorksUser />} />
+          <Route path="/how-it-works-developer" element={<HowItWorksDeveloper />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/user"
+            element={
+              <ProtectedRoute>
+                <UserDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/developer"
+            element={
+              <ProtectedRoute>
+                <DeveloperDashboard />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Suspense>
+    </div>
   );
 }
