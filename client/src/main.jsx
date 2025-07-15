@@ -1,13 +1,14 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
 
-// Minimal test component to isolate the issue
-function MinimalApp() {
+// Test with AuthContext only
+function TestApp() {
   return (
     <div className="p-4">
-      <h1>Minimal Test - No Context</h1>
-      <p>If this loads without error, the issue is with our contexts.</p>
+      <h1>Test with AuthContext Added</h1>
+      <p>Testing if AuthContext is the source of React error #321</p>
     </div>
   );
 }
@@ -18,7 +19,9 @@ if (rootElement) {
   createRoot(rootElement).render(
     <React.StrictMode>
       <BrowserRouter>
-        <MinimalApp />
+        <AuthProvider>
+          <TestApp />
+        </AuthProvider>
       </BrowserRouter>
     </React.StrictMode>
   );
