@@ -89,8 +89,7 @@ export default function LoginCustomer() {
               <input
                 id="email"
                 name="email"
-                type="email"
-                autoComplete="email"
+                type="email" autoComplete="username"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

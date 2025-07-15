@@ -90,7 +90,7 @@ function BasicRegistration({ onNext, formData, setFormData }) {
               First Name
             </label>
             <input
-              type="text"
+              type="text" autoComplete="username"
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
@@ -102,7 +102,7 @@ function BasicRegistration({ onNext, formData, setFormData }) {
               Last Name
             </label>
             <input
-              type="text"
+              type="text" autoComplete="username"
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
@@ -116,7 +116,7 @@ function BasicRegistration({ onNext, formData, setFormData }) {
             Email Address
           </label>
           <input
-            type="email"
+            type="email" autoComplete="username"
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -327,7 +327,7 @@ function DetailedRegistration({ formData, setFormData, onSubmit }) {
             {formData.role === "user" ? "Company Name" : "Developer/Company Name"}
           </label>
           <input
-            type="text"
+            type="text" autoComplete="username"
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             value={company}
             onChange={(e) => setCompany(e.target.value)}

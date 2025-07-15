@@ -30,7 +30,7 @@ function Login() {
       <form onSubmit={handleLogin}>
         <input
           className="block w-full mb-2 p-2 border"
-          type="email"
+          type="email" autoComplete="username"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}

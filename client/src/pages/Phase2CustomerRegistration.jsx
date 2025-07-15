@@ -178,7 +178,7 @@ export default function Phase2CustomerRegistration() {
             Company Name
           </label>
           <input
-            type="text"
+            type="text" autoComplete="username"
             value={formData.companyName}
             onChange={(e) => setFormData({...formData, companyName: e.target.value})}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
