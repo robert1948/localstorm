@@ -257,7 +257,7 @@ class RegisterStep2Request(BaseModel):
     email: EmailStr
     password: str
     full_name: str
-    user_role: Optional[str] = "customer"
+    user_role: Optional[str] = "client"  # Fixed: match database constraint
     company_name: Optional[str] = None
     
     @validator('password')
@@ -265,4 +265,11 @@ class RegisterStep2Request(BaseModel):
         """Password validation for step 2"""
         if len(v) < 8:
             raise ValueError('Password must be at least 8 characters long')
+        return v
+    
+    @validator('user_role')
+    def validate_user_role(cls, v):
+        """Validate role selection to match database constraint"""
+        if v not in ['client', 'developer']:
+            raise ValueError('Role must be either "client" or "developer"')
         return v

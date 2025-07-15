@@ -384,11 +384,19 @@ async def register_step2(request: schemas.RegisterStep2Request, db: Session = De
             )
         
         print(f"🔍 Step2 Debug: Creating user object...")
+        
+        # Map role to database-compatible values
+        user_role = getattr(request, 'user_role', 'client')
+        if user_role == 'customer':  # Handle legacy frontend values
+            user_role = 'client'
+        
+        print(f"🔍 Step2 Debug: Using role '{user_role}' for database insert")
+        
         db_user = models.User(
             email=request.email.lower().strip(),
             password_hash=hashed_password,
             full_name=request.full_name.strip(),
-            user_role=getattr(request, 'user_role', 'customer'),
+            user_role=user_role,
             company_name=getattr(request, 'company_name', None),
             tos_accepted_at=datetime.utcnow()
         )
