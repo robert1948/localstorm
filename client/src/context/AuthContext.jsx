@@ -7,37 +7,51 @@ export const AuthContext = createContext({
   user: null,
   setUser: () => {},
   logout: () => {},
+  loading: true,
 });
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const initializeUser = async () => {
-      const token = getToken();
-      if (token) {
-        try {
-          const currentUser = await getCurrentUser();
-          setUser(currentUser);
-        } catch (err) {
-          console.warn('Auto-login failed:', err.message);
-          handleLogout();
-        }
-      }
-      setLoading(false);
-    };
-    initializeUser();
-  }, []);
-
   const handleLogout = () => {
-    clearToken(); // ✅ fixed
+    clearToken();
     setUser(null);
   };
 
-  // Always provide the context, even when loading
+  useEffect(() => {
+    const initializeUser = async () => {
+      try {
+        const token = getToken();
+        if (token) {
+          try {
+            const currentUser = await getCurrentUser();
+            setUser(currentUser);
+          } catch (err) {
+            console.warn('Auto-login failed:', err.message);
+            handleLogout();
+          }
+        }
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    initializeUser();
+  }, []);
+
+  // Always provide the context with all required values
+  const contextValue = {
+    user,
+    setUser,
+    logout: handleLogout,
+    loading,
+  };
+
   return (
-    <AuthContext.Provider value={{ user, setUser, logout: handleLogout }}>
+    <AuthContext.Provider value={contextValue}>
       {loading ? (
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">

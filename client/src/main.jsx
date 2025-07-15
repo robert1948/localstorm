@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App.jsx';
 import { AuthProvider } from './context/AuthContext';
-import { CapeAIProvider } from './context/CapeAIContext';
 import './styles.css';
 
 // Error Boundary Component
@@ -50,9 +49,7 @@ if (rootElement) {
     <ErrorBoundary>
       <BrowserRouter>
         <AuthProvider>
-          <CapeAIProvider>
-            <App />
-          </CapeAIProvider>
+          <App />
         </AuthProvider>
       </BrowserRouter>
     </ErrorBoundary>
