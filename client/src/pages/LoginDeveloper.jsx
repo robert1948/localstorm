@@ -105,8 +105,7 @@ export default function LoginDeveloper() {
               <input
                 id="password"
                 name="password"
-                type="password"
-                autoComplete="current-password"
+                type="password" autoComplete="current-password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

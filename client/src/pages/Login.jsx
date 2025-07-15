@@ -37,7 +37,7 @@ function Login() {
         />
         <input
           className="block w-full mb-4 p-2 border"
-          type="password"
+          type="password" autoComplete="current-password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}

@@ -129,7 +129,7 @@ function BasicRegistration({ onNext, formData, setFormData }) {
             Password
           </label>
           <input
-            type="password"
+            type="password" autoComplete="new-password"
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -143,7 +143,7 @@ function BasicRegistration({ onNext, formData, setFormData }) {
             Confirm Password
           </label>
           <input
-            type="password"
+            type="password" autoComplete="new-password"
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
