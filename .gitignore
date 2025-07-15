@@ -18,6 +18,7 @@ pip-delete-this-directory.txt
 
 # === Dependency Directories ===
 node_modules/
+.venv/  # Python virtual environment (root)
 backend/.venv/  # Python virtual environment
 backend/venv/
 backend/env/
