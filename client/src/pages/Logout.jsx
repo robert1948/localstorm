@@ -1,15 +1,15 @@
-import { useEffect, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { useEffect } from 'react';
+import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
 export default function Logout() {
-  const { logout } = useContext(AuthContext);
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     logout();
-    navigate('/login');
+    navigate('/');
   }, [logout, navigate]);
 
-  return <p className="p-4">Logging out...</p>;
+  return <div className="p-4 text-center">Logging out...</div>;
 }

@@ -1,7 +1,12 @@
 // client/src/context/CapeAIContext.jsx
 import React, { createContext, useState, useCallback } from 'react';
 
-export const CapeAIContext = createContext();
+export const CapeAIContext = createContext({
+  isVisible: true,
+  messages: [],
+  toggleVisibility: () => {},
+  addMessage: () => {},
+});
 
 export const CapeAIProvider = ({ children }) => {
   const [isVisible, setIsVisible] = useState(true);
