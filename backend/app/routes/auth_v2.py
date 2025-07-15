@@ -337,8 +337,16 @@ async def register_step2(request: schemas.RegisterStep2Request, db: Session = De
     Step 2: Complete registration with full user data
     """
     try:
+        # Debug: Log incoming request data
+        print(f"🔍 Step2 Debug: Incoming request data:")
+        print(f"   - Email: '{request.email}'")
+        print(f"   - Full name: '{request.full_name}'")
+        print(f"   - User role: '{request.user_role}'")
+        print(f"   - Company: '{request.company_name}'")
+        
         # Validate required fields
         if not all([request.email, request.password, request.full_name]):
+            print(f"❌ Step2 Debug: Missing required fields")
             raise HTTPException(
                 status_code=400,
                 detail="Email, password, and full name are required"
@@ -346,6 +354,8 @@ async def register_step2(request: schemas.RegisterStep2Request, db: Session = De
         
         # Check email again (defensive programming)
         normalized_email = request.email.lower().strip()
+        print(f"🔍 Step2 Debug: Checking email '{normalized_email}' in database...")
+        
         existing_user = db.query(models.User).filter(
             models.User.email == normalized_email
         ).first()
@@ -355,9 +365,10 @@ async def register_step2(request: schemas.RegisterStep2Request, db: Session = De
             print(f"❌ Step2 Debug: Email '{normalized_email}' found in database")
             print(f"   - Existing user ID: {existing_user.id}")
             print(f"   - Existing user email: '{existing_user.email}'")
+            print(f"   - Existing user created: {existing_user.created_at}")
             raise HTTPException(
                 status_code=400,
-                detail=f"Email already registered: {normalized_email}"
+                detail=f"Email already registered"
             )
         
         # Create new user with production schema fields
@@ -372,6 +383,7 @@ async def register_step2(request: schemas.RegisterStep2Request, db: Session = De
                 detail=f"Password hashing failed: {str(hash_error)}"
             )
         
+        print(f"🔍 Step2 Debug: Creating user object...")
         db_user = models.User(
             email=request.email.lower().strip(),
             password_hash=hashed_password,
@@ -381,12 +393,22 @@ async def register_step2(request: schemas.RegisterStep2Request, db: Session = De
             tos_accepted_at=datetime.utcnow()
         )
         
+        print(f"🔍 Step2 Debug: Adding user to database...")
         db.add(db_user)
+        
+        print(f"🔍 Step2 Debug: Committing transaction...")
         db.commit()
+        
+        print(f"🔍 Step2 Debug: Refreshing user object...")
         db.refresh(db_user)
         
+        print(f"✅ Step2 Debug: User created successfully with ID: {db_user.id}")
+        
         # Generate access token
+        print(f"🔍 Step2 Debug: Generating access token...")
         access_token = create_access_token(data={"sub": db_user.email})
+        
+        print(f"✅ Step2 Debug: Registration completed successfully for '{normalized_email}'")
         
         return schemas.UserOut(
             id=str(db_user.id),
@@ -399,15 +421,20 @@ async def register_step2(request: schemas.RegisterStep2Request, db: Session = De
         )
         
     except HTTPException:
+        print(f"❌ Step2 Debug: HTTPException raised")
         raise
-    except IntegrityError:
+    except IntegrityError as ie:
         db.rollback()
+        print(f"❌ Step2 Debug: IntegrityError - {ie}")
         raise HTTPException(
             status_code=400,
             detail="Email already registered"
         )
     except Exception as e:
         db.rollback()
+        print(f"❌ Step2 Debug: Unexpected error - {type(e).__name__}: {e}")
+        import traceback
+        print(f"❌ Step2 Debug: Traceback - {traceback.format_exc()}")
         raise HTTPException(
             status_code=500,
             detail=f"Registration failed: {str(e)}"
