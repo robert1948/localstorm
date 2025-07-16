@@ -1,1 +1,0 @@
-import{u as o,r as s,j as a}from"./index-CMYYXbab.js";import{u as r}from"./useAuth-BBHr9Z9o.js";function i(){const{logout:t}=r(),e=o();return s.useEffect(()=>{t(),e("/")},[t,e]),a.jsx("div",{className:"p-4 text-center",children:"Logging out..."})}export{i as default};
