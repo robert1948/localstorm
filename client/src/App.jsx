@@ -1,7 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import Navbar from "./components/Navbar";
-import { AuthProvider } from "./context/AuthContext";
 
 // ✅ Lazy-loaded pages
 const Landing = lazy(() => import("./pages/Landing"));
@@ -26,53 +25,47 @@ const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"));
 
 export default function App() {
   return (
-    <AuthProvider>
-      <div className="min-h-screen bg-gray-100 text-gray-900">
-        <Navbar />
-        <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/vision" element={<Vision />} />
-            <Route path="/platform" element={<Platform />} />
-            <Route path="/developers" element={<Developers />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/register-legacy" element={<RegisterLegacy />} />
-            <Route path="/phase2-customer" element={<Phase2CustomerRegistration />} />
-            <Route path="/phase2-developer" element={<Phase2DeveloperRegistration />} />
-            <Route path="/login-customer" element={<LoginCustomer />} />
-            <Route path="/login-developer" element={<LoginDeveloper />} />
-            <Route path="/logout" element={<Logout />} />
-            <Route path="/how-it-works" element={<HowItWorks />} />
-            <Route path="/how-it-works-user" element={<HowItWorksUser />} />
-            <Route path="/how-it-works-developer" element={<HowItWorksDeveloper />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard/user"
-              element={
-                <ProtectedRoute>
-                  <UserDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard/developer"
-              element={
-                <ProtectedRoute>
-                  <DeveloperDashboard />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </Suspense>
-      </div>
-    </AuthProvider>
+    <div className="min-h-screen bg-gray-100 text-gray-900">
+      <Navbar />
+      <Suspense fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-2 text-sm text-gray-600">Loading...</p>
+          </div>
+        </div>
+      }>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/vision" element={<Vision />} />
+          <Route path="/platform" element={<Platform />} />
+          <Route path="/developers" element={<Developers />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/register-legacy" element={<RegisterLegacy />} />
+          <Route path="/phase2-customer" element={<Phase2CustomerRegistration />} />
+          <Route path="/phase2-developer" element={<Phase2DeveloperRegistration />} />
+          <Route path="/login-customer" element={<LoginCustomer />} />
+          <Route path="/login-developer" element={<LoginDeveloper />} />
+          <Route path="/logout" element={<Logout />} />
+          <Route path="/how-it-works" element={<HowItWorks />} />
+          <Route path="/how-it-works-user" element={<HowItWorksUser />} />
+          <Route path="/how-it-works-developer" element={<HowItWorksDeveloper />} />
+          <Route
+            path="/dashboard"
+            element={<ProtectedRoute><Dashboard /></ProtectedRoute>}
+          />
+          <Route
+            path="/dashboard/user"
+            element={<ProtectedRoute><UserDashboard /></ProtectedRoute>}
+          />
+          <Route
+            path="/dashboard/developer"
+            element={<ProtectedRoute><DeveloperDashboard /></ProtectedRoute>}
+          />
+          <Route path="*" element={<div className="p-4 text-center text-red-600">404 - Page Not Found</div>} />
+        </Routes>
+      </Suspense>
+    </div>
   );
 }

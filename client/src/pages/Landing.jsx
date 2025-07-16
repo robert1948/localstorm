@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
-export default function Logout() {
+export default function Landing() {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
