@@ -5,138 +5,67 @@
 **Last Updated:** July 15, 2025
 
 CapeControl is a modern platform connecting clients with AI developers through a secure, streamlined registration and matching system.
+### � **Production Metrics**
 
-## 🚀 **PRODUCTION STATUS**
+## ⚙️ Local Development
 
-### ✅ **Currently Deployed & Working**
-- **2-Step Registration System** - V2 auth endpoints operational
-- **Database:** PostgreSQL on Heroku with production schema
-- **Authentication:** JWT-based with bcrypt password hashing  
-- **Email System:** SMTP integration with background tasks
-- **Domain & SSL:** Custom domain with Cloudflare + Heroku SSL
-- **API Documentation:** OpenAPI/Swagger available at `/docs`
+### 🔧 Prerequisites
+- Python 3.11+ 
+- Node.js 18+
+- Git
 
-### 📊 **Production Metrics**
-- **Uptime:** 99.9%+ operational
-- **Response Times:** Health check ~1ms, Registration ~60-290ms
-- **Current Release:** v315 (Heroku auto-deploy from GitHub)
-- **Database:** Essential PostgreSQL with connection pooling
+### 🚀 Quick Start
 
-## 🔧 **TECHNICAL ARCHITECTURE**
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/robert1948/localstorm.git
+   cd localstorm
+   ```
 
-### Backend (FastAPI + PostgreSQL)
-```python
-# Production API Endpoints
-/api/health                    # System health check
-/api/auth/register/step1       # Email validation  
-/api/auth/register/step2       # Complete registration
-/api/auth/v2/login            # User authentication
-/api/auth/v2/validate-email   # Real-time email checking
-/api/auth/v2/validate-password # Password strength validation
-```
+2. **Set up environment variables:**
+   ```bash
+   # Copy environment templates
+   cp .env.example .env
+   cp backend/.env.example backend/.env
 
-### Frontend (React + Vite + Tailwind)
-- **Modern Stack:** React 18.2.0 with Vite build system
-- **UI Components:** shadcn/ui component library
-- **Styling:** Tailwind CSS with responsive design
-- **Performance:** Optimized production builds with cache busting
+   # Update backend/.env with your configuration (see IMPLEMENTATION_STATUS.md for production values)
+   ```
 
-### Production Database Schema
-```sql
--- PostgreSQL Production Schema
-users (
-  id VARCHAR PRIMARY KEY,           -- UUID string
-  email VARCHAR(255) UNIQUE,        -- User email (validated)
-  password_hash VARCHAR(60),        -- bcrypt hashed password
-  user_role VARCHAR(20),            -- 'customer' or 'developer'
-  full_name VARCHAR(100),           -- User's display name
-  company_name VARCHAR,             -- Optional company info
-  tos_accepted_at TIMESTAMP,        -- Terms acceptance timestamp
-  created_at TIMESTAMP DEFAULT NOW,
-  updated_at TIMESTAMP DEFAULT NOW
-)
-```
+3. **Backend Setup:**
+   ```bash
+   cd backend
+   pip install -r requirements.txt
 
-## 🎯 **2-STEP REGISTRATION FLOW**
+   # Run database migrations (creates SQLite for development)
+   python migrate_auth.py
 
-### Step 1: Email Validation
-- Real-time email format validation
-- Database availability checking
-- Instant feedback to users
+   # Start the API server
+   uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+   ```
 
-### Step 2: Complete Registration
-- Password strength validation (8+ chars, mixed case, numbers)
-- Role selection (Customer/Developer)
-- Terms of service acceptance
-- JWT token generation
-- Welcome email delivery
+4. **Frontend Setup:**
+   ```bash
+   cd client
+   npm install
+   npm run dev
+   ```
 
-## 🌐 **PRODUCTION ENVIRONMENT**
+5. **Docker (Full Stack):**
+   ```bash
+   # Run the complete stack
+   docker-compose up --build
+   ```
 
-### Heroku Deployment
-```env
-# Key Production Configuration
-DATABASE_URL=postgres://[...]        # Heroku PostgreSQL
-SECRET_KEY=[secure-key]              # JWT signing key
-SMTP_HOST=smtp.gmail.com             # Email delivery
-CLIENT_URL=https://www.cape-control.com
-NODE_ENV=production
-```
+### 🌐 Access Points
+- **Frontend**: http://localhost:5173  
+- **Backend API**: http://localhost:8000
+- **API Documentation**: http://localhost:8000/docs
+- **Health Check**: http://localhost:8000/health
 
-### Domain & Performance
-- **Primary Domain:** www.cape-control.com
-- **SSL Certificate:** Heroku Auto Cert Management
-- **CDN:** Cloudflare with global edge caching
-- **DNS:** Cloudflare DNS management
+### 🧪 Testing the Authentication System
 
-## 📋 **RECENT UPDATES**
-
-### July 15, 2025 - Project Cleanup ✅
-- ✅ Streamlined codebase - disabled legacy auth systems
-- ✅ Removed obsolete files and dependencies
-- ✅ Enhanced error handling and bcrypt compatibility
-- ✅ Updated documentation and status tracking
-- ✅ Optimized main.py to use only V2 auth system
-
-### July 14, 2025 - Registration System ✅  
-- ✅ Fixed production schema compatibility
-- ✅ Added 2-step registration endpoints
-- ✅ Resolved UUID and field name mismatches
-- ✅ Enhanced password validation and hashing
-
-### July 13, 2025 - Production Deployment ✅
-- ✅ Fixed Cloudflare DNS and SSL issues  
-- ✅ Verified database connectivity
-- ✅ Fixed favicon and static asset loading
-- ✅ Confirmed health endpoints operational
-- **Authentication**: Register, login, logout, refresh tokens
-- **User Management**: Profile management, password changes
-- **Developer Revenue**: Earnings tracking (developers only)
-- **Security**: Role-based access control, audit logging
-
-See `/docs/api_specification.md` for complete API documentation.
-
-## 🌐 Deployment
-
-### Production Deployment
-Automatic deployment is triggered when code is pushed to the `main` branch via GitHub Actions.
-
-**Infrastructure:**
-- Docker images built and deployed to Heroku Container Registry
-- Static frontend assets synced to AWS S3
-- PostgreSQL database on Heroku Postgres
-- Environment variables managed through Heroku Config Vars
-
-**Live URLs:**
-- **Production Site**: [https://cape-control.com](https://cape-control.com)
-- **API Endpoint**: https://api.cape-control.com
-- **Status Page**: https://api.cape-control.com/health
-
-### Environment Configuration
-
-**Required Environment Variables:**
 ```bash
-# Security
+# Test user registration (V2 endpoint)
 SECRET_KEY=your-super-secure-secret-key
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
@@ -147,13 +76,68 @@ DATABASE_URL=postgresql://user:pass@localhost:5432/capecontrol
 # Email (for password reset)
 EMAIL_SMTP_HOST=smtp.gmail.com
 EMAIL_USERNAME=your-email@gmail.com
-## 🛠️ **DEVELOPMENT SETUP**
+## �️ **DEVELOPMENT SETUP**
 
 ### Prerequisites
 - Node.js 18+ for frontend development
 - Python 3.11+ for backend development  
 - PostgreSQL for database (or use provided Docker setup)
 - Git for version control
+```
+
+### 🖥️ Visit the app locally
+
+- Frontend: http://localhost:5173  
+- Backend API: http://localhost:8000
+
+## 🌐 Deployment
+
+Automatic deployment is triggered when code is pushed to the `main` branch via GitHub Actions.  
+Docker images are built and released to Heroku’s container registry.  
+Static frontend assets are synced to an AWS S3 bucket.
+
+Live site: [https://cape-control.com](https://cape-control.com)
+
+## 🔒 Security Features
+
+- **JWT Authentication**: Stateless, secure token-based auth
+- **Password Hashing**: bcrypt with automatic salt generation  
+- **Role-Based Access**: Customer, Developer, Admin permissions
+- **Session Management**: Token refresh, revocation, device tracking
+- **Security Monitoring**: Comprehensive audit logging
+- **Input Validation**: Pydantic models with type safety
+- **CORS Protection**: Configurable cross-origin policies
+- **Rate Limiting**: Built-in abuse protection
+
+## 🏆 Key Features
+
+### For Customers
+- ✅ Secure account registration and login
+- ✅ Browse AI agent marketplace  
+- ✅ Subscription and pay-per-use billing
+- ✅ Personalized dashboard
+- ✅ Usage analytics and history
+
+### For Developers  
+- ✅ AI agent publishing platform
+- ✅ Revenue tracking and analytics
+- ✅ Commission management (30% default)
+- ✅ Payout history and reporting
+- ✅ Developer-specific APIs
+
+### For Administrators
+- ✅ User management and analytics
+- ✅ Platform oversight and monitoring
+- ✅ Revenue reporting and insights
+- ✅ Security audit logs
+
+## 📄 License
+
+MIT License © Robert
+
+---
+
+_Last updated: 2025-07-15 - Production deployment, V2 authentication, Tailwind global, all context/provider issues resolved._
 
 ### Local Development
 ```bash
