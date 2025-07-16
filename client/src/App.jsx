@@ -25,7 +25,7 @@ const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"));
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900">
+    <div className="min-h-screen bg-gray-100 text-gray-900 pt-20">
       <Navbar />
       <Suspense fallback={
         <div className="flex items-center justify-center min-h-screen">
