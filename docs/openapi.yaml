@@ -1,0 +1,776 @@
+openapi: 3.0.0
+info:
+  title: CapeControl Authentication API
+  description: |
+    Secure, scalable authentication system for CapeControl with JWT tokens, 
+    role-based access control, and developer revenue tracking.
+    
+    ## Features
+    - JWT-based authentication with refresh tokens
+    - Role-based access control (Customer, Developer, Admin)
+    - Secure password reset workflow
+    - Developer earnings and revenue tracking
+    - Comprehensive audit logging
+    
+    ## Security
+    - bcrypt password hashing
+    - HS256 JWT tokens with configurable expiration
+    - Token revocation and session management
+    - Rate limiting and abuse protection
+    
+  version: 1.0.0
+  contact:
+    name: CapeControl API Support
+    email: api-support@capecontrol.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.capecontrol.com
+    description: Production server
+  - url: https://staging-api.capecontrol.com
+    description: Staging server
+  - url: http://localhost:8000
+    description: Development server
+
+security:
+  - BearerAuth: []
+
+paths:
+  /api/auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user
+      description: Create a new user account with email and password
+      operationId: registerUser
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+            examples:
+              customer:
+                summary: Customer registration
+                value:
+                  email: "customer@example.com"
+                  password: "SecurePassword123!"
+                  first_name: "John"
+                  last_name: "Doe"
+                  role: "customer"
+                  experience: "intermediate"
+              developer:
+                summary: Developer registration
+                value:
+                  email: "developer@example.com"
+                  password: "DevPassword123!"
+                  first_name: "Jane"
+                  last_name: "Smith"
+                  role: "developer"
+                  company: "TechCorp"
+                  website: "https://techcorp.com"
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSuccessResponse'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Authenticate user
+      description: Login with email and password to receive JWT tokens
+      operationId: loginUser
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              email: "user@example.com"
+              password: "SecurePassword123!"
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSuccessResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: Logout user
+      description: Invalidate current JWT tokens
+      operationId: logoutUser
+      responses:
+        '200':
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/refresh:
+    post:
+      tags:
+        - Authentication
+      summary: Refresh access token
+      description: Use refresh token to get a new access token
+      operationId: refreshToken
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+            example:
+              refresh_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      responses:
+        '200':
+          description: Token refreshed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          description: Invalid refresh token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/reset-password:
+    post:
+      tags:
+        - Authentication
+      summary: Request password reset
+      description: Send password reset email to user
+      operationId: requestPasswordReset
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+            example:
+              email: "user@example.com"
+      responses:
+        '200':
+          description: Password reset email sent (always returns success)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /api/auth/reset-password/confirm:
+    post:
+      tags:
+        - Authentication
+      summary: Confirm password reset
+      description: Reset password using token from email
+      operationId: confirmPasswordReset
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
+            example:
+              token: "reset_token_from_email"
+              new_password: "NewSecurePassword123!"
+      responses:
+        '200':
+          description: Password reset successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/me:
+    get:
+      tags:
+        - User Management
+      summary: Get current user profile
+      description: Retrieve the authenticated user's profile information
+      operationId: getCurrentUser
+      responses:
+        '200':
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResponse'
+        '401':
+          description: Invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      tags:
+        - User Management
+      summary: Update user profile
+      description: Update the authenticated user's profile information
+      operationId: updateUserProfile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+            example:
+              first_name: "John"
+              last_name: "Smith"
+              phone: "+1-555-0124"
+              website: "https://newsite.com"
+              company: "New Company"
+              experience: "advanced"
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResponse'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/change-password:
+    post:
+      tags:
+        - User Management
+      summary: Change user password
+      description: Change the authenticated user's password
+      operationId: changePassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordChangeRequest'
+            example:
+              current_password: "SecurePassword123!"
+              new_password: "NewSecurePassword456!"
+      responses:
+        '200':
+          description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Invalid current password or weak new password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/developer/earnings:
+    get:
+      tags:
+        - Developer Revenue
+      summary: Get developer earnings
+      description: Retrieve developer's revenue share and earnings data (Developer role required)
+      operationId: getDeveloperEarnings
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of items per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+        - name: agent_id
+          in: query
+          description: Filter by specific agent ID
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Developer earnings retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeveloperEarningsResponse'
+        '401':
+          description: Invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Developer access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT access token obtained from login or refresh endpoint
+
+  schemas:
+    UserCreateRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+        password:
+          type: string
+          minLength: 8
+          example: "SecurePassword123!"
+          description: "Minimum 8 characters, must include uppercase, lowercase, and number"
+        first_name:
+          type: string
+          maxLength: 100
+          example: "John"
+        last_name:
+          type: string
+          maxLength: 100
+          example: "Doe"
+        role:
+          type: string
+          enum: [customer, developer, admin]
+          default: customer
+          example: "customer"
+        phone:
+          type: string
+          maxLength: 20
+          example: "+1-555-0123"
+        website:
+          type: string
+          format: uri
+          example: "https://example.com"
+        company:
+          type: string
+          maxLength: 255
+          example: "Example Corp"
+        experience:
+          type: string
+          enum: [beginner, intermediate, advanced, expert]
+          example: "intermediate"
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+        password:
+          type: string
+          example: "SecurePassword123!"
+
+    RefreshTokenRequest:
+      type: object
+      required:
+        - refresh_token
+      properties:
+        refresh_token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+    PasswordResetRequest:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+
+    PasswordResetConfirmRequest:
+      type: object
+      required:
+        - token
+        - new_password
+      properties:
+        token:
+          type: string
+          example: "reset_token_from_email"
+        new_password:
+          type: string
+          minLength: 8
+          example: "NewSecurePassword123!"
+
+    UserUpdateRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          maxLength: 100
+          example: "John"
+        last_name:
+          type: string
+          maxLength: 100
+          example: "Smith"
+        phone:
+          type: string
+          maxLength: 20
+          example: "+1-555-0124"
+        website:
+          type: string
+          format: uri
+          example: "https://newsite.com"
+        company:
+          type: string
+          maxLength: 255
+          example: "New Company"
+        experience:
+          type: string
+          enum: [beginner, intermediate, advanced, expert]
+          example: "advanced"
+
+    PasswordChangeRequest:
+      type: object
+      required:
+        - current_password
+        - new_password
+      properties:
+        current_password:
+          type: string
+          example: "SecurePassword123!"
+        new_password:
+          type: string
+          minLength: 8
+          example: "NewSecurePassword456!"
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+        first_name:
+          type: string
+          example: "John"
+        last_name:
+          type: string
+          example: "Doe"
+        role:
+          type: string
+          enum: [customer, developer, admin]
+          example: "customer"
+        phone:
+          type: string
+          example: "+1-555-0123"
+        website:
+          type: string
+          example: "https://example.com"
+        company:
+          type: string
+          example: "Example Corp"
+        experience:
+          type: string
+          enum: [beginner, intermediate, advanced, expert]
+          example: "intermediate"
+        is_active:
+          type: boolean
+          example: true
+        is_verified:
+          type: boolean
+          example: false
+        created_at:
+          type: string
+          format: date-time
+          example: "2025-01-08T10:30:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2025-01-08T11:00:00Z"
+        last_login_at:
+          type: string
+          format: date-time
+          example: "2025-01-08T10:30:00Z"
+
+    Tokens:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        refresh_token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        token_type:
+          type: string
+          example: "bearer"
+        expires_in:
+          type: integer
+          example: 3600
+          description: "Access token expiration time in seconds"
+
+    DeveloperEarning:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        agent_id:
+          type: string
+          example: "agent_001"
+        agent_name:
+          type: string
+          example: "Marketing AI Assistant"
+        revenue_share:
+          type: number
+          format: decimal
+          example: 750.50
+        total_sales:
+          type: number
+          format: decimal
+          example: 2501.67
+        commission_rate:
+          type: number
+          format: decimal
+          example: 0.3000
+        last_payout_amount:
+          type: number
+          format: decimal
+          example: 500.00
+        last_payout_at:
+          type: string
+          format: date-time
+          example: "2025-01-01T00:00:00Z"
+        total_paid_out:
+          type: number
+          format: decimal
+          example: 500.00
+        is_active:
+          type: boolean
+          example: true
+        currency:
+          type: string
+          example: "USD"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-12-01T00:00:00Z"
+
+    DeveloperEarningsSummary:
+      type: object
+      properties:
+        total_revenue_share:
+          type: number
+          format: decimal
+          example: 1250.75
+        total_paid_out:
+          type: number
+          format: decimal
+          example: 800.00
+        pending_payout:
+          type: number
+          format: decimal
+          example: 450.75
+        active_agents:
+          type: integer
+          example: 3
+        currency:
+          type: string
+          example: "USD"
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 10
+        total:
+          type: integer
+          example: 25
+        total_pages:
+          type: integer
+          example: 3
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Operation completed successfully"
+
+    AuthSuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "User registered successfully"
+        data:
+          type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/User'
+            tokens:
+              $ref: '#/components/schemas/Tokens'
+
+    TokenResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Token refreshed successfully"
+        data:
+          type: object
+          properties:
+            access_token:
+              type: string
+              example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            token_type:
+              type: string
+              example: "bearer"
+            expires_in:
+              type: integer
+              example: 3600
+
+    UserProfileResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          $ref: '#/components/schemas/User'
+
+    DeveloperEarningsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          properties:
+            summary:
+              $ref: '#/components/schemas/DeveloperEarningsSummary'
+            earnings:
+              type: array
+              items:
+                $ref: '#/components/schemas/DeveloperEarning'
+            pagination:
+              $ref: '#/components/schemas/Pagination'
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: "An error occurred"
+        error_code:
+          type: string
+          example: "INVALID_CREDENTIALS"
+        details:
+          type: object
+          additionalProperties: true
+          example:
+            field: "Additional error details"
+
+tags:
+  - name: Authentication
+    description: User authentication and token management
+  - name: User Management
+    description: User profile and account management
+  - name: Developer Revenue
+    description: Developer earnings and revenue tracking

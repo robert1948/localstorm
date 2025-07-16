@@ -1,0 +1,70 @@
+# === Python bytecode & cache ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# === Python virtual environments ===
+.venv/
+env/
+venv/
+backend/.venv/
+backend/env/
+backend/venv/
+
+# === Environment files & secrets ===
+.env
+.env.*
+backend/.env
+backend/.env.*
+*.key
+*.pem
+*.crt
+secrets/
+
+# === Database files (exclude from Docker builds) ===
+*.db
+*.sqlite
+*.sqlite3
+capecontrol.db
+backend/capecontrol.db
+
+# === Node modules & frontend build cache ===
+client/node_modules/
+node_modules/
+
+# === Logs ===
+*.log
+logs/
+
+# === IDE/editor files ===
+.vscode/
+.idea/
+*.swp
+.DS_Store
+.vs/
+
+# === Git ===
+.git/
+.gitignore
+.gitattributes
+
+# === Docker local config ===
+docker-compose.override.yml
+Dockerfile.dev
+
+# === Testing & Development files ===
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+test_data.json
+demo_users.json
+
+# === Documentation (if large) ===
+# docs/  # Uncomment if docs are large and not needed in production
+
+# ❌ DO NOT exclude these - they are needed in Docker builds!
+# client/dist/     <-- Keep for production builds
+# backend/app/static/ <-- Keep for serving frontend
