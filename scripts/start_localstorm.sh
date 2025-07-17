@@ -4,6 +4,15 @@
 BACKEND_PORT=8000
 FRONTEND_PORT=3000
 
+# Load environment variables from .env file
+if [[ -f .env ]]; then
+    export $(cat .env | grep -v '^#' | xargs)
+    echo "✅ Loaded environment variables from .env"
+else
+    echo "⚠️  No .env file found, using defaults"
+    export SECRET_KEY=dev-secret-key-for-local-development
+fi
+
 # Function to free a port
 free_port() {
   local port=$1
@@ -32,14 +41,13 @@ trap cleanup EXIT
 
 # Start backend
 echo "🚀 Starting backend on http://localhost:$BACKEND_PORT ..."
-uvicorn backend.app.main:app --reload --port $BACKEND_PORT &
+(cd backend && python -m uvicorn app.main:app --reload --port $BACKEND_PORT --host 0.0.0.0) &
 BACKEND_PID=$!
 
 # Start frontend
 echo "🚀 Starting frontend on http://localhost:$FRONTEND_PORT ..."
-cd client && npm run dev -- --port $FRONTEND_PORT &
+(cd client && npm run dev -- --port $FRONTEND_PORT --host 0.0.0.0) &
 FRONTEND_PID=$!
-cd ..
 
 # Wait briefly
 sleep 2

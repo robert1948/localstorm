@@ -3,9 +3,10 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
+  "workspaceFolder": "/workspaces/localstorm-main",
   "forwardPorts": [8000, 5173],
-  "postCreateCommand": "npm install --prefix /workspace/client && pip install -r /workspace/backend/requirements.txt",
-  "postStartCommand": "bash scripts/start_localstorm.sh",
+  "postCreateCommand": "npm install --prefix ./client && pip install -r ./requirements.txt",
+  "postStartCommand": "bash ./scripts/start_localstorm.sh",
 
   "features": {},
   "customizations": {

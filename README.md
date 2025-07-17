@@ -1,8 +1,9 @@
-# 🌩️ CapeControl 2.0 - Production Ready 250716
+# 🌩️ CapeControl 2.0 - Production Ready & Development Environment
 
 **Status:** ✅ **DEPLOYED AND OPERATIONAL**  
 **Production URL:** https://www.cape-control.com  
-**Last Updated:** July 15, 2025
+**Development Environment:** ✅ **FULLY CONFIGURED**  
+**Last Updated:** July 17, 2025
 
 CapeControl is a modern platform connecting clients with AI developers through a secure, streamlined registration and matching system.
 ### � **Production Metrics**
@@ -10,11 +11,42 @@ CapeControl is a modern platform connecting clients with AI developers through a
 ## ⚙️ Local Development
 
 ### 🔧 Prerequisites
-- Python 3.11+ 
-- Node.js 18+
-- Git
+- VS Code with Dev Containers extension (recommended)
+- Docker Desktop (for dev container)
+- OR: Python 3.11+ and Node.js 18+ (for manual setup)
 
-### 🚀 Quick Start
+### 🚀 Quick Start (Dev Container - Recommended)
+
+1. **Open in VS Code Dev Container:**
+   ```bash
+   git clone https://github.com/robert1948/localstorm.git
+   cd localstorm
+   code .
+   # VS Code will prompt to "Reopen in Container" - click Yes
+   ```
+
+2. **Automatic Setup:**
+   - Dev container automatically runs: `npm install --prefix ./client && pip install -r ./requirements.txt`
+   - Environment variables are configured via `.env` file
+   - Both backend and frontend dependencies are installed
+
+3. **Start the Application:**
+   ```bash
+   # Use the provided startup script (runs both backend and frontend)
+   bash ./scripts/start_localstorm.sh
+
+   # OR use the Makefile
+   make dev
+
+   # OR start services individually:
+   # Backend (from project root)
+   cd backend && python -m uvicorn app.main:app --reload --port 8000 --host 0.0.0.0
+
+   # Frontend (from project root, new terminal)
+   cd client && npm run dev -- --port 3000 --host 0.0.0.0
+   ```
+
+### 🚀 Manual Setup (Without Dev Container)
 
 1. **Clone the repository:**
    ```bash
@@ -24,71 +56,62 @@ CapeControl is a modern platform connecting clients with AI developers through a
 
 2. **Set up environment variables:**
    ```bash
-   # Copy environment templates
+   # Copy environment template and configure
    cp .env.example .env
-   cp backend/.env.example backend/.env
-
-   # Update backend/.env with your configuration (see IMPLEMENTATION_STATUS.md for production values)
+   # Edit .env with your configuration (SECRET_KEY is required)
    ```
 
 3. **Backend Setup:**
    ```bash
    cd backend
-   pip install -r requirements.txt
+   pip install -r ../requirements.txt
 
    # Run database migrations (creates SQLite for development)
    python migrate_auth.py
 
    # Start the API server
-   uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+   python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
    ```
 
 4. **Frontend Setup:**
    ```bash
    cd client
    npm install
-   npm run dev
-   ```
-
-5. **Docker (Full Stack):**
-   ```bash
-   # Run the complete stack
-   docker-compose up --build
+   npm run dev -- --port 3000 --host 0.0.0.0
    ```
 
 ### 🌐 Access Points
-- **Frontend**: http://localhost:5173  
+- **Frontend**: http://localhost:3000  
 - **Backend API**: http://localhost:8000
 - **API Documentation**: http://localhost:8000/docs
-- **Health Check**: http://localhost:8000/health
+- **Health Check**: http://localhost:8000/api/health
 
-### 🧪 Testing the Authentication System
+### 🧪 Testing the Application
 
 ```bash
-# Test user registration (V2 endpoint)
-SECRET_KEY=your-super-secure-secret-key
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=30
+# Test health endpoint
+curl http://localhost:8000/api/health
 
-# Database  
-DATABASE_URL=postgresql://user:pass@localhost:5432/capecontrol
-
-# Email (for password reset)
-EMAIL_SMTP_HOST=smtp.gmail.com
-EMAIL_USERNAME=your-email@gmail.com
-## �️ **DEVELOPMENT SETUP**
-
-### Prerequisites
-- Node.js 18+ for frontend development
-- Python 3.11+ for backend development  
-- PostgreSQL for database (or use provided Docker setup)
-- Git for version control
+# Test registration endpoint
+curl -X POST http://localhost:8000/api/auth/register/step1 \
+  -H "Content-Type: application/json" \
+  -d '{"email": "test@example.com"}'
 ```
 
-### 🖥️ Visit the app locally
+### 🔧 Development Environment Variables
 
-- Frontend: http://localhost:5173  
-- Backend API: http://localhost:8000
+Create a `.env` file in the project root:
+```bash
+SECRET_KEY=dev-secret-key-for-local-development-change-in-production
+ENV=development
+DEBUG=true
+DATABASE_URL=sqlite:///./capecontrol.db
+POSTGRES_DB=capecontrol
+POSTGRES_USER=capecontrol_user
+POSTGRES_PASSWORD=dev-password-123
+REACT_APP_API_URL=http://localhost:8000
+REACT_APP_ENVIRONMENT=development
+```
 
 ## 🌐 Deployment
 
@@ -137,7 +160,7 @@ MIT License © Robert
 
 ---
 
-_Last updated: 2025-07-15 - Production deployment, V2 authentication, Tailwind global, all context/provider issues resolved._
+_Last updated: 2025-07-17 - Production deployment, V2 authentication, Tailwind global, development environment fully configured._
 
 ### Local Development
 ```bash
