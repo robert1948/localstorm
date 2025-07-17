@@ -1,6 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import Navbar from "./components/Navbar";
+import CapeAIProvider from "./context/CapeAIContext";
+import CapeAISystem from "./components/CapeAISystem";
 
 // ✅ Lazy-loaded pages
 const Landing = lazy(() => import("./pages/Landing"));
@@ -25,7 +27,7 @@ const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"));
 
 export default function App() {
   return (
-    <>
+    <CapeAIProvider>
       <div className="p-4 bg-green-200 text-center font-bold text-xl">
         ✅ Tailwind is working!
       </div>
@@ -93,7 +95,10 @@ export default function App() {
             </Routes>
           </Suspense>
         </main>
+        
+        {/* CapeAI System - Available throughout the app */}
+        <CapeAISystem />
       </div>
-    </>
+    </CapeAIProvider>
   );
 }
