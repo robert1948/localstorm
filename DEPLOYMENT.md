@@ -18,6 +18,8 @@
 - **Platform**: Heroku (capecraft app)
 - **Database**: PostgreSQL (Heroku Essential)
 - **Status**: ✅ Operational
+- **Current Release**: v341 (deployed July 17, 2025 06:35 UTC)
+- **Latest Deployment**: 5a25a2cd6ea9 by zeonita@gmail.com
 - **SSL**: Cloudflare + Heroku Auto Cert
 - **CDN**: Cloudflare global edge caching
 
@@ -33,12 +35,20 @@
 - **Status**: ✅ Successfully deployed
 - **Branch**: `main`
 - **Latest Updates**: Development environment fixes (July 17, 2025)
+- **Production Release**: v341 (auto-deployed from GitHub)
 
 ---
 
 ## 📋 **Recent Updates & Fixes**
 
-### 🔧 **July 17, 2025 - Development Environment Setup**
+### � **July 17, 2025 06:35 UTC - Production Auto-Deployment**
+- ✅ **Release v341**: Automatically deployed to production
+- ✅ **Deployment ID**: 5a25a2cd6ea9
+- ✅ **Status**: Successfully started on port 42686
+- ✅ **Process**: Uvicorn server running with latest changes
+- ✅ **Auto-Deploy**: Triggered from GitHub main branch push
+
+### �🔧 **July 17, 2025 - Development Environment Setup**
 - ✅ Fixed devcontainer.json postCreateCommand permission issues
 - ✅ Corrected workspace paths from `/workspace/` to `/workspaces/localstorm-main/`
 - ✅ Created .env file with required SECRET_KEY and development configuration
@@ -159,10 +169,11 @@ npm run dev -- --port 3000 --host 0.0.0.0
 4. **Access applications**: Frontend (3000), Backend (8000), API docs (/docs)
 
 ### For Production Deployment
-1. **Heroku**: Automatic deployment from main branch
+1. **Heroku**: ✅ Automatic deployment from main branch (v341 live)
 2. **Domain**: Configured at https://www.cape-control.com
 3. **Database**: PostgreSQL production database
 4. **Monitoring**: Health checks and uptime monitoring active
+5. **Auto-Deploy**: Push to main branch triggers production deployment
 
 ### For Feature Development
 1. **Backend Changes**: Edit files in `/backend/app/`
@@ -195,6 +206,8 @@ npm run dev -- --port 3000 --host 0.0.0.0
 ## 📊 **Deployment Statistics**
 
 ### Recent Updates (July 17, 2025)
+- **Production Release**: v341 deployed successfully (06:35 UTC)
+- **Auto-Deployment**: GitHub → Heroku pipeline working
 - **Development Environment**: 100% functional
 - **Documentation Updates**: 4 major files updated
 - **Container Configuration**: Fixed and tested
