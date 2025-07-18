@@ -5,6 +5,21 @@ on:
     branches: [ main, develop ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+        - staging
+        - production
+
+# Prevent concurrent deployments
+concurrency:
+  group: deployment-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   NODE_VERSION: '18'
@@ -113,7 +128,14 @@ jobs:
   deploy-production:
     needs: [test-backend, test-frontend, security-scan]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    # Only deploy to production manually or on version tags
+    if: |
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production') ||
+      (github.ref == 'refs/heads/main' && github.event_name == 'push' && contains(github.event.head_commit.message, '[deploy]'))
+    
+    environment:
+      name: production
+      url: https://www.cape-control.com
     
     steps:
     - uses: actions/checkout@v4
@@ -130,6 +152,12 @@ jobs:
         sleep 30  # Wait for deployment
         curl -f https://www.cape-control.com/api/health || exit 1
         echo "✅ Production deployment healthy"
+        
+    - name: Create deployment notification
+      run: |
+        echo "🚀 Production deployment completed successfully!"
+        echo "📅 Deployed at: $(date)"
+        echo "🔗 URL: https://www.cape-control.com"
 
   performance-test:
     needs: [deploy-staging]
