@@ -3,7 +3,17 @@ import { MessageCircle, X, Minimize2, Maximize2 } from 'lucide-react';
 import useCapeAI from '../hooks/useCapeAI';
 
 export default function CapeAIFloatingButton() {
-  const { isVisible, toggleVisibility, messageHistory, hasUnreadMessages } = useCapeAI();
+  // Add error boundary for context usage
+  let capeAIData;
+  
+  try {
+    capeAIData = useCapeAI();
+  } catch (error) {
+    console.warn('CapeAI context not available in FloatingButton:', error);
+    return null; // Don't render if context is not available
+  }
+  
+  const { isVisible, toggleVisibility, messageHistory, hasUnreadMessages } = capeAIData;
   const [position, setPosition] = useState({ x: 20, y: 20 });
   const [isDragging, setIsDragging] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);

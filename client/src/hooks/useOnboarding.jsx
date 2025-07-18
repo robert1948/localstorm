@@ -65,13 +65,40 @@ const ONBOARDING_STEPS = {
 export default function useOnboarding() {
   const location = useLocation();
   const navigate = useNavigate();
+  
+  // Add error boundary for context usage
+  let capeAIData;
+  
+  try {
+    capeAIData = useCapeAI();
+  } catch (error) {
+    console.warn('CapeAI context not available in useOnboarding:', error);
+    // Return safe defaults if context is not available
+    return {
+      currentStep: 'welcome',
+      showContextualHelp: false,
+      isComplete: false,
+      getCurrentStepConfig: () => ONBOARDING_STEPS['welcome'],
+      nextStep: () => {},
+      previousStep: () => {},
+      completeStep: () => {},
+      completeCurrentStep: () => {},
+      goToStep: () => {},
+      showStepDialog: false,
+      setShowStepDialog: () => {},
+      isStepCompleted: () => false,
+      getProgress: () => ({ completed: 0, total: 6, percentage: 0 }),
+      showContextualMessage: () => {}
+    };
+  }
+  
   const { 
     onboardingData, 
     updateOnboardingData, 
     onboardingStep,
     addMessage,
     toggleVisibility 
-  } = useCapeAI();
+  } = capeAIData;
 
   const [currentStep, setCurrentStep] = useState(onboardingStep || 'welcome');
   const [showStepDialog, setShowStepDialog] = useState(false);

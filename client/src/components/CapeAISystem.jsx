@@ -7,8 +7,20 @@ import useCapeAI from '../hooks/useCapeAI';
 
 export default function CapeAISystem() {
   const location = useLocation();
-  const { currentStep, showContextualHelp, isComplete } = useOnboarding();
-  const { addMessage, isVisible } = useCapeAI();
+  
+  // Add error boundary for context usage
+  let onboardingData, capeAIData;
+  
+  try {
+    onboardingData = useOnboarding();
+    capeAIData = useCapeAI();
+  } catch (error) {
+    console.warn('CapeAI context not available:', error);
+    return null; // Don't render if context is not available
+  }
+  
+  const { currentStep, showContextualHelp, isComplete } = onboardingData;
+  const { addMessage, isVisible } = capeAIData;
 
   // Handle route-based contextual messages
   useEffect(() => {

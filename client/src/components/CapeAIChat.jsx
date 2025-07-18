@@ -3,7 +3,17 @@ import React, { useState, useRef, useEffect } from 'react';
 import useCapeAI from '../hooks/useCapeAI';
 
 export default function CapeAIChat() {
-  const { isVisible, messages, toggleVisibility, addMessage } = useCapeAI();
+  // Add error boundary for context usage
+  let capeAIData;
+  
+  try {
+    capeAIData = useCapeAI();
+  } catch (error) {
+    console.warn('CapeAI context not available in Chat:', error);
+    return null; // Don't render if context is not available
+  }
+  
+  const { isVisible, messages, toggleVisibility, addMessage } = capeAIData;
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
