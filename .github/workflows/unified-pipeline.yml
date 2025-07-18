@@ -171,7 +171,7 @@ jobs:
       working-directory: client
       run: npm run build
 
-    - name: 📋 Check Heroku CLI and API Key
+    - name: 📋 Check Heroku API Key
       run: |
         if [ -z "${{ secrets.HEROKU_API_KEY }}" ]; then
           echo "❌ HEROKU_API_KEY secret is missing!"
@@ -181,26 +181,31 @@ jobs:
           echo "✅ HEROKU_API_KEY is configured"
         fi
 
-    - name: 🚀 Deploy to Heroku (Simplified)
-      uses: akhileshns/heroku-deploy@v3.12.14
-      with:
-        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-        heroku_app_name: ${{ env.HEROKU_APP_NAME }}
-        heroku_email: ${{ env.HEROKU_EMAIL }}
-        usedocker: true
-        docker_heroku_process_type: web
-        stack: "heroku-22"
-
-    - name: 🏥 Simple Health Check
+    - name: 🚀 Install Heroku CLI (Same as working deployment)
       run: |
-        echo "⏳ Waiting for Heroku deployment to complete..."
-        sleep 45
-        echo "🔍 Checking if app is responding..."
-        if curl -f -s https://capecraft.herokuapp.com/ > /dev/null; then
-          echo "✅ App is responding!"
-        else
-          echo "⚠️ App may still be starting up - check manually: https://capecraft.herokuapp.com"
-        fi
+        curl https://cli-assets.heroku.com/install.sh | sh
+        echo "$HOME/.local/share/heroku/bin" >> $GITHUB_PATH
+        export PATH="$HOME/.local/share/heroku/bin:$PATH"
+
+    - name: 🔑 Login to Heroku Container Registry
+      run: echo "${{ secrets.HEROKU_API_KEY }}" | docker login --username=_ --password-stdin registry.heroku.com
+
+    - name: 🛠️ Build Docker image
+      run: docker build -t registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web .
+
+    - name: 📤 Push Docker image to Heroku
+      run: docker push registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
+
+    - name: 🎉 Release app on Heroku
+      run: heroku container:release web --app ${{ env.HEROKU_APP_NAME }}
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
+    - name: ✅ Confirm deployment
+      run: |
+        echo "✅ Deployed using PROVEN method from working workflow!"
+        echo "  🌐 https://${{ env.HEROKU_APP_NAME }}.herokuapp.com"
+        echo "  🔗 https://www.cape-control.com"
 
   # ALWAYS RUN: Performance testing (after any deployment)
   performance-test:
