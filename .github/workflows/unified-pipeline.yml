@@ -1,0 +1,205 @@
+name: 🚀 Unified CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      deploy_to_production:
+        description: 'Deploy to production? (type "YES" to confirm)'
+        required: false
+        default: 'NO'
+        type: string
+
+env:
+  NODE_VERSION: '18'
+  PYTHON_VERSION: '3.11'
+  HEROKU_APP_NAME: capecraft
+  HEROKU_EMAIL: zeonita@gmail.com
+  AWS_DEFAULT_REGION: us-east-1
+
+# Prevent multiple deployments
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # ALWAYS RUN: Testing and validation
+  test-backend:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-asyncio pytest-cov
+    
+    - name: Run tests with coverage
+      run: |
+        cd backend
+        python -m pytest tests/ -v --cov=app --cov-report=term-missing
+    
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        fail_ci_if_error: false
+
+  test-frontend:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: client/package-lock.json
+    
+    - name: Install dependencies
+      run: |
+        cd client
+        npm ci
+    
+    - name: Run linting
+      run: |
+        cd client
+        npm run lint
+    
+    - name: Run tests
+      run: |
+        cd client
+        npm test
+
+  security-scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run security scan - Backend
+      run: |
+        pip install safety bandit
+        safety check -r requirements.txt
+        bandit -r backend/app/
+    
+    - name: Run security scan - Frontend
+      run: |
+        cd client
+        npm audit --audit-level moderate
+
+  # CONDITIONAL: Deploy to staging (develop branch only)
+  deploy-staging:
+    needs: [test-backend, test-frontend, security-scan]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Deploy to staging
+      run: |
+        echo "🚀 Deploying to staging environment..."
+        # Add staging deployment commands here
+
+  # CONDITIONAL: Deploy to production (main branch + manual confirmation OR main with [deploy] tag)
+  deploy-production:
+    needs: [test-backend, test-frontend, security-scan]
+    runs-on: ubuntu-latest
+    if: |
+      (github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && github.event.inputs.deploy_to_production == 'YES') ||
+      (github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[deploy]'))
+    
+    environment:
+      name: production
+      url: https://capecraft.herokuapp.com
+    
+    steps:
+    - name: 🔵 Checkout code
+      uses: actions/checkout@v4
+
+    - name: ⚙️ Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: client/package-lock.json
+
+    - name: 📦 Install frontend dependencies
+      working-directory: client
+      run: npm ci
+
+    - name: 🧩 Build frontend (includes cache-bust)
+      working-directory: client
+      run: npm run build
+
+    - name: ☁️ Upload built assets to S3
+      working-directory: client
+      run: npm run upload
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
+
+    - name: 📤 Upload static assets to S3
+      working-directory: client
+      run: npm run deploy:static
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
+
+    - name: 🚀 Deploy to Heroku (Container)
+      uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_app_name: ${{ env.HEROKU_APP_NAME }}
+        heroku_email: ${{ env.HEROKU_EMAIL }}
+        usedocker: true
+        docker_heroku_process_type: web
+
+    - name: 🏥 Health check
+      run: |
+        echo "Waiting for deployment to be ready..."
+        sleep 30
+        response=$(curl -s -o /dev/null -w "%{http_code}" https://capecraft.herokuapp.com/health || echo "000")
+        if [ "$response" = "200" ]; then
+          echo "✅ Deployment successful - health check passed"
+        else
+          echo "❌ Health check failed - HTTP $response"
+          exit 1
+        fi
+
+  # ALWAYS RUN: Performance testing (after any deployment)
+  performance-test:
+    needs: [deploy-staging, deploy-production]
+    runs-on: ubuntu-latest
+    if: always() && (needs.deploy-staging.result == 'success' || needs.deploy-production.result == 'success')
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run performance tests
+      run: |
+        echo "🔍 Running performance tests..."
+        # Add performance testing tools like k6, Artillery, etc.
