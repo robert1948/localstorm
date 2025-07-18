@@ -167,47 +167,39 @@ jobs:
       working-directory: client
       run: npm ci
 
-    - name: 🧩 Build frontend (includes cache-bust)
+    - name: 🧩 Build frontend
       working-directory: client
       run: npm run build
 
-    - name: ☁️ Upload built assets to S3 (Optional - skip if secrets missing)
-      working-directory: client
-      run: npm run upload || echo "⚠️ S3 upload failed, continuing without it"
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
-      continue-on-error: true
+    - name: 📋 Check Heroku CLI and API Key
+      run: |
+        if [ -z "${{ secrets.HEROKU_API_KEY }}" ]; then
+          echo "❌ HEROKU_API_KEY secret is missing!"
+          echo "Please add HEROKU_API_KEY to GitHub Secrets"
+          exit 1
+        else
+          echo "✅ HEROKU_API_KEY is configured"
+        fi
 
-    - name: 📤 Upload static assets to S3 (Optional - skip if secrets missing)
-      working-directory: client
-      run: npm run deploy:static || echo "⚠️ S3 static upload failed, continuing without it"
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
-      continue-on-error: true
-
-    - name: 🚀 Deploy to Heroku (Container)
-      uses: akhileshns/heroku-deploy@v3.12.12
+    - name: 🚀 Deploy to Heroku (Simplified)
+      uses: akhileshns/heroku-deploy@v3.12.14
       with:
         heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
         heroku_app_name: ${{ env.HEROKU_APP_NAME }}
         heroku_email: ${{ env.HEROKU_EMAIL }}
         usedocker: true
         docker_heroku_process_type: web
+        stack: "heroku-22"
 
-    - name: 🏥 Health check
+    - name: 🏥 Simple Health Check
       run: |
-        echo "Waiting for deployment to be ready..."
-        sleep 30
-        response=$(curl -s -o /dev/null -w "%{http_code}" https://capecraft.herokuapp.com/health || echo "000")
-        if [ "$response" = "200" ]; then
-          echo "✅ Deployment successful - health check passed"
+        echo "⏳ Waiting for Heroku deployment to complete..."
+        sleep 45
+        echo "🔍 Checking if app is responding..."
+        if curl -f -s https://capecraft.herokuapp.com/ > /dev/null; then
+          echo "✅ App is responding!"
         else
-          echo "⚠️ Health check failed - HTTP $response (this may be normal for first deployment)"
-          echo "✅ Heroku deployment completed, check manually: https://capecraft.herokuapp.com"
+          echo "⚠️ App may still be starting up - check manually: https://capecraft.herokuapp.com"
         fi
 
   # ALWAYS RUN: Performance testing (after any deployment)
