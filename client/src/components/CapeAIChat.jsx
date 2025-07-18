@@ -91,9 +91,9 @@ export default function CapeAIChat() {
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {messages.map((message, index) => (
+        {messages.map((message) => (
           <div
-            key={index}
+            key={message.id}
             className={`flex ${message.from === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div

@@ -1,7 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import Navbar from "./components/Navbar";
-import CapeAIProvider from "./context/CapeAIContext";
 import CapeAISystem from "./components/CapeAISystem";
 
 // ✅ Lazy-loaded pages
@@ -27,13 +26,9 @@ const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"));
 
 export default function App() {
   return (
-    <CapeAIProvider>
-      <div className="p-4 bg-green-200 text-center font-bold text-xl">
-        ✅ Tailwind is working!
-      </div>
-      <div className="min-h-screen flex flex-col font-sans bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
-        <Navbar />
-        <main className="flex-1 pt-20">
+    <div className="min-h-screen flex flex-col font-sans bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
+      <Navbar />
+      <main className="flex-1 pt-20">
           <Suspense
             fallback={
               <div className="flex items-center justify-center min-h-[50vh]" role="status">
@@ -99,6 +94,5 @@ export default function App() {
         {/* CapeAI System - Available throughout the app */}
         <CapeAISystem />
       </div>
-    </CapeAIProvider>
   );
 }
