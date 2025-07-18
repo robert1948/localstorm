@@ -16,11 +16,6 @@ on:
         - staging
         - production
 
-# Prevent concurrent deployments
-concurrency:
-  group: deployment-${{ github.ref }}
-  cancel-in-progress: true
-
 env:
   NODE_VERSION: '18'
   PYTHON_VERSION: '3.11'
@@ -125,39 +120,9 @@ jobs:
         echo "Deploying to staging environment..."
         # Add staging deployment commands here
 
-  deploy-production:
-    needs: [test-backend, test-frontend, security-scan]
-    runs-on: ubuntu-latest
-    # Only deploy to production manually or on version tags
-    if: |
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production') ||
-      (github.ref == 'refs/heads/main' && github.event_name == 'push' && contains(github.event.head_commit.message, '[deploy]'))
-    
-    environment:
-      name: production
-      url: https://www.cape-control.com
-    
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Deploy to Heroku
-      uses: akhileshns/heroku-deploy@v3.12.12
-      with:
-        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-        heroku_app_name: "capecraft"
-        heroku_email: ${{ secrets.HEROKU_EMAIL }}
-    
-    - name: Post-deployment health check
-      run: |
-        sleep 30  # Wait for deployment
-        curl -f https://www.cape-control.com/api/health || exit 1
-        echo "✅ Production deployment healthy"
-        
-    - name: Create deployment notification
-      run: |
-        echo "🚀 Production deployment completed successfully!"
-        echo "📅 Deployed at: $(date)"
-        echo "🔗 URL: https://www.cape-control.com"
+  # PRODUCTION DEPLOYMENT MOVED TO SEPARATE WORKFLOW
+  # See: .github/workflows/production-deploy.yml
+  # This prevents duplicate deployments and provides better control
 
   performance-test:
     needs: [deploy-staging]
