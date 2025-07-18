@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import Navbar from "./components/Navbar";
-import CapeAISystem from "./components/CapeAISystem";
+import CapeAISystemSafe from "./components/CapeAISystemSafe";
 
 // ✅ Lazy-loaded pages
 const Landing = lazy(() => import("./pages/Landing"));
@@ -92,7 +92,7 @@ export default function App() {
         </main>
         
         {/* CapeAI System - Available throughout the app */}
-        <CapeAISystem />
+        <CapeAISystemSafe />
       </div>
   );
 }

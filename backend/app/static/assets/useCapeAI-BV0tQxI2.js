@@ -1,0 +1,1 @@
+import{r as t}from"./index-DjZP2RjB.js";const a=t.createContext({isVisible:!1,messages:[],onboardingStep:0,onboardingData:{},toggleVisibility:()=>{},addMessage:()=>{},setOnboardingStep:()=>{},updateOnboardingData:()=>{}});function s(){const e=t.useContext(a);if(!e)throw new Error("useCapeAI must be used within a CapeAIProvider");return e}export{s as u};

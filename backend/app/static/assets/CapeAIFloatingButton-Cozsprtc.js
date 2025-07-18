@@ -1,0 +1,41 @@
+import{r as i,j as e}from"./index-DjZP2RjB.js";import{u as I}from"./useCapeAI-BV0tQxI2.js";/**
+ * @license lucide-react v0.522.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const E=o=>o.replace(/([a-z0-9])([A-Z])/g,"$1-$2").toLowerCase(),L=o=>o.replace(/^([A-Z])|[\s-_]+(\w)/g,(s,a,r)=>r?r.toUpperCase():a.toLowerCase()),j=o=>{const s=L(o);return s.charAt(0).toUpperCase()+s.slice(1)},M=(...o)=>o.filter((s,a,r)=>!!s&&s.trim()!==""&&r.indexOf(s)===a).join(" ").trim(),$=o=>{for(const s in o)if(s.startsWith("aria-")||s==="role"||s==="title")return!0};/**
+ * @license lucide-react v0.522.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */var H={xmlns:"http://www.w3.org/2000/svg",width:24,height:24,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round"};/**
+ * @license lucide-react v0.522.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const D=i.forwardRef(({color:o="currentColor",size:s=24,strokeWidth:a=2,absoluteStrokeWidth:r,className:c="",children:n,iconNode:d,...u},m)=>i.createElement("svg",{ref:m,...H,width:s,height:s,stroke:o,strokeWidth:r?Number(a)*24/Number(s):a,className:M("lucide",c),...!n&&!$(u)&&{"aria-hidden":"true"},...u},[...d.map(([g,h])=>i.createElement(g,h)),...Array.isArray(n)?n:[n]]));/**
+ * @license lucide-react v0.522.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const x=(o,s)=>{const a=i.forwardRef(({className:r,...c},n)=>i.createElement(D,{ref:n,iconNode:s,className:M(`lucide-${E(j(o))}`,`lucide-${o}`,r),...c}));return a.displayName=j(o),a};/**
+ * @license lucide-react v0.522.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const _=[["path",{d:"M15 3h6v6",key:"1q9fwt"}],["path",{d:"m21 3-7 7",key:"1l2asr"}],["path",{d:"m3 21 7-7",key:"tjx5ai"}],["path",{d:"M9 21H3v-6",key:"wtvkvv"}]],P=x("maximize-2",_);/**
+ * @license lucide-react v0.522.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const W=[["path",{d:"M7.9 20A9 9 0 1 0 4 16.1L2 22Z",key:"vv11sd"}]],S=x("message-circle",W);/**
+ * @license lucide-react v0.522.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const X=[["path",{d:"m14 10 7-7",key:"oa77jy"}],["path",{d:"M20 10h-6V4",key:"mjg0md"}],["path",{d:"m3 21 7-7",key:"tjx5ai"}],["path",{d:"M4 14h6v6",key:"rmj7iw"}]],B=x("minimize-2",X);/**
+ * @license lucide-react v0.522.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const U=[["path",{d:"M18 6 6 18",key:"1bl5f8"}],["path",{d:"m6 6 12 12",key:"d8bk6v"}]],N=x("x",U);function R(){let o;try{o=I()}catch(t){return console.warn("CapeAI context not available in FloatingButton:",t),null}const{isVisible:s,toggleVisibility:a,messageHistory:r,hasUnreadMessages:c}=o,[n,d]=i.useState({x:20,y:20}),[u,m]=i.useState(!1),[g,h]=i.useState(!1);i.useEffect(()=>{const t=()=>{const l=window.innerWidth,p=window.innerHeight;l<768?d({x:l/2-30,y:p-100}):d({x:20,y:p-100})};return t(),window.addEventListener("resize",t),()=>window.removeEventListener("resize",t)},[]);const C=t=>{m(!0);const l=t.clientX-n.x,p=t.clientY-n.y,y=v=>{const A=Math.max(0,Math.min(window.innerWidth-60,v.clientX-l)),z=Math.max(0,Math.min(window.innerHeight-60,v.clientY-p));d({x:A,y:z})},f=()=>{m(!1),document.removeEventListener("mousemove",y),document.removeEventListener("mouseup",f)};document.addEventListener("mousemove",y),document.addEventListener("mouseup",f)},b=()=>{const t=window.location.pathname;return{"/dashboard":"Need help with your dashboard?","/profile":"Setting up your profile?","/agents":"Questions about AI agents?","/settings":"Need help with settings?","/":"Welcome! How can I help you get started?"}[t]||"Hi! How can I help you today?"},k=c?"animate-pulse":"",w=c?e.jsx("div",{className:"absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-bounce"}):null;return g?e.jsx("div",{className:"fixed z-50 cursor-pointer",style:{left:n.x,bottom:20},onClick:()=>h(!1),children:e.jsxs("div",{className:"bg-blue-600 text-white p-2 rounded-full shadow-lg hover:bg-blue-700 transition-colors",children:[e.jsx(P,{size:16}),w]})}):e.jsxs(e.Fragment,{children:[e.jsx("div",{className:`fixed z-50 ${u?"cursor-grabbing":"cursor-grab"}`,style:{left:n.x,bottom:n.y},onMouseDown:C,children:e.jsxs("div",{className:"relative",children:[e.jsxs("button",{onClick:a,className:`bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 ${k}`,onMouseDown:t=>t.stopPropagation(),children:[s?e.jsx(N,{size:24}):e.jsx(S,{size:24}),w]}),e.jsx("button",{onClick:t=>{t.stopPropagation(),h(!0)},className:"absolute -top-2 -right-2 bg-gray-600 text-white p-1 rounded-full opacity-0 hover:opacity-100 transition-opacity",onMouseDown:t=>t.stopPropagation(),children:e.jsx(B,{size:12})}),!s&&!u&&e.jsxs("div",{className:"absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-sm rounded-lg whitespace-nowrap opacity-0 hover:opacity-100 transition-opacity pointer-events-none",children:[b(),e.jsx("div",{className:"absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-800"})]})]})}),s&&e.jsxs("div",{className:"fixed z-40 bg-white rounded-lg shadow-2xl border",style:{left:Math.min(n.x,window.innerWidth-380),bottom:n.y+80,width:"360px",height:"500px",maxHeight:"80vh"},children:[e.jsxs("div",{className:"bg-blue-600 text-white p-4 rounded-t-lg flex justify-between items-center",children:[e.jsxs("div",{className:"flex items-center gap-2",children:[e.jsx("div",{className:"w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center",children:"🤖"}),e.jsxs("div",{children:[e.jsx("h3",{className:"font-semibold",children:"CapeAI Assistant"}),e.jsx("p",{className:"text-xs opacity-90",children:"Always here to help"})]})]}),e.jsx("button",{onClick:a,className:"text-white hover:bg-blue-700 p-1 rounded",children:e.jsx(N,{size:18})})]}),e.jsx("div",{className:"h-96 overflow-y-auto p-4 space-y-3",children:r.length===0?e.jsxs("div",{className:"text-center py-8",children:[e.jsx("div",{className:"text-4xl mb-2",children:"👋"}),e.jsx("h4",{className:"font-semibold text-gray-800 mb-2",children:"Welcome to CapeAI!"}),e.jsx("p",{className:"text-sm text-gray-600 mb-4",children:b()}),e.jsxs("div",{className:"space-y-2",children:[e.jsx("button",{className:"w-full bg-blue-50 text-blue-700 p-2 rounded-lg text-sm hover:bg-blue-100 transition-colors",children:"💡 Show me around the platform"}),e.jsx("button",{className:"w-full bg-green-50 text-green-700 p-2 rounded-lg text-sm hover:bg-green-100 transition-colors",children:"🚀 Help me get started"}),e.jsx("button",{className:"w-full bg-purple-50 text-purple-700 p-2 rounded-lg text-sm hover:bg-purple-100 transition-colors",children:"❓ I have a specific question"})]})]}):r.map((t,l)=>e.jsx("div",{className:`flex ${t.sender==="user"?"justify-end":"justify-start"}`,children:e.jsxs("div",{className:`max-w-xs p-3 rounded-lg ${t.sender==="user"?"bg-blue-600 text-white":"bg-gray-100 text-gray-800"}`,children:[e.jsx("p",{className:"text-sm",children:t.content}),e.jsx("p",{className:"text-xs opacity-75 mt-1",children:new Date(t.timestamp).toLocaleTimeString()})]})},l))}),e.jsx("div",{className:"border-t p-4",children:e.jsxs("div",{className:"flex gap-2",children:[e.jsx("input",{type:"text",placeholder:"Type your message...",className:"flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500",onKeyPress:t=>{t.key==="Enter"&&t.target.value.trim()&&(t.target.value="")}}),e.jsx("button",{className:"bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors",children:"Send"})]})})]})]})}export{R as default};
