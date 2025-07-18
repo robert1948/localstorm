@@ -35,8 +35,24 @@ backend/
 client/
 ├── src/                 # React source code
 │   ├── components/      # Reusable UI components
-│   ├── pages/           # Page components
+│   │   ├── 🤖 CapeAIChat.jsx           # Full-featured chat interface
+│   │   ├── 🤖 CapeAIFloatingButton.jsx # Draggable floating chat button
+│   │   ├── 🤖 CapeAISystem.jsx         # Integration component
+│   │   ├── onboarding/                 # Onboarding components
+│   │   │   ├── 🤖 OnboardingChecklist.jsx # Interactive checklist
+│   │   │   └── 🤖 OnboardingFlow.jsx      # Automated flow manager
+│   │   ├── Navbar.jsx                  # Navigation component
+│   │   └── ProtectedRoute.jsx          # Route protection
+│   ├── context/         # React Context providers
+│   │   └── 🤖 CapeAIContext.jsx        # Enhanced CapeAI state management
 │   ├── hooks/           # Custom React hooks
+│   │   ├── 🤖 useCapeAI.jsx            # CapeAI context hook
+│   │   ├── 🤖 useOnboarding.jsx        # Smart onboarding management
+│   │   └── useAuth.jsx                 # Authentication hook
+│   ├── pages/           # Page components
+│   │   ├── Dashboard.jsx               # Enhanced with onboarding
+│   │   ├── Landing.jsx                 # Landing page
+│   │   └── [other pages]               # Login, Register, etc.
 │   ├── utils/           # Utility functions
 │   └── styles/          # CSS and styling
 ├── public/              # Static assets
@@ -102,6 +118,18 @@ cd client && npm run dev -- --port 3000 --host 0.0.0.0
 - **Backend API**: http://localhost:8000  
 - **API Documentation**: http://localhost:8000/docs
 - **Health Check**: http://localhost:8000/api/health
+- **🤖 CapeAI Assistant**: Available on all frontend pages via floating chat button
+
+### 🤖 CapeAI System Overview
+The CapeAI onboarding assistant system includes:
+
+1. **CapeAIContext.jsx**: Enhanced React context with onboarding state management
+2. **CapeAISystem.jsx**: Main integration component connecting all CapeAI features
+3. **CapeAIFloatingButton.jsx**: Draggable floating chat interface with smart positioning
+4. **OnboardingFlow.jsx**: Automated onboarding guidance system
+5. **OnboardingChecklist.jsx**: Interactive checklist with CapeAI integration
+6. **useOnboarding.jsx**: Smart hook for managing onboarding state and progress
+7. **useCapeAI.jsx**: Context hook for accessing CapeAI functionality
 
 ### Production Build
 ```bash
@@ -119,5 +147,12 @@ cd backend && python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
 - `heroku.yml` - Heroku container deployment
 - `app.json` - Heroku app configuration
 
+## 🎯 **Project Status**
+
+- **Production URL**: https://www.cape-control.com
+- **Development**: VS Code Dev Container + Docker  
+- **Status**: ✅ Live and fully operational with CapeAI onboarding system
+- **Latest Features**: 🤖 CapeAI intelligent onboarding assistant (July 18, 2025)
+
 ---
-*Last updated: July 17, 2025*
+*Last updated: July 18, 2025 - Added comprehensive CapeAI onboarding assistant system*
