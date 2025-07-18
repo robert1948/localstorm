@@ -7,9 +7,8 @@ on:
         description: 'Type "DEPLOY" to confirm production deployment'
         required: true
         default: ''
-  push:
-    tags:
-      - 'v*'  # Only deploy on version tags like v1.0.0
+  # Removed push trigger - production deploys are manual only
+  # Use workflow_dispatch or create a version tag manually when ready
 
 # STRICT concurrency control - only one production deployment at a time
 concurrency:
