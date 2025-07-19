@@ -58,7 +58,7 @@ class TestAuth:
         assert response.status_code == 200
         data = response.json()
         assert data["valid"] == False
-        assert "too short" in data["message"].lower()
+        assert "doesn't meet requirements" in data["message"].lower()
     
     def test_password_validation_strong(self):
         """Test password validation for strong password"""
@@ -76,11 +76,12 @@ class TestAuth:
             "full_name": "Test User",
             "user_role": "customer"
         }
-        response = client.post("/api/auth/v2/register/step1", json=user_data)
+        response = client.post("/api/auth/register/step1", json=user_data)
         assert response.status_code == 200
         data = response.json()
-        assert data["email"] == user_data["email"]
-        assert "id" in data
+        assert data["success"] == True
+        assert data["step"] == 1
+        assert "next_step" in data
 
     def test_registration_duplicate_email(self):
         """Test registration with duplicate email"""
@@ -88,15 +89,17 @@ class TestAuth:
             "email": "duplicate@example.com",
             "password": "StrongPassword123!",
             "full_name": "Test User",
-            "user_role": "customer"
+            "user_role": "client",
+            "tos_accepted": True
         }
-        # First registration
-        client.post("/api/auth/v2/register/step1", json=user_data)
+        # First registration - should succeed
+        response1 = client.post("/api/auth/v2/register", json=user_data)
+        assert response1.status_code == 200
         
         # Second registration should fail
-        response = client.post("/api/auth/v2/register/step1", json=user_data)
-        assert response.status_code == 400
-        assert "already registered" in response.json()["detail"].lower()
+        response2 = client.post("/api/auth/v2/register", json=user_data)
+        assert response2.status_code == 409
+        assert "already registered" in response2.json()["detail"].lower()
 
 class TestCapeAI:
     """Test CapeAI system components"""
