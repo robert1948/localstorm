@@ -1,0 +1,80 @@
+name: Production Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Type "DEPLOY" to confirm production deployment'
+        required: true
+        default: ''
+  # Removed push trigger - production deploys are manual only
+  # Use workflow_dispatch or create a version tag manually when ready
+
+# STRICT concurrency control - only one production deployment at a time
+concurrency:
+  group: production-only
+  cancel-in-progress: false
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    
+    environment:
+      name: production
+      url: https://www.cape-control.com
+    
+    steps:
+    - name: Validate deployment confirmation
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        if [ "${{ github.event.inputs.confirmation }}" != "DEPLOY" ]; then
+          echo "❌ Deployment cancelled - confirmation required"
+          echo "Please type 'DEPLOY' in the confirmation field"
+          exit 1
+        fi
+        echo "✅ Deployment confirmed"
+    
+    - uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: client/package-lock.json
+    
+    - name: Build frontend
+      run: |
+        cd client
+        npm ci
+        npm run build
+    
+    - name: Deploy to Heroku
+      uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_app_name: "capecraft"
+        heroku_email: ${{ secrets.HEROKU_EMAIL }}
+    
+    - name: Post-deployment health check
+      run: |
+        echo "⏳ Waiting for deployment to complete..."
+        sleep 45
+        
+        # Multiple health check attempts
+        for i in {1..5}; do
+          if curl -f https://www.cape-control.com/api/health; then
+            echo "✅ Production deployment healthy (attempt $i)"
+            break
+          else
+            echo "⚠️ Health check failed (attempt $i/5), retrying in 10s..."
+            sleep 10
+          fi
+        done
+        
+    - name: Deployment success notification
+      run: |
+        echo "🎉 PRODUCTION DEPLOYMENT SUCCESSFUL!"
+        echo "📅 Deployed at: $(date)"
+        echo "🔗 URL: https://www.cape-control.com"
+        echo "📝 Commit: ${{ github.sha }}"
