@@ -11,7 +11,7 @@ export default function NavBar() {
           {/* Logo + Brand */}
           <Link to="/" className="flex items-center space-x-2 py-2">
             <img
-              src="https://lightning-s3.s3.us-east-1.amazonaws.com/static/website/img/LogoC.png"
+              src="https://lightning-s3.s3.us-east-1.amazonaws.com/static/website/img/LogoW.png"
               alt="CapeControl Logo"
               className="h-10 w-10 hidden sm:block"
             />

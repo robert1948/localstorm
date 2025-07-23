@@ -61,5 +61,35 @@ else
   echo "⚠️ Skipped: $LANDING_IMG not found."
 fi
 
+# === Upload main navbar logo ===
+echo "🏢 Uploading navbar logo..."
+NAVBAR_LOGO="$STATIC_DIR/LogoC.png"
+if [ -f "$NAVBAR_LOGO" ]; then
+  echo "📤 $NAVBAR_LOGO ➜ $S3_BUCKET/LogoC.png"
+  aws s3 cp "$NAVBAR_LOGO" "$S3_BUCKET/LogoC.png" --content-type "image/png"
+else
+  echo "⚠️ Skipped: $NAVBAR_LOGO not found."
+fi
+
+# === Upload white navbar logo ===
+echo "🏢 Uploading white navbar logo..."
+NAVBAR_LOGO_W="$STATIC_DIR/LogoW.png"
+if [ -f "$NAVBAR_LOGO_W" ]; then
+  echo "📤 $NAVBAR_LOGO_W ➜ $S3_BUCKET/LogoW.png"
+  aws s3 cp "$NAVBAR_LOGO_W" "$S3_BUCKET/LogoW.png" --content-type "image/png"
+else
+  echo "⚠️ Skipped: $NAVBAR_LOGO_W not found."
+fi
+
+# === Upload favicon.ico ===
+echo "🔖 Uploading favicon.ico..."
+FAVICON_ICO="$STATIC_DIR/favicon.ico"
+if [ -f "$FAVICON_ICO" ]; then
+  echo "📤 $FAVICON_ICO ➜ $S3_BUCKET/favicon.ico"
+  aws s3 cp "$FAVICON_ICO" "$S3_BUCKET/favicon.ico" --content-type "image/x-icon"
+else
+  echo "⚠️ Skipped: $FAVICON_ICO not found."
+fi
+
 echo "✅ All static image assets uploaded with correct headers."
 
