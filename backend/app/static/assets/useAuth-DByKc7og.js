@@ -1,1 +1,0 @@
-import{r as e,A as o}from"./index-B1s3ZP1Z.js";function u(){const t=e.useContext(o);if(!t)throw console.error("❌ useAuth() was called outside of <AuthProvider>!"),console.trace(),new Error("❌ useAuth must be used within an <AuthProvider>");return t}export{u};
