@@ -16,6 +16,8 @@ parts/
 sdist/
 var/
 wheels/
+# Allow client lib directory for utilities
+!client/src/lib/
 *.egg-info/
 .installed.cfg
 *.egg
