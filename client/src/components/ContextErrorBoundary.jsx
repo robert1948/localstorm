@@ -21,6 +21,11 @@ class ContextErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     console.warn('🛡️ Error Boundary caught error:', error, errorInfo);
+    console.warn('🛡️ Error details:', {
+      message: error?.message,
+      stack: error?.stack,
+      name: error?.name
+    });
     this.setState({ errorInfo });
     
     // Try to recover after a short delay
@@ -40,6 +45,14 @@ class ContextErrorBoundary extends React.Component {
             <p className="text-gray-600 text-sm mb-4">
               The application encountered an error. It will automatically recover in a moment.
             </p>
+            {this.state.error && (
+              <details className="text-xs text-gray-500 mb-4 text-left">
+                <summary className="cursor-pointer">Error details (for debugging)</summary>
+                <pre className="mt-2 p-2 bg-gray-100 rounded text-xs overflow-auto">
+                  {this.state.error.message}
+                </pre>
+              </details>
+            )}
             <button 
               onClick={() => window.location.reload()} 
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
