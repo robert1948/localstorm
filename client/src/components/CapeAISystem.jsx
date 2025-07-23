@@ -8,23 +8,13 @@ import useCapeAI from '../hooks/useCapeAI';
 export default function CapeAISystem() {
   const location = useLocation();
   
-  // Add error boundary for context usage
-  let onboardingData, capeAIData;
+  // ✅ ALL hook calls are now completely unconditional at the top level
+  const onboardingData = useOnboarding();
+  const capeAIData = useCapeAI();
   
-  try {
-    onboardingData = useOnboarding();
-    capeAIData = useCapeAI();
-  } catch (error) {
-    console.warn('CapeAI context not available:', error);
-    return null; // Don't render if context is not available
-  }
-  
-  const { currentStep, showContextualHelp, isComplete } = onboardingData;
-  const { addMessage, isVisible } = capeAIData;
-
-  // Handle route-based contextual messages
+  // ✅ useEffect calls must also be at the top level
   useEffect(() => {
-    if (!isComplete) {
+    if (onboardingData && capeAIData && !onboardingData.isComplete) {
       const routeMessages = {
         '/dashboard': 'Welcome to your dashboard! This is where you can monitor and manage all your AI agents.',
         '/profile': 'Let\'s get your profile set up! This helps me provide better assistance tailored to your business.',
@@ -34,35 +24,56 @@ export default function CapeAISystem() {
       };
 
       const message = routeMessages[location.pathname];
-      if (message && !isVisible) {
-        // Delay the message slightly to avoid spam
+      if (message && !capeAIData.isVisible) {
         const timer = setTimeout(() => {
-          addMessage('assistant', message);
-        }, 2000);
+          capeAIData.addMessage('assistant', message);
+        }, 1000);
         
         return () => clearTimeout(timer);
       }
     }
-  }, [location.pathname, isComplete, isVisible, addMessage]);
+  }, [location.pathname, onboardingData?.isComplete, capeAIData?.isVisible, capeAIData?.addMessage]);
 
-  // Auto-suggest help for new users
   useEffect(() => {
-    if (!isComplete && currentStep === 'welcome') {
-      const welcomeTimer = setTimeout(() => {
-        showContextualHelp('welcome');
-      }, 3000); // Show welcome after 3 seconds
-
-      return () => clearTimeout(welcomeTimer);
+    if (onboardingData && capeAIData) {
+      const { currentStep, showContextualHelp } = onboardingData;
+      const { addMessage } = capeAIData;
+      
+      if (showContextualHelp) {
+        const helpMessages = {
+          'profile': 'Fill out your business profile to get personalized AI recommendations.',
+          'agents': 'Browse our marketplace to find AI agents that match your needs.',
+          'dashboard': 'Monitor your AI agents performance and track your business metrics.',
+          'complete': 'Congratulations! You\'re all set up. Feel free to ask me anything!'
+        };
+        
+        const message = helpMessages[currentStep];
+        if (message) {
+          addMessage('assistant', message);
+        }
+      }
     }
-  }, [currentStep, isComplete, showContextualHelp]);
+  }, [onboardingData?.currentStep, onboardingData?.showContextualHelp, capeAIData?.addMessage]);
+  
+  // Safe fallback if context is not available
+  if (!onboardingData || !capeAIData) {
+    return null;
+  }
+  
+  const { currentStep, showContextualHelp, isComplete } = onboardingData;
 
   return (
-    <>
-      {/* Main floating chat interface */}
-      <CapeAIFloatingButton />
+    <div className="cape-ai-system">
+      {/* Onboarding Flow */}
+      {!isComplete && (
+        <OnboardingFlow 
+          currentStep={currentStep}
+          showContextualHelp={showContextualHelp}
+        />
+      )}
       
-      {/* Onboarding flow manager */}
-      {!isComplete && <OnboardingFlow />}
-    </>
+      {/* Floating AI Button */}
+      <CapeAIFloatingButton />
+    </div>
   );
 }

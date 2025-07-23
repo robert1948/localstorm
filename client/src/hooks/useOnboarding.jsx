@@ -66,13 +66,33 @@ export default function useOnboarding() {
   const location = useLocation();
   const navigate = useNavigate();
   
-  // Add error boundary for context usage
-  let capeAIData;
+  // ✅ ALL hook calls must be at the top level before any conditional logic
+  const capeAIData = useCapeAI();
+  const [currentStep, setCurrentStep] = useState('welcome');
+  const [showStepDialog, setShowStepDialog] = useState(false);
+  const [stepHistory, setStepHistory] = useState([]);
   
-  try {
-    capeAIData = useCapeAI();
-  } catch (error) {
-    console.warn('CapeAI context not available in useOnboarding:', error);
+  // ✅ useEffect calls must also be at the top level
+  useEffect(() => {
+    // Handle route changes for step triggering
+    if (capeAIData) {
+      const triggerStepForRoute = (pathname) => {
+        // Route-based step logic can go here
+        console.log('Route changed:', pathname);
+      };
+      triggerStepForRoute(location.pathname);
+    }
+  }, [location.pathname, capeAIData]);
+
+  useEffect(() => {
+    // Track step history
+    if (currentStep && !stepHistory.includes(currentStep)) {
+      setStepHistory(prev => [...prev, currentStep]);
+    }
+  }, [currentStep, stepHistory]);
+  
+  // Safe fallback if context is not available
+  if (!capeAIData) {
     // Return safe defaults if context is not available
     return {
       currentStep: 'welcome',
@@ -100,9 +120,10 @@ export default function useOnboarding() {
     toggleVisibility 
   } = capeAIData;
 
-  const [currentStep, setCurrentStep] = useState(onboardingStep || 'welcome');
-  const [showStepDialog, setShowStepDialog] = useState(false);
-  const [stepHistory, setStepHistory] = useState([]);
+  // Update current step from context if available
+  if (onboardingStep && currentStep !== onboardingStep) {
+    setCurrentStep(onboardingStep);
+  }
 
   // Get current step configuration
   const getCurrentStepConfig = () => ONBOARDING_STEPS[currentStep];
@@ -244,18 +265,6 @@ export default function useOnboarding() {
     });
     setStepHistory([]);
   };
-
-  // Effect to handle route changes
-  useEffect(() => {
-    triggerStepForRoute(location.pathname);
-  }, [location.pathname]);
-
-  // Effect to track step history
-  useEffect(() => {
-    if (currentStep && !stepHistory.includes(currentStep)) {
-      setStepHistory(prev => [...prev, currentStep]);
-    }
-  }, [currentStep]);
 
   // Check if onboarding is complete
   const isOnboardingComplete = () => {

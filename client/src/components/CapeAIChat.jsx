@@ -3,28 +3,31 @@ import React, { useState, useRef, useEffect } from 'react';
 import useCapeAI from '../hooks/useCapeAI';
 
 export default function CapeAIChat() {
-  // Add error boundary for context usage
-  let capeAIData;
-  
-  try {
-    capeAIData = useCapeAI();
-  } catch (error) {
-    console.warn('CapeAI context not available in Chat:', error);
-    return null; // Don't render if context is not available
-  }
-  
-  const { isVisible, messages, toggleVisibility, addMessage } = capeAIData;
+  // ✅ Always call ALL hooks at the top level unconditionally
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
+  
+  // ✅ Hook call is now completely unconditional
+  const capeAIData = useCapeAI();
+  
+  // ✅ useEffect must also be at the top level
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [capeAIData?.messages]);
+  
+  // Safe fallback if context is not available
+  if (!capeAIData) {
+    return null;
+  }
+  
+  const { isVisible, messages, toggleVisibility, addMessage } = capeAIData;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
