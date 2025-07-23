@@ -1,15 +1,15 @@
 # 🏗️ LocalStorm Project Architecture
 
-**Updated:** July 20, 2025 | **Status:** Production-Ready & Localhost Operational
+**Updated:** July 23, 2025 | **Status:** Production-Ready & Localhost Operational
 
 ## 📁 **Root Directory Structure**
 ```
 /workspaces/localstorm/
 ├── 🚀 backend/              # FastAPI backend (Python 3.11)
-├── 🎨 client/               # React frontend (Vite + TailwindCSS)
+├── 🎨 client/               # React 19.1.0 frontend (Vite 6.3.5 + TailwindCSS)
 ├── ☁️ cloudflare-workers/   # Edge workers for CDN optimization
 ├── 📚 docs/                 # Comprehensive documentation
-├── 🔧 scripts/              # Deployment & utility scripts
+├── 🔧 scripts/              # Deployment & utility scripts (Enhanced S3 support)
 ├── 🐳 .devcontainer/        # VS Code dev container config
 ├── 📄 .env                  # Production-connected environment
 ├── 🛠️ apply_security_fixes.sh # Security hardening script
@@ -43,9 +43,9 @@ backend/
 ## 🎨 **Frontend Architecture** (`/client/`)
 ```
 client/
-├── src/                    # React 18 source code
+├── src/                    # React 19.1.0 source code (Hook-compliant)
 │   ├── components/         # Reusable UI components
-│   │   ├── 🤖 CapeAI System Components:
+│   │   ├── 🤖 CapeAI System Components (Hook Rules Fixed):
 │   │   │   ├── CapeAIChat.jsx           # Advanced chat interface
 │   │   │   ├── CapeAIFloatingButton.jsx # Draggable floating button
 │   │   │   └── CapeAISystem.jsx         # Core integration hub
@@ -73,9 +73,16 @@ client/
 │   ├── utils/              # Utility functions
 │   └── styles/             # CSS and styling system
 ├── public/                 # Static assets
-│   └── static/             # Images synced to S3
+│   ├── static/             # Images (synced to S3)
+│   │   ├── LogoC.png       # Color logo (1.4MB) - S3 hosted
+│   │   ├── LogoW.png       # White logo (326KB) - S3 hosted  
+│   │   ├── landing01.png   # Hero image (503KB) - S3 hosted
+│   │   ├── capecontrol-logo.png # Brand logo (2.7KB) - S3 hosted
+│   │   └── favicon files   # PWA icons - All S3 hosted
+│   ├── manifest.json       # PWA manifest (S3 URLs)
+│   └── site.webmanifest    # Web manifest (S3 URLs)
 ├── dist/                   # Vite build output
-├── package.json            # Dependencies (React 18, Vite, Tailwind)
+├── package.json            # Dependencies (React 19.1.0, Vite 6.3.5, Tailwind)
 ├── vite.config.js          # Vite configuration + cache busting
 └── tailwind.config.js      # Tailwind CSS configuration
 ```
@@ -96,7 +103,10 @@ Security Implementation:
 Production Infrastructure:
 ├── 🏗️ Deployment Platform  # Heroku (Docker containers)
 ├── 🗄️ Database            # AWS RDS PostgreSQL (production-grade)
-├── 📦 Static Assets       # AWS S3 (lightning-s3 bucket)
+├── 📦 Static Assets       # AWS S3 (lightning-s3.s3.us-east-1.amazonaws.com)
+│   ├── 🖼️ Images          # All PNG/ICO files (14 total, 2.8MB)
+│   ├── 📱 PWA Icons       # Progressive Web App manifest icons
+│   └── 🎨 Brand Assets    # Logos, landing images, favicons
 ├── 🔄 CI/CD               # GitHub Actions (automated testing)
 └── 🌐 CDN                 # S3 + CloudFront for global delivery
 ```
