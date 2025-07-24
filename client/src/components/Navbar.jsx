@@ -5,47 +5,47 @@ export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 h-20 bg-blue-600 dark:bg-gray-900 text-white shadow-lg z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          {/* Logo + Brand */}
-          <Link to="/" className="flex items-center space-x-2 py-2">
+    <nav className="fixed top-0 left-0 right-0 h-16 sm:h-20 bg-blue-600 dark:bg-gray-900 text-white shadow-lg z-50">
+      <div className="container-mobile">
+        <div className="flex justify-between items-center h-16 sm:h-20">
+          {/* Logo + Brand - Mobile optimized */}
+          <Link to="/" className="flex items-center space-x-2 py-2 active:scale-95 transition-transform">
             <img
               src="https://lightning-s3.s3.us-east-1.amazonaws.com/static/website/img/LogoW.png"
               alt="CapeControl Logo"
-              className="h-10 w-10 hidden sm:block"
+              className="h-8 w-8 sm:h-10 sm:w-10"
             />
-            <span className="text-2xl font-bold">CapeControl</span>
+            <span className="text-lg sm:text-2xl font-bold">CapeControl</span>
           </Link>
 
           {/* Desktop links - hide on smaller screens */}
-          <div className="hidden lg:flex space-x-6 items-center">
-            <Link to="/vision" className="hover:underline py-3 px-4 rounded transition-colors hover:bg-blue-700 text-lg font-medium">
+          <div className="hidden lg:flex space-x-2 xl:space-x-6 items-center">
+            <Link to="/vision" className="btn-mobile text-white hover:bg-blue-700 font-medium">
               Vision
             </Link>
-            <Link to="/platform" className="hover:underline py-3 px-4 rounded transition-colors hover:bg-blue-700 text-lg font-medium">
+            <Link to="/platform" className="btn-mobile text-white hover:bg-blue-700 font-medium">
               Platform
             </Link>
-            <Link to="/developers" className="hover:underline py-3 px-4 rounded transition-colors hover:bg-blue-700 text-lg font-medium">
+            <Link to="/developers" className="btn-mobile text-white hover:bg-blue-700 font-medium">
               Developers
             </Link>
-            <Link to="/login" className="hover:underline py-3 px-4 rounded transition-colors hover:bg-blue-700 text-lg font-medium">
+            <Link to="/login" className="btn-mobile text-white hover:bg-blue-700 font-medium">
               Login
             </Link>
-            <Link to="/register" className="bg-white text-blue-600 hover:bg-gray-100 py-3 px-6 rounded-lg transition-colors text-lg font-semibold">
+            <Link to="/register" className="btn-mobile bg-white text-blue-600 hover:bg-gray-100 font-semibold shadow-lg">
               Get Started
             </Link>
           </div>
 
-          {/* Hamburger menu button - show on smaller screens */}
+          {/* Hamburger menu button - Mobile friendly */}
           <div className="lg:hidden">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="text-white focus:outline-none p-3 rounded hover:bg-blue-700 transition-colors"
+              className="text-white focus:outline-none p-2 sm:p-3 rounded-lg hover:bg-blue-700 transition-all duration-200 active:scale-95 min-h-[44px] min-w-[44px] flex items-center justify-center"
               aria-label="Toggle menu"
             >
               <svg
-                className="w-7 h-7"
+                className="w-6 h-6 sm:w-7 sm:h-7"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -70,44 +70,48 @@ export default function NavBar() {
           </div>
         </div>
 
-        {/* Mobile dropdown */}
+                {/* Mobile dropdown - Enhanced for touch */}
         {menuOpen && (
-          <div className="lg:hidden animate-dropdown bg-blue-600 px-2 pb-3 space-y-2 border-t border-blue-500">
-            <Link
-              to="/vision"
-              className="block py-4 px-4 text-white hover:bg-blue-700 rounded transition-colors text-lg font-medium"
-              onClick={() => setMenuOpen(false)}
-            >
-              Vision
-            </Link>
-            <Link
-              to="/platform"
-              className="block py-4 px-4 text-white hover:bg-blue-700 rounded transition-colors text-lg font-medium"
-              onClick={() => setMenuOpen(false)}
-            >
-              Platform
-            </Link>
-            <Link
-              to="/developers"
-              className="block py-4 px-4 text-white hover:bg-blue-700 rounded transition-colors text-lg font-medium"
-              onClick={() => setMenuOpen(false)}
-            >
-              Developers
-            </Link>
-            <Link
-              to="/login"
-              className="block py-4 px-4 text-white hover:bg-blue-700 rounded transition-colors text-lg font-medium"
-              onClick={() => setMenuOpen(false)}
-            >
-              Login
-            </Link>
-            <Link
-              to="/register"
-              className="block py-4 px-4 text-white bg-white/10 hover:bg-white/20 rounded transition-colors text-lg font-semibold"
-              onClick={() => setMenuOpen(false)}
-            >
-              Get Started
-            </Link>
+          <div className="lg:hidden animate-dropdown bg-blue-600 border-t border-blue-500 shadow-xl">
+            <div className="py-2 space-y-1">
+              <Link
+                to="/vision"
+                className="block btn-mobile-lg w-full text-left text-white hover:bg-blue-700 transition-all duration-200"
+                onClick={() => setMenuOpen(false)}
+              >
+                Vision
+              </Link>
+              <Link
+                to="/platform"
+                className="block btn-mobile-lg w-full text-left text-white hover:bg-blue-700 transition-all duration-200"
+                onClick={() => setMenuOpen(false)}
+              >
+                Platform
+              </Link>
+              <Link
+                to="/developers"
+                className="block btn-mobile-lg w-full text-left text-white hover:bg-blue-700 transition-all duration-200"
+                onClick={() => setMenuOpen(false)}
+              >
+                Developers
+              </Link>
+              <Link
+                to="/login"
+                className="block btn-mobile-lg w-full text-left text-white hover:bg-blue-700 transition-all duration-200"
+                onClick={() => setMenuOpen(false)}
+              >
+                Login
+              </Link>
+              <div className="px-4 py-2">
+                <Link
+                  to="/register"
+                  className="block btn-mobile-lg w-full text-center bg-white text-blue-600 hover:bg-gray-100 font-semibold shadow-lg"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Get Started
+                </Link>
+              </div>
+            </div>
           </div>
         )}
       </div>

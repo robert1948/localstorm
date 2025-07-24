@@ -89,6 +89,30 @@
   /* Smooth scrolling for better mobile experience */
   html {
     scroll-behavior: smooth;
+    /* Prevent horizontal scroll on mobile */
+    overflow-x: hidden;
+    /* Improve text rendering */
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    /* Prevent bounce scrolling on iOS */
+    overscroll-behavior-y: none;
+    /* Improve touch scrolling */
+    -webkit-overflow-scrolling: touch;
+    /* Remove tap highlight on mobile */
+    -webkit-tap-highlight-color: transparent;
+    /* Base font size for mobile readability */
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* Mobile-safe viewport handling */
+  #root {
+    min-height: 100vh;
+    min-height: 100dvh; /* Dynamic viewport height for mobile */
   }
 
   /* Prevent text selection on touch devices for UI elements */
@@ -99,5 +123,44 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+  }
+}
+
+@layer components {
+  /* Mobile-first button components */
+  .btn-mobile {
+    @apply min-h-[44px] px-4 py-3 rounded-lg font-medium text-base transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+  
+  .btn-mobile-lg {
+    @apply min-h-[56px] px-6 py-4 rounded-xl font-semibold text-lg transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  /* Mobile card components */
+  .card-mobile {
+    @apply bg-white rounded-xl shadow-lg border border-gray-100 p-4 sm:p-6 transition-shadow duration-200;
+  }
+
+  /* Mobile text utilities */
+  .text-mobile-title {
+    @apply text-xl sm:text-2xl md:text-3xl font-bold leading-tight;
+  }
+
+  .text-mobile-body {
+    @apply text-base sm:text-lg leading-relaxed;
+  }
+
+  /* Mobile spacing utilities */
+  .container-mobile {
+    @apply max-w-full mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-mobile {
+    @apply py-8 sm:py-12 md:py-16;
+  }
+
+  /* Mobile form utilities */
+  .input-mobile {
+    @apply w-full min-h-[44px] px-4 py-3 border border-gray-300 rounded-lg text-base bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors;
   }
 }

@@ -1,0 +1,1 @@
+import{j as e,N as i}from"./index-BLFZl3Tt.js";import{u as o}from"./useAuth-eO9ideAR.js";function u({children:r}){const{user:t}=o();return t===void 0?e.jsx("div",{className:"p-4 text-center",children:"Checking authentication..."}):t?r:e.jsx(i,{to:"/login",replace:!0})}export{u as default};
