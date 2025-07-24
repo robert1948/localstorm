@@ -14,8 +14,10 @@
 
     "upload": "bash ../scripts/upload-to-s3.sh",
     "deploy:static": "bash ../scripts/deploy-static-assets.sh",
+    "preserve:png": "bash ../scripts/preserve-png-images.sh",
+    "verify:png": "bash ../scripts/verify-png-images.sh",
 
-    "heroku-postbuild": "npm install && npm run build && npm run upload",
+    "heroku-postbuild": "npm install && npm run build && npm run upload && npm run preserve:png",
     "purge:cloudflare": "echo '🔄 Add curl call to Cloudflare API here'",
 
     "lint": "eslint . --max-warnings 10",
