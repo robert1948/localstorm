@@ -40,6 +40,30 @@ class Settings(BaseSettings):
     rate_limit_requests: int = Field(100, alias="RATE_LIMIT_REQUESTS")
     rate_limit_window: int = Field(3600, alias="RATE_LIMIT_WINDOW")
     
+    # Redis configuration for CapeAI
+    redis_host: str = Field("localhost", alias="REDIS_HOST")
+    redis_port: int = Field(6379, alias="REDIS_PORT")
+    redis_password: str = Field("", alias="REDIS_PASSWORD")
+    
+    # OpenAI configuration for CapeAI
+    openai_api_key: str = Field("", alias="OPENAI_API_KEY")
+    
+    @property
+    def REDIS_HOST(self) -> str:
+        return self.redis_host
+        
+    @property 
+    def REDIS_PORT(self) -> int:
+        return self.redis_port
+        
+    @property
+    def REDIS_PASSWORD(self) -> str:
+        return self.redis_password or None
+        
+    @property
+    def OPENAI_API_KEY(self) -> str:
+        return self.openai_api_key
+    
     @property
     def allowed_hosts_list(self) -> List[str]:
         if isinstance(self.allowed_hosts, str):

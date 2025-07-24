@@ -3,14 +3,14 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
-import openai
+from openai import AsyncOpenAI
 import redis
 import json
 import uuid
 from datetime import datetime
 import asyncio
 
-from app.auth import get_current_user
+from app.dependencies import get_current_user
 from app.models import User
 from app.config import settings
 
@@ -25,7 +25,7 @@ redis_client = redis.Redis(
 )
 
 # OpenAI client
-openai.api_key = settings.OPENAI_API_KEY
+openai_client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
 
 class AIPromptRequest(BaseModel):
     message: str
@@ -143,7 +143,7 @@ class CapeAIService:
         
         try:
             # Call OpenAI API
-            response = await openai.ChatCompletion.acreate(
+            response = await openai_client.chat.completions.create(
                 model="gpt-4",
                 messages=messages,
                 max_tokens=500,

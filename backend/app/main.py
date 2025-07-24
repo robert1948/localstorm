@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # from app.routes import auth  # Legacy - DISABLED
 # from app.routes import auth_enhanced  # Enhanced - DISABLED
 from app.routes import auth_v2  # V2 registration system - ACTIVE
+from app.routes import cape_ai  # CapeAI service - ACTIVE
 import os
 
 app = FastAPI(
@@ -17,6 +18,7 @@ app = FastAPI(
 # app.include_router(auth.router, prefix="/api")  # Legacy authentication - DISABLED
 # app.include_router(auth_enhanced.router)  # Enhanced authentication - DISABLED
 app.include_router(auth_v2.router, prefix="/api")  # V2 registration system - ACTIVE
+app.include_router(cape_ai.router, prefix="/api")  # CapeAI service - ACTIVE
 
 # Health check endpoint
 @app.get("/api/health")

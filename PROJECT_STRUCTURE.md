@@ -1,78 +1,92 @@
 # 🏗️ LocalStorm Project Architecture
 
-**Updated:** July 24, 2025 | **Status:** Production-Ready & Mobile-Optimized
+**Updated:** July 24, 2025 | **Status:** Production-Ready with AI Intelligence
 
 ## 📁 **Root Directory Structure**
 ```
 /workspaces/localstorm/
-├── 🚀 backend/              # FastAPI backend (Python 3.11)
-├── 🎨 client/               # React 19.1.0 frontend (Vite 6.3.5 + Mobile-First TailwindCSS)
-├── ☁️ cloudflare-workers/   # Edge workers for CDN optimization
-├── 📚 docs/                 # Comprehensive documentation
-├── 🔧 scripts/              # Deployment & utility scripts (Enhanced S3 support)
-├── 🐳 .devcontainer/        # VS Code dev container config
-├── 📄 .env                  # Production-connected environment
-├── 🛠️ apply_security_fixes.sh # Security hardening script
+├── 🚀 backend/              # FastAPI backend (Python 3.11) with AI Services
+├── 🎨 client/               # React 19.1.0 frontend (Mobile-First + AI-Enhanced)
+├── ☁️ cloudflare-workers/   # Edge workers with AI routing optimization
+├── 📚 docs/                 # Comprehensive documentation + AI guides
+├── 🔧 scripts/              # Deployment & utility scripts (S3 + AI deployments)
+├── 🐳 .devcontainer/        # VS Code dev container with AI development tools
+├── 📄 .env                  # Production environment with AI API keys
+├── 🤖 CapeAI Implementation Files:
+│   ├── CAPEAI_DEVELOPMENT_PLAN.md      # Comprehensive AI roadmap
+│   ├── CAPEAI_INTEGRATION_GUIDE.md     # Step-by-step implementation
+│   ├── CAPEAI_IMPLEMENTATION_CHECKLIST.md # Production deployment guide
+│   └── PRODUCTION_APP_ROUTE_FIX.md     # Cloudflare routing solution
+├── 🛠️ apply_security_fixes.sh # Security hardening with AI monitoring
 ├── 📋 *_AUDIT.md            # Security and deployment documentation
 ├── 📱 MOBILE_TAILWIND_IMPLEMENTATION.md # Mobile-first design documentation
-└── 🔧 configuration files   # Docker, Heroku, CI/CD configs
+└── 🔧 configuration files   # Docker, Heroku, CI/CD with AI service configs
 ```
 
 ## 🚀 **Backend Architecture** (`/backend/`)
 ```
 backend/
-├── app/                     # FastAPI application core
-│   ├── main.py             # Application entry point + CORS
-│   ├── config.py           # Configuration management
-│   ├── database.py         # PostgreSQL connection (AWS RDS)
-│   ├── dependencies.py     # Dependency injection
-│   ├── models.py           # SQLAlchemy database models
-│   ├── schemas.py          # Pydantic validation schemas
-│   ├── auth.py             # JWT authentication logic
+├── app/                     # FastAPI application core with AI services
+│   ├── main.py             # Application entry + CORS + AI route integration
+│   ├── config/             # Configuration management
+│   │   └── cape_ai_config.py # AI service configurations and feature flags
+│   ├── database.py         # PostgreSQL connection (AWS RDS) + AI analytics tables
+│   ├── dependencies.py     # Dependency injection + AI service dependencies
+│   ├── models.py           # SQLAlchemy models + AI conversation schemas
+│   ├── schemas.py          # Pydantic validation + AI request/response models
+│   ├── auth.py             # JWT authentication with AI security features
 │   ├── routes/             # API endpoint modules
 │   │   ├── auth.py         # Legacy auth endpoints
 │   │   ├── auth_v2.py      # Enhanced auth with v2 features
-│   │   └── auth_enhanced.py # Production auth system
-│   └── static/             # Frontend build integration (Mobile-optimized)
-├── tests/                  # Comprehensive test suite
-│   └── test_auth.py        # Authentication endpoint tests
-├── migrations/             # Database migration scripts
-├── Dockerfile              # Production container config
-└── standalone services     # Development utilities
+│   │   ├── auth_enhanced.py # Production auth system
+│   │   └── 🤖 cape_ai.py   # AI assistant endpoints (OpenAI + Redis integration)
+│   ├── services/           # Business logic services
+│   │   └── ai_service.py   # CapeAI intelligence engine (context-aware responses)
+│   └── static/             # Frontend build integration (AI-enhanced mobile UI)
+├── tests/                  # Comprehensive test suite + AI endpoint tests
+│   └── test_auth.py        # Authentication + AI security tests
+├── migrations/             # Database migration scripts + AI schema updates
+├── Dockerfile              # Production container with AI dependencies
+└── standalone services     # Development utilities + AI testing tools
 ```
 
 ## 🎨 **Frontend Architecture** (`/client/`)
 ```
 client/
-├── src/                    # React 19.1.0 source code (Hook-compliant + Mobile-First)
-│   ├── components/         # Reusable UI components (Mobile-Optimized)
-│   │   ├── 🤖 CapeAI System Components (Hook Rules Fixed + Touch-Friendly):
-│   │   │   ├── CapeAIChat.jsx           # Advanced chat interface (Mobile responsive)
-│   │   │   ├── CapeAIFloatingButton.jsx # Draggable floating button (Touch-optimized)
-│   │   │   └── CapeAISystem.jsx         # Core integration hub
+├── src/                    # React 19.1.0 source (AI-Enhanced + Mobile-First)
+│   ├── components/         # Reusable UI components (AI-Integrated + Touch-Optimized)
+│   │   ├── 🤖 AI System Components (Production-Ready):
+│   │   │   ├── CapeAIChat.jsx           # Basic chat interface (legacy)
+│   │   │   ├── CapeAIChatEnhanced.jsx   # Advanced AI chat with OpenAI integration
+│   │   │   ├── CapeAISystem.jsx         # AI system orchestrator
+│   │   │   └── OnboardingChecklist.jsx  # AI-guided onboarding
 │   │   ├── 📋 Onboarding Components:
 │   │   │   ├── OnboardingChecklist.jsx  # Interactive progress tracker
 │   │   │   └── OnboardingFlow.jsx       # Automated flow manager
 │   │   ├── 🧭 Navigation & Layout:
-│   │   │   ├── Navbar.jsx               # Main navigation (S3 logo)
-│   │   │   ├── Hero.jsx                 # Landing hero (S3 images)
+│   │   │   ├── Navbar.jsx               # Main navigation (S3 logo + mobile hamburger)
+│   │   │   ├── Hero.jsx                 # Landing hero (S3 images + responsive)
 │   │   │   └── ProtectedRoute.jsx       # Route authentication
-│   │   └── 🎯 Feature Components        # Forms, modals, etc.
-│   ├── context/            # React Context providers
+│   │   └── 🎯 Feature Components        # Forms, modals, etc. (Mobile-optimized)
+│   ├── context/            # React Context providers  
 │   │   ├── 🤖 CapeAIContext.jsx        # AI assistant state management
+│   │   ├── 🤖 CapeAIContextSafe.jsx    # Safe AI context with fallbacks
 │   │   └── AuthContext.jsx             # Authentication state
-│   ├── hooks/              # Custom React hooks
-│   │   ├── 🤖 useCapeAI.jsx            # CapeAI integration hook
+│   ├── hooks/              # Custom React hooks (Hook Rules Compliant)
+│   │   ├── 🤖 useCapeAI.jsx            # Basic CapeAI integration hook
+│   │   ├── 🤖 useCapeAIEnhanced.jsx    # Advanced AI hook with OpenAI API
 │   │   ├── 🤖 useOnboarding.jsx        # Onboarding flow management
 │   │   └── useAuth.jsx                 # Authentication utilities
-│   ├── pages/              # Route-based page components
-│   │   ├── Landing.jsx                 # Public landing page
-│   │   ├── Dashboard.jsx               # User dashboard with CapeAI
-│   │   ├── auth/                       # Authentication pages
-│   │   └── platform/                   # Platform-specific pages
-│   ├── api/                # API integration layer
-│   ├── utils/              # Utility functions
-│   └── styles/             # CSS and styling system
+│   ├── pages/              # Route-based page components (Mobile-First)
+│   │   ├── Landing.jsx                 # Public landing (Touch-optimized)
+│   │   ├── Dashboard.jsx               # User dashboard with AI integration
+│   │   ├── auth/                       # Authentication pages (Mobile forms)
+│   │   └── platform/                   # Platform pages (AI-enhanced)
+│   ├── api/                # API integration layer + AI endpoints
+│   ├── utils/              # Utility functions + AI helpers
+│   └── styles/             # CSS styling system (Mobile-First Tailwind)
+│       ├── globals.css     # Global styles (7.11kB optimized)
+│       └── components.css  # Component-specific styles
 ├── public/                 # Static assets
 │   ├── static/             # Images (synced to S3)
 │   │   ├── LogoC.png       # Color logo (1.4MB) - S3 hosted
