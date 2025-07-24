@@ -26,39 +26,37 @@ export default {
       return new Response(null, { status: 204 })
     }
     
-    // Handle app route - redirect or show coming soon
+    // Handle app route - proxy to Heroku React app
     if (url.pathname === '/app' || url.pathname.startsWith('/app/')) {
-      return new Response(`<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CapeControl Dashboard - Coming Soon</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚁</text></svg>">
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-               background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-               color: white; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .container { text-align: center; padding: 2rem; }
-        .logo { font-size: 3rem; font-weight: bold; margin-bottom: 1rem; }
-        .message { font-size: 1.5rem; margin-bottom: 2rem; opacity: 0.9; }
-        .btn { display: inline-block; background: white; color: #667eea; padding: 1rem 2rem; 
-               text-decoration: none; border-radius: 8px; font-weight: bold; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="logo">🚁 CapeControl</div>
-        <div class="message">Dashboard Coming Soon</div>
-        <p>We're building something amazing for drone operations management.</p>
-        <br>
-        <a href="/" class="btn">← Back to Home</a>
-    </div>
-</body>
-</html>`, {
-        status: 200,
-        headers: { 'Content-Type': 'text/html', ...securityHeaders }
-      })
+      try {
+        // Remove /app prefix and proxy to Heroku root
+        const targetPath = url.pathname === '/app' ? '/' : url.pathname.substring(4)
+        const backendUrl = new URL(targetPath + url.search, BACKEND_URL)
+        
+        const response = await fetch(backendUrl.toString(), {
+          method: request.method,
+          headers: {
+            ...request.headers,
+            'Host': new URL(BACKEND_URL).hostname
+          },
+          body: request.method !== 'GET' && request.method !== 'HEAD' ? request.body : undefined
+        })
+        
+        // Forward the response with security headers
+        const modifiedResponse = new Response(response.body, {
+          status: response.status,
+          statusText: response.statusText,
+          headers: { ...response.headers, ...securityHeaders }
+        })
+        
+        return modifiedResponse
+      } catch (error) {
+        console.error('Error proxying to Heroku:', error)
+        return new Response('Service temporarily unavailable', { 
+          status: 503, 
+          headers: { 'Content-Type': 'text/plain', ...securityHeaders }
+        })
+      }
     }
     
     // API requests - proxy to Heroku
