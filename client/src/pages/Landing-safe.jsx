@@ -132,60 +132,59 @@ export default function Landing() {
                   </div>
                   <div className="text-center">
                     <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">🌐</div>
-                    <div className="text-sm font-semibold text-gray-700">Global Scale</div>
+                    <div className="text-sm font-semibold text-gray-700">Always Available</div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Platform Stats - new mobile section */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-xl p-6 mx-2 text-white">
-              <div className="text-center mb-6">
-                <h3 className="text-xl font-bold mb-2">Trusted by Thousands</h3>
-                <p className="text-blue-100 text-sm">Join the AI revolution today</p>
-              </div>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold">1000+</div>
-                  <div className="text-xs text-blue-100">Active Users</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold">50+</div>
-                  <div className="text-xs text-blue-100">AI Agents</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold">24/7</div>
-                  <div className="text-xs text-blue-100">Support</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Vision quote - enhanced */}
-            <div className="bg-white rounded-2xl shadow-xl p-8 mx-2">
+            {/* Developer platform highlight */}
+            <div className="bg-white rounded-2xl shadow-xl p-6 mx-2">
               <div className="text-center">
-                <span className="text-blue-500 text-4xl leading-none">"</span>
-                <p className="text-gray-700 italic text-lg leading-relaxed my-4">
-                  CapeControl is more than a service—it's a showcase of what AI can achieve. 
-                  The platform's intelligence and responsiveness demonstrate the transformative potential of AI.
+                <div className="text-5xl mb-4 text-purple-600">👨‍💻</div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-4">Developer Empowerment</h3>
+                <p className="text-gray-600 text-base leading-relaxed mb-6">
+                  Build, deploy, and monetize AI agents on our platform. Join a community where your innovations create impact and income.
                 </p>
-                <div className="text-right">
-                  <div className="text-sm font-semibold text-gray-800">— Vision Statement</div>
-                  <div className="text-xs text-gray-500">CapeControl Team</div>
+                
+                <div className="space-y-4">
+                  <div className="flex items-center bg-purple-50 rounded-lg p-4">
+                    <div className="text-2xl mr-4">💰</div>
+                    <div className="text-left">
+                      <div className="font-semibold text-gray-800">Earn While You Build</div>
+                      <div className="text-sm text-gray-600">Monetize your AI creations</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center bg-blue-50 rounded-lg p-4">
+                    <div className="text-2xl mr-4">🚀</div>
+                    <div className="text-left">
+                      <div className="font-semibold text-gray-800">Deploy with Ease</div>
+                      <div className="text-sm text-gray-600">One-click deployment platform</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Final CTA - mobile */}
-            <div className="text-center mx-2">
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-200">
-                <p className="text-lg font-bold text-blue-700 mb-4">
-                  "Where intelligence meets impact, and possibilities become realities."
-                </p>
+            {/* CTA for mobile */}
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-xl p-8 mx-2 text-white text-center">
+              <h3 className="text-2xl font-bold mb-4">Ready to Transform Your Ideas?</h3>
+              <p className="text-blue-100 mb-6 leading-relaxed">
+                Join thousands who are already building the future with AI that truly understands.
+              </p>
+              <div className="space-y-3">
                 <button 
                   onClick={handleTryForFree}
-                  className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-lg"
+                  className="w-full bg-white text-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 active:bg-blue-100 transition-colors font-semibold shadow-lg"
                 >
-                  Start Your AI Journey
+                  Start Your Journey Free
+                </button>
+                <button 
+                  onClick={handleJoinAsDeveloper}
+                  className="w-full border-2 border-white text-white px-6 py-3 rounded-lg hover:bg-white hover:text-purple-600 active:bg-blue-50 transition-colors font-semibold"
+                >
+                  Become a Developer
                 </button>
               </div>
             </div>
@@ -193,6 +192,40 @@ export default function Landing() {
           </div>
         </div>
       </div>
+
+      {/* Footer with enhanced mobile design */}
+      <footer className="bg-gray-900 text-white py-8 px-4">
+        <div className="max-w-5xl mx-auto text-center">
+          <div className="text-2xl font-bold mb-4 text-blue-400">CapeControl</div>
+          <p className="text-gray-400 mb-6 max-w-2xl mx-auto">
+            Democratizing AI technology to empower individuals and businesses worldwide.
+          </p>
+          
+          {/* Social proof numbers - mobile optimized */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-400">10K+</div>
+              <div className="text-gray-400 text-sm">Active Users</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-400">500+</div>
+              <div className="text-gray-400 text-sm">AI Agents</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-400">99.9%</div>
+              <div className="text-gray-400 text-sm">Uptime</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-yellow-400">24/7</div>
+              <div className="text-gray-400 text-sm">Support</div>
+            </div>
+          </div>
+          
+          <div className="text-gray-500 text-sm">
+            © 2024 CapeControl. Transforming possibilities into reality.
+          </div>
+        </div>
+      </footer>
     </section>
   );
 }
