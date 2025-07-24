@@ -29,21 +29,15 @@ jobs:
         working-directory: client
         run: npm ci
 
-      - name: 🧩 Build frontend (includes cache-bust)
+      - name: 🧩 Build frontend (includes manifest.json)
         working-directory: client
         run: npm run build
 
-      - name: ☁️ Upload built assets to S3
+      - name: ☁️ Upload all built assets (incl. manifest) to S3
         working-directory: client
-        run: npm run upload
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
-
-      - name: 📤 Upload static assets to S3 (manifest, icons, etc.)
-        working-directory: client
-        run: npm run deploy:static
+        run: |
+          npm run upload
+          npm run deploy:static
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
