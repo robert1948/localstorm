@@ -143,3 +143,41 @@ SESSION_*.md
 PRODUCTION_*.md
 CRITICAL_*.md
 SECRET_*.md
+
+# Project Management CSV files (generated data)
+*.csv
+project_tracking.csv
+kpi_metrics.csv
+resource_allocation.csv
+risk_register.csv
+localstorm_project_data.zip
+
+# Non-essential development markdown files
+DEVELOPMENT_ROADMAP.md
+DEVELOPMENT_SESSION_SUMMARY.md
+IMPLEMENTATION_STATUS.md
+MASTER_PROJECT_PLAN.md
+CURRENT_SPRINT.md
+SPRINT_TEMPLATE.md
+*_CHECKLIST.md
+*_SUMMARY.md
+*_GUIDE.md
+*_RESOLUTION.md
+*_COMPLETE.md
+*_SUCCESS.md
+*_VERIFIED.md
+*_AUDIT.md
+*_REPORT.md
+*_TROUBLESHOOTING.md
+*_SOLUTION.md
+
+# Temporary project files
+CI_CD_*.md
+AWS_MANUAL_*.md
+HEROKU_*.md
+S3_FIX_*.md
+WORKFLOW_*.md
+UNIFIED_*.md
+FINAL_*.md
+DUPLICATE_*.md
+FAVICON_*.md
