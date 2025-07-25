@@ -71,6 +71,10 @@ yarn-error.log*
 .cache/
 .temp/
 .tmp/
+# Vite specific
+.vite/
+# React specific
+.react/
 
 # Logs
 *.log
@@ -114,6 +118,13 @@ htmlcov/
 coverage/
 *.cover
 .hypothesis/
+# Vitest cache and reports
+.vitest/
+vitest.config.js.timestamp-*
+test-results/
+test-reports/
+# Jest cache
+.jest/
 
 # Local development
 *.local
@@ -151,6 +162,12 @@ kpi_metrics.csv
 resource_allocation.csv
 risk_register.csv
 localstorm_project_data.zip
+
+# Task-specific progress files
+TASK_*_PROGRESS_SUMMARY.md
+TASK_*_UPDATE.md
+REGISTER_COMPONENT_*.md
+*_BREAKTHROUGH.md
 
 # Non-essential development markdown files
 DEVELOPMENT_ROADMAP.md

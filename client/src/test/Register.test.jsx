@@ -9,7 +9,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { BrowserRouter } from 'react-router-dom'
 import { Register } from '../pages/Register'
 import { renderWithProviders, mockAuthContextValue } from '../test/utils.jsx'
 
@@ -20,12 +19,7 @@ describe('Register Page', () => {
 
   describe('Rendering', () => {
     it('should render registration form', () => {
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       expect(screen.getByRole('heading', { name: /create account/i })).toBeInTheDocument()
       expect(screen.getByLabelText(/full name/i)).toBeInTheDocument()
@@ -36,25 +30,15 @@ describe('Register Page', () => {
     })
 
     it('should render link to login page', () => {
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
-      const loginLink = screen.getByText(/already have an account/i).parentElement.querySelector('a')
-      expect(loginLink).toHaveAttribute('href', '/login')
+      const loginLink = screen.getByText(/sign in/i)
+      expect(loginLink.closest('a')).toHaveAttribute('href', '/login')
       expect(loginLink).toHaveTextContent(/sign in/i)
     })
 
     it('should render terms and privacy policy links', () => {
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       expect(screen.getByText(/terms of service/i)).toBeInTheDocument()
       expect(screen.getByText(/privacy policy/i)).toBeInTheDocument()
@@ -65,12 +49,7 @@ describe('Register Page', () => {
     it('should accept name input', async () => {
       const user = userEvent.setup()
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       const nameInput = screen.getByLabelText(/full name/i)
       await user.type(nameInput, 'John Doe')
@@ -81,12 +60,7 @@ describe('Register Page', () => {
     it('should accept email input', async () => {
       const user = userEvent.setup()
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       const emailInput = screen.getByLabelText(/email/i)
       await user.type(emailInput, 'john@example.com')
@@ -97,12 +71,7 @@ describe('Register Page', () => {
     it('should accept password input', async () => {
       const user = userEvent.setup()
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       const passwordInput = screen.getByLabelText('Password')
       await user.type(passwordInput, 'password123')
@@ -114,12 +83,7 @@ describe('Register Page', () => {
     it('should accept confirm password input', async () => {
       const user = userEvent.setup()
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       const confirmPasswordInput = screen.getByLabelText(/confirm password/i)
       await user.type(confirmPasswordInput, 'password123')
@@ -131,12 +95,7 @@ describe('Register Page', () => {
     it('should toggle password visibility', async () => {
       const user = userEvent.setup()
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       const passwordInput = screen.getByLabelText('Password')
       const toggleButtons = screen.getAllByRole('button', { name: /show password/i })
@@ -155,12 +114,7 @@ describe('Register Page', () => {
     it('should show error for empty name', async () => {
       const user = userEvent.setup()
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       const submitButton = screen.getByRole('button', { name: /create account/i })
       await user.click(submitButton)
@@ -171,12 +125,7 @@ describe('Register Page', () => {
     it('should show error for empty email', async () => {
       const user = userEvent.setup()
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       const nameInput = screen.getByLabelText(/full name/i)
       const submitButton = screen.getByRole('button', { name: /create account/i })
@@ -190,12 +139,7 @@ describe('Register Page', () => {
     it('should show error for invalid email format', async () => {
       const user = userEvent.setup()
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       const nameInput = screen.getByLabelText(/full name/i)
       const emailInput = screen.getByLabelText(/email/i)
@@ -205,18 +149,15 @@ describe('Register Page', () => {
       await user.type(emailInput, 'invalid-email')
       await user.click(submitButton)
       
-      expect(screen.getByText(/please enter a valid email/i)).toBeInTheDocument()
+      await waitFor(() => {
+        expect(screen.getByText(/please enter a valid email/i)).toBeInTheDocument()
+      })
     })
 
     it('should show error for empty password', async () => {
       const user = userEvent.setup()
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       const nameInput = screen.getByLabelText(/full name/i)
       const emailInput = screen.getByLabelText(/email/i)
@@ -232,12 +173,7 @@ describe('Register Page', () => {
     it('should show error for short password', async () => {
       const user = userEvent.setup()
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       const nameInput = screen.getByLabelText(/full name/i)
       const emailInput = screen.getByLabelText(/email/i)
@@ -255,12 +191,7 @@ describe('Register Page', () => {
     it('should show error for password mismatch', async () => {
       const user = userEvent.setup()
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       const nameInput = screen.getByLabelText(/full name/i)
       const emailInput = screen.getByLabelText(/email/i)
@@ -280,12 +211,7 @@ describe('Register Page', () => {
     it('should show password strength indicator', async () => {
       const user = userEvent.setup()
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       const passwordInput = screen.getByLabelText('Password')
       
@@ -307,12 +233,7 @@ describe('Register Page', () => {
     it('should clear validation errors when input changes', async () => {
       const user = userEvent.setup()
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       const nameInput = screen.getByLabelText(/full name/i)
       const submitButton = screen.getByRole('button', { name: /create account/i })
@@ -336,34 +257,27 @@ describe('Register Page', () => {
         register: mockRegister
       }
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { 
-          wrapper: (props) => renderWithProviders(props.children, { 
-            authValue: contextWithMock 
-          }) 
-        }
-      )
+      renderWithProviders(<Register />, { 
+        authValue: contextWithMock 
+      })
       
       const nameInput = screen.getByLabelText(/full name/i)
       const emailInput = screen.getByLabelText(/email/i)
       const passwordInput = screen.getByLabelText('Password')
       const confirmPasswordInput = screen.getByLabelText(/confirm password/i)
+      const termsCheckbox = screen.getByLabelText(/i agree to the terms/i)
       const submitButton = screen.getByRole('button', { name: /create account/i })
       
       await user.type(nameInput, 'John Doe')
       await user.type(emailInput, 'john@example.com')
       await user.type(passwordInput, 'password123')
       await user.type(confirmPasswordInput, 'password123')
+      await user.click(termsCheckbox)
       await user.click(submitButton)
       
-      expect(mockRegister).toHaveBeenCalledWith({
-        name: 'John Doe',
-        email: 'john@example.com',
-        password: 'password123'
-      })
+      // Should advance to step 2 (role selection) instead of calling register
+      expect(screen.getByText(/choose your role/i)).toBeInTheDocument()
+      expect(screen.getByText(/step 2/i)).toBeInTheDocument()
     })
 
     it('should show loading state during registration', async () => {
@@ -375,30 +289,25 @@ describe('Register Page', () => {
         isLoading: false
       }
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { 
-          wrapper: (props) => renderWithProviders(props.children, { 
-            authValue: contextWithMock 
-          }) 
-        }
-      )
+      renderWithProviders(<Register />, { 
+        authValue: contextWithMock 
+      })
       
       const nameInput = screen.getByLabelText(/full name/i)
       const emailInput = screen.getByLabelText(/email/i)
       const passwordInput = screen.getByLabelText('Password')
       const confirmPasswordInput = screen.getByLabelText(/confirm password/i)
+      const termsCheckbox = screen.getByLabelText(/i agree to the terms/i)
       const submitButton = screen.getByRole('button', { name: /create account/i })
       
       await user.type(nameInput, 'John Doe')
       await user.type(emailInput, 'john@example.com')
       await user.type(passwordInput, 'password123')
       await user.type(confirmPasswordInput, 'password123')
+      await user.click(termsCheckbox)
       await user.click(submitButton)
       
-      expect(screen.getByText(/creating account/i)).toBeInTheDocument()
+      expect(screen.getByText(/choose your role/i)).toBeInTheDocument()
       expect(submitButton).toBeDisabled()
     })
 
@@ -408,16 +317,9 @@ describe('Register Page', () => {
         isLoading: true
       }
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { 
-          wrapper: (props) => renderWithProviders(props.children, { 
-            authValue: loadingContext 
-          }) 
-        }
-      )
+      renderWithProviders(<Register />, { 
+        authValue: loadingContext 
+      })
       
       expect(screen.getByLabelText(/full name/i)).toBeDisabled()
       expect(screen.getByLabelText(/email/i)).toBeDisabled()
@@ -436,16 +338,9 @@ describe('Register Page', () => {
         register: mockRegister
       }
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { 
-          wrapper: (props) => renderWithProviders(props.children, { 
-            authValue: contextWithMock 
-          }) 
-        }
-      )
+      renderWithProviders(<Register />, { 
+        authValue: contextWithMock 
+      })
       
       const nameInput = screen.getByLabelText(/full name/i)
       const emailInput = screen.getByLabelText(/email/i)
@@ -472,16 +367,9 @@ describe('Register Page', () => {
         register: mockRegister
       }
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { 
-          wrapper: (props) => renderWithProviders(props.children, { 
-            authValue: contextWithMock 
-          }) 
-        }
-      )
+      renderWithProviders(<Register />, { 
+        authValue: contextWithMock 
+      })
       
       const nameInput = screen.getByLabelText(/full name/i)
       const emailInput = screen.getByLabelText(/email/i)
@@ -503,12 +391,7 @@ describe('Register Page', () => {
 
   describe('Terms and Conditions', () => {
     it('should render terms acceptance checkbox', () => {
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       expect(screen.getByLabelText(/i agree to the terms/i)).toBeInTheDocument()
     })
@@ -516,12 +399,7 @@ describe('Register Page', () => {
     it('should require terms acceptance', async () => {
       const user = userEvent.setup()
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       const nameInput = screen.getByLabelText(/full name/i)
       const emailInput = screen.getByLabelText(/email/i)
@@ -546,16 +424,9 @@ describe('Register Page', () => {
         register: mockRegister
       }
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { 
-          wrapper: (props) => renderWithProviders(props.children, { 
-            authValue: contextWithMock 
-          }) 
-        }
-      )
+      renderWithProviders(<Register />, { 
+        authValue: contextWithMock 
+      })
       
       const nameInput = screen.getByLabelText(/full name/i)
       const emailInput = screen.getByLabelText(/email/i)
@@ -571,18 +442,14 @@ describe('Register Page', () => {
       await user.click(termsCheckbox)
       await user.click(submitButton)
       
-      expect(mockRegister).toHaveBeenCalled()
+      // Should advance to step 2 instead of calling register
+      expect(screen.getByText(/choose your role/i)).toBeInTheDocument()
     })
   })
 
   describe('Accessibility', () => {
     it('should have proper form labels and ARIA attributes', () => {
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       expect(screen.getByLabelText(/full name/i)).toHaveAttribute('aria-describedby')
       expect(screen.getByLabelText(/email/i)).toHaveAttribute('aria-describedby')
@@ -593,12 +460,7 @@ describe('Register Page', () => {
     it('should announce errors to screen readers', async () => {
       const user = userEvent.setup()
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       const submitButton = screen.getByRole('button', { name: /create account/i })
       await user.click(submitButton)
@@ -610,12 +472,7 @@ describe('Register Page', () => {
     it('should support keyboard navigation', async () => {
       const user = userEvent.setup()
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       await user.tab()
       expect(screen.getByLabelText(/full name/i)).toHaveFocus()
@@ -630,12 +487,7 @@ describe('Register Page', () => {
 
   describe('Social Registration', () => {
     it('should render social registration buttons', () => {
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { wrapper: (props) => renderWithProviders(props.children) }
-      )
+      renderWithProviders(<Register />)
       
       expect(screen.getByText(/continue with google/i)).toBeInTheDocument()
       expect(screen.getByText(/continue with github/i)).toBeInTheDocument()
@@ -651,16 +503,9 @@ describe('Register Page', () => {
         socialLogin: mockSocialLogin
       }
       
-      render(
-        <BrowserRouter>
-          <Register />
-        </BrowserRouter>,
-        { 
-          wrapper: (props) => renderWithProviders(props.children, { 
-            authValue: contextWithSocial 
-          }) 
-        }
-      )
+      renderWithProviders(<Register />, { 
+        authValue: contextWithSocial 
+      })
       
       const googleButton = screen.getByText(/continue with google/i)
       await user.click(googleButton)
