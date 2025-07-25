@@ -15,6 +15,7 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const UserDashboard = lazy(() => import("./pages/UserDashboard"));
 const DeveloperDashboard = lazy(() => import("./pages/DeveloperDashboard"));
 const PerformanceDashboard = lazy(() => import("./pages/PerformanceDashboardPage"));
+const PersonalizedDashboard = lazy(() => import("./components/PersonalizedDashboard"));
 const Logout = lazy(() => import("./pages/Logout"));
 const HowItWorks = lazy(() => import("./pages/HowItWorks"));
 const HowItWorksUser = lazy(() => import("./pages/HowItWorksUser"));
@@ -84,6 +85,14 @@ export default function App() {
                 element={
                   <ProtectedRoute>
                     <PerformanceDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/personalized"
+                element={
+                  <ProtectedRoute>
+                    <PersonalizedDashboard />
                   </ProtectedRoute>
                 }
               />

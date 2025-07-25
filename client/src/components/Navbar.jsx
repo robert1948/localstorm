@@ -55,6 +55,9 @@ export function Navbar() {
                 <Link to="/dashboard" className="btn-mobile text-white hover:bg-blue-700 font-medium">
                   Dashboard
                 </Link>
+                <Link to="/dashboard/personalized" className="btn-mobile text-white hover:bg-blue-700 font-medium">
+                  Personalized
+                </Link>
                 <Link to="/profile" className="btn-mobile text-white hover:bg-blue-700 font-medium">
                   Profile
                 </Link>
