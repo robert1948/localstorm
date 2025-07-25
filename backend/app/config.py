@@ -48,6 +48,7 @@ class Settings(BaseSettings):
     # AI Provider Configuration (Task 2.1.1: Multi-Provider Support)
     openai_api_key: str = Field("", alias="OPENAI_API_KEY")
     claude_api_key: str = Field("", alias="CLAUDE_API_KEY")  # NEW: Claude API key
+    gemini_api_key: str = Field("", alias="GEMINI_API_KEY")  # Task 2.1.2: Gemini API key
     
     @property
     def REDIS_HOST(self) -> str:

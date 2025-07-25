@@ -20,6 +20,14 @@ from datetime import datetime
 # Provider-specific imports
 from openai import AsyncOpenAI
 import anthropic
+try:
+    import google.generativeai as genai
+    from google.generativeai.types import HarmCategory, HarmBlockThreshold
+    GEMINI_AVAILABLE = True
+except ImportError:
+    GEMINI_AVAILABLE = False
+    # Logger will be defined later
+
 from pydantic import BaseModel
 
 from app.config import settings
@@ -32,7 +40,7 @@ class ModelProvider(str, Enum):
     """Available AI model providers"""
     OPENAI = "openai"
     CLAUDE = "claude"
-    # GEMINI will be added in Task 2.1.2
+    GEMINI = "gemini"  # Added in Task 2.1.2
 
 
 @dataclass
@@ -95,6 +103,18 @@ class MultiProviderAIService:
             self.logger.info("Claude client initialized successfully")
         else:
             self.logger.warning("Claude API key not found - Claude models unavailable")
+        
+        # Gemini (Google) client - Task 2.1.2
+        if GEMINI_AVAILABLE:
+            gemini_api_key = getattr(settings, 'GEMINI_API_KEY', os.getenv('GEMINI_API_KEY'))
+            if gemini_api_key:
+                genai.configure(api_key=gemini_api_key)
+                self.clients[ModelProvider.GEMINI] = genai
+                self.logger.info("Gemini client initialized successfully")
+            else:
+                self.logger.warning("Gemini API key not found - Gemini models unavailable")
+        else:
+            self.logger.warning("Google Generative AI library not found - Gemini models unavailable")
     
     def _setup_model_configurations(self):
         """Setup configurations for all supported models"""
@@ -166,6 +186,41 @@ class MultiProviderAIService:
                 context_window=200000
             )
         })
+        
+        # Gemini model configurations - Task 2.1.2
+        if GEMINI_AVAILABLE:
+            self.model_configs.update({
+                "gemini-pro": AIModelConfig(
+                    provider=ModelProvider.GEMINI,
+                    model_name="gemini-pro",
+                    max_tokens=8192,
+                    temperature=0.7,
+                    supports_streaming=True,
+                    cost_per_1k_prompt=0.0005,
+                    cost_per_1k_completion=0.0015,
+                    context_window=32768
+                ),
+                "gemini-pro-vision": AIModelConfig(
+                    provider=ModelProvider.GEMINI,
+                    model_name="gemini-pro-vision",
+                    max_tokens=4096,
+                    temperature=0.7,
+                    supports_streaming=False,
+                    cost_per_1k_prompt=0.00025,
+                    cost_per_1k_completion=0.00025,
+                    context_window=16384
+                ),
+                "gemini-1.5-pro": AIModelConfig(
+                    provider=ModelProvider.GEMINI,
+                    model_name="gemini-1.5-pro",
+                    max_tokens=8192,
+                    temperature=0.7,
+                    supports_streaming=True,
+                    cost_per_1k_prompt=0.0035,
+                    cost_per_1k_completion=0.0105,
+                    context_window=1048576
+                )
+            })
     
     def get_available_models(self) -> Dict[str, List[str]]:
         """Get all available models grouped by provider"""
@@ -193,10 +248,14 @@ class MultiProviderAIService:
             return "gpt-4"
         elif provider == ModelProvider.CLAUDE:
             return "claude-3-sonnet"
+        elif provider == ModelProvider.GEMINI:
+            return "gemini-pro"
         
         # Overall default - prefer Claude Sonnet for better performance/cost ratio
         if ModelProvider.CLAUDE in self.clients:
             return "claude-3-sonnet"
+        elif ModelProvider.GEMINI in self.clients:
+            return "gemini-pro"
         elif ModelProvider.OPENAI in self.clients:
             return "gpt-4"
         
@@ -242,6 +301,10 @@ class MultiProviderAIService:
                 )
             elif config.provider == ModelProvider.CLAUDE:
                 response = await self._generate_claude_response(
+                    messages, config, temperature, max_tokens, **kwargs
+                )
+            elif config.provider == ModelProvider.GEMINI:
+                response = await self._generate_gemini_response(
                     messages, config, temperature, max_tokens, **kwargs
                 )
             else:
@@ -402,6 +465,104 @@ class MultiProviderAIService:
                 })
         
         return claude_messages
+    
+    async def _generate_gemini_response(
+        self,
+        messages: List[Dict[str, str]],
+        config: AIModelConfig,
+        temperature: float,
+        max_tokens: int,
+        **kwargs
+    ) -> AIProviderResponse:
+        """Generate response using Google Gemini models"""
+        
+        client = self.clients[ModelProvider.GEMINI]
+        
+        # Create Gemini model instance
+        model = client.GenerativeModel(
+            model_name=config.model_name,
+            generation_config=client.types.GenerationConfig(
+                temperature=temperature,
+                max_output_tokens=max_tokens,
+                top_p=0.8,
+                top_k=40
+            ),
+            safety_settings={
+                HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+                HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+                HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+                HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+            }
+        )
+        
+        # Convert messages to Gemini format
+        gemini_messages = self._convert_to_gemini_format(messages)
+        
+        try:
+            # Generate response
+            if len(gemini_messages) == 1:
+                # Single message - use generate_content
+                response = await model.generate_content_async(gemini_messages[0])
+            else:
+                # Multiple messages - start chat
+                chat = model.start_chat(history=gemini_messages[:-1])
+                response = await chat.send_message_async(gemini_messages[-1])
+            
+            # Extract response content
+            if response.text:
+                content = response.text.strip()
+            else:
+                content = "I'm sorry, I couldn't generate a response."
+            
+            # Calculate token usage (approximate for Gemini)
+            prompt_tokens = sum(len(msg.split()) for msg in gemini_messages if isinstance(msg, str))
+            completion_tokens = len(content.split())
+            
+            return AIProviderResponse(
+                content=content,
+                provider=ModelProvider.GEMINI,
+                model=config.model_name,
+                usage={
+                    'prompt_tokens': prompt_tokens,
+                    'completion_tokens': completion_tokens,
+                    'total_tokens': prompt_tokens + completion_tokens
+                },
+                response_time_ms=0,  # Will be set by caller
+                finish_reason=response.candidates[0].finish_reason.name if response.candidates else "stop",
+                metadata={
+                    'safety_ratings': [
+                        {
+                            'category': rating.category.name,
+                            'probability': rating.probability.name
+                        }
+                        for rating in response.candidates[0].safety_ratings
+                    ] if response.candidates else []
+                }
+            )
+            
+        except Exception as e:
+            self.logger.error(f"Gemini API error: {str(e)}")
+            raise Exception(f"Gemini generation failed: {str(e)}")
+    
+    def _convert_to_gemini_format(self, messages: List[Dict[str, str]]) -> List[str]:
+        """Convert standard messages to Gemini format"""
+        
+        gemini_messages = []
+        
+        for message in messages:
+            role = message.get('role', 'user')
+            content = message.get('content', '')
+            
+            if role == 'system':
+                # Gemini doesn't have system role - prepend to first user message
+                gemini_messages.append(f"System: {content}")
+            elif role == 'assistant':
+                # Gemini uses model responses in chat history
+                gemini_messages.append(content)
+            else:  # user or other
+                gemini_messages.append(content)
+        
+        return gemini_messages
     
     async def get_provider_status(self) -> Dict[str, Dict[str, Any]]:
         """Get status of all AI providers"""
