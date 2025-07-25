@@ -9,6 +9,7 @@ from datetime import datetime
 from app import models, schemas
 from app.dependencies import get_db
 from app.auth import get_password_hash, verify_password, create_access_token
+from app.services.audit_service import get_audit_logger, AuditEventType, AuditLogLevel
 
 router = APIRouter()
 
@@ -114,6 +115,8 @@ async def register_v2(
     """
     Enhanced registration with stronger validation and real-time feedback
     """
+    audit_logger = get_audit_logger()
+    
     try:
         # Normalize email
         normalized_email = user.email.lower().strip()
@@ -124,6 +127,16 @@ async def register_v2(
         ).first()
         
         if existing_user:
+            # Log failed registration attempt
+            audit_logger.log_authentication_event(
+                db=db,
+                event_type=AuditEventType.USER_REGISTRATION_FAILED,
+                user_email=normalized_email,
+                success=False,
+                error_message="Email already registered",
+                metadata={"reason": "duplicate_email", "user_role": user.user_role}
+            )
+            
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
                 detail="Email already registered. Please use a different email or try logging in."
@@ -151,6 +164,22 @@ async def register_v2(
         db.add(db_user)
         db.commit()
         db.refresh(db_user)
+        
+        # Log successful registration
+        audit_logger.log_authentication_event(
+            db=db,
+            event_type=AuditEventType.USER_REGISTRATION,
+            user_id=str(db_user.id),
+            user_email=db_user.email,
+            user_role=db_user.user_role,
+            success=True,
+            metadata={
+                "user_role": user.user_role,
+                "company_name": user.company_name,
+                "industry": user.industry,
+                "registration_method": "v2_direct"
+            }
+        )
         
         # Add background task for email notification
         background_tasks.add_task(
@@ -218,6 +247,8 @@ async def login_v2(payload: schemas.LoginInput, db: Session = Depends(get_db)):
     """
     Enhanced login with better error handling
     """
+    audit_logger = get_audit_logger()
+    
     try:
         # Normalize email
         normalized_email = payload.email.lower().strip()
@@ -228,6 +259,16 @@ async def login_v2(payload: schemas.LoginInput, db: Session = Depends(get_db)):
         ).first()
         
         if not user:
+            # Log failed login attempt
+            audit_logger.log_authentication_event(
+                db=db,
+                event_type=AuditEventType.USER_LOGIN_FAILED,
+                user_email=normalized_email,
+                success=False,
+                error_message="User not found",
+                metadata={"reason": "invalid_email"}
+            )
+            
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid email or password"
@@ -235,6 +276,18 @@ async def login_v2(payload: schemas.LoginInput, db: Session = Depends(get_db)):
         
         # Verify password using production column name
         if not verify_password(payload.password, user.password_hash):
+            # Log failed login attempt
+            audit_logger.log_authentication_event(
+                db=db,
+                event_type=AuditEventType.USER_LOGIN_FAILED,
+                user_id=str(user.id),
+                user_email=user.email,
+                user_role=user.user_role,
+                success=False,
+                error_message="Invalid password",
+                metadata={"reason": "invalid_password"}
+            )
+            
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid email or password"
@@ -254,6 +307,20 @@ async def login_v2(payload: schemas.LoginInput, db: Session = Depends(get_db)):
             "role": user.user_role  # Use production column name
         }
         access_token = create_access_token(token_data, SECRET_KEY, ALGORITHM)
+        
+        # Log successful login
+        audit_logger.log_authentication_event(
+            db=db,
+            event_type=AuditEventType.USER_LOGIN,
+            user_id=str(user.id),
+            user_email=user.email,
+            user_role=user.user_role,
+            success=True,
+            metadata={
+                "login_method": "v2_password",
+                "user_role": user.user_role
+            }
+        )
         
         print(f"✅ User logged in: {user.email}")
         

@@ -14,6 +14,7 @@ const LoginDeveloper = lazy(() => import("./pages/LoginDeveloper"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const UserDashboard = lazy(() => import("./pages/UserDashboard"));
 const DeveloperDashboard = lazy(() => import("./pages/DeveloperDashboard"));
+const PerformanceDashboard = lazy(() => import("./pages/PerformanceDashboardPage"));
 const Logout = lazy(() => import("./pages/Logout"));
 const HowItWorks = lazy(() => import("./pages/HowItWorks"));
 const HowItWorksUser = lazy(() => import("./pages/HowItWorksUser"));
@@ -75,6 +76,14 @@ export default function App() {
                 element={
                   <ProtectedRoute>
                     <DeveloperDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/performance"
+                element={
+                  <ProtectedRoute>
+                    <PerformanceDashboard />
                   </ProtectedRoute>
                 }
               />

@@ -4,7 +4,7 @@ Rate limiting middleware for CapeControl API
 import time
 from typing import Dict, Optional
 from fastapi import Request, HTTPException
-from fastapi.middleware.base import BaseHTTPMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 from collections import defaultdict, deque
 
 
@@ -94,6 +94,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
 # Configuration for different endpoints
 RATE_LIMITS = {
+    "ai": {"calls_per_minute": 30, "calls_per_hour": 500},             # AI-specific limits (Task 1.2.2)
     "authentication": {"calls_per_minute": 10, "calls_per_hour": 100},  # Stricter for auth
     "registration": {"calls_per_minute": 5, "calls_per_hour": 20},     # Very strict for registration  
     "general": {"calls_per_minute": 60, "calls_per_hour": 1000},       # General API

@@ -45,8 +45,9 @@ class Settings(BaseSettings):
     redis_port: int = Field(6379, alias="REDIS_PORT")
     redis_password: str = Field("", alias="REDIS_PASSWORD")
     
-    # OpenAI configuration for CapeAI
+    # AI Provider Configuration (Task 2.1.1: Multi-Provider Support)
     openai_api_key: str = Field("", alias="OPENAI_API_KEY")
+    claude_api_key: str = Field("", alias="CLAUDE_API_KEY")  # NEW: Claude API key
     
     @property
     def REDIS_HOST(self) -> str:
@@ -63,6 +64,10 @@ class Settings(BaseSettings):
     @property
     def OPENAI_API_KEY(self) -> str:
         return self.openai_api_key
+    
+    @property
+    def CLAUDE_API_KEY(self) -> str:
+        return self.claude_api_key
     
     @property
     def allowed_hosts_list(self) -> List[str]:
