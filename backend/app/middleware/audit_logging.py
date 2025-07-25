@@ -17,7 +17,6 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.services.audit_service import get_audit_logger, AuditEventType, AuditLogLevel
-from app.auth import get_current_user_from_token
 
 
 class AuditLoggingMiddleware(BaseHTTPMiddleware):
