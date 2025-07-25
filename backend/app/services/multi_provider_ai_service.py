@@ -33,6 +33,7 @@ from pydantic import BaseModel
 from app.config import settings
 from app.services.ai_performance_service import get_ai_performance_monitor, AIProvider
 from app.services.conversation_context_service import get_context_service, ContextType
+# Task 2.1.4: AI Personalization integration (imported lazily to avoid circular import)
 
 logger = logging.getLogger(__name__)
 
@@ -273,6 +274,7 @@ class MultiProviderAIService:
         user_id: Optional[str] = None,
         conversation_id: Optional[str] = None,
         use_context: bool = True,
+        use_personalization: bool = True,
         **kwargs
     ) -> AIProviderResponse:
         """
@@ -282,10 +284,24 @@ class MultiProviderAIService:
         - Automatic conversation context integration
         - User preference-aware model selection
         - Context-aware response generation
+        
+        Enhanced with Task 2.1.4: AI Personalization
+        - User personality profile integration
+        - Personalized prompt adaptation
+        - Dynamic parameter adjustment
         """
         
-        # Initialize context service
+        # Initialize services
         context_service = await get_context_service()
+        
+        # Initialize personalization service (lazy import to avoid circular dependency)
+        personalization_service = None
+        if use_personalization and user_id:
+            try:
+                from app.services.ai_personalization_service import get_personalization_service
+                personalization_service = await get_personalization_service()
+            except Exception as e:
+                logger.warning(f"Failed to initialize personalization service: {e}")
         
         # Handle conversation context if enabled
         enhanced_messages = messages.copy()
@@ -328,13 +344,57 @@ class MultiProviderAIService:
                 logger.warning(f"Failed to load conversation context: {e}")
                 # Continue without context
         
+        # Apply personalization to messages
+        if personalization_service and user_id and enhanced_messages:
+            try:
+                # Personalize the system message or first assistant message
+                for i, msg in enumerate(enhanced_messages):
+                    if msg.get('role') in ['system', 'assistant']:
+                        # Find a suitable message to personalize
+                        if 'You are' in msg.get('content', '') or msg.get('role') == 'system':
+                            personalized_content = await personalization_service.personalize_prompt(
+                                base_prompt=msg['content'],
+                                user_id=user_id,
+                                context_type='general_chat'
+                            )
+                            enhanced_messages[i] = {**msg, 'content': personalized_content}
+                            logger.debug(f"Applied personalization to message {i}")
+                            break
+                else:
+                    # If no system message, add a personalized system message
+                    if enhanced_messages and enhanced_messages[0].get('role') != 'system':
+                        base_system_prompt = "You are a helpful AI assistant."
+                        personalized_prompt = await personalization_service.personalize_prompt(
+                            base_prompt=base_system_prompt,
+                            user_id=user_id,
+                            context_type='general_chat'
+                        )
+                        enhanced_messages.insert(0, {'role': 'system', 'content': personalized_prompt})
+                        logger.debug("Added personalized system message")
+                        
+            except Exception as e:
+                logger.warning(f"Failed to apply personalization to messages: {e}")
+        
         # Use default model if none specified, considering user preferences
         if not model:
-            if context_metadata and context_metadata.get('user_preferences', {}).get('preferred_ai_model'):
+            # Check personalization service for model preference
+            if personalization_service and user_id:
+                try:
+                    profile = await personalization_service.get_personality_profile(user_id)
+                    if profile and profile.preferred_models:
+                        preferred_model = profile.preferred_models[0]
+                        if self.get_model_config(preferred_model):
+                            model = preferred_model
+                            logger.debug(f"Using personalized preferred model: {model}")
+                except Exception as e:
+                    logger.warning(f"Failed to get personalized model preference: {e}")
+            
+            # Fallback to context-based preference
+            if not model and context_metadata and context_metadata.get('user_preferences', {}).get('preferred_ai_model'):
                 preferred_model = context_metadata['user_preferences']['preferred_ai_model']
                 if self.get_model_config(preferred_model):
                     model = preferred_model
-                    logger.debug(f"Using user preferred model: {model}")
+                    logger.debug(f"Using context preferred model: {model}")
             
             if not model:
                 model = self.get_default_model()
@@ -352,7 +412,31 @@ class MultiProviderAIService:
         temperature = temperature if temperature is not None else config.temperature
         max_tokens = max_tokens if max_tokens is not None else config.max_tokens
         
-        # Adjust parameters based on user preferences
+        # Apply personalization to AI parameters
+        if personalization_service and user_id:
+            try:
+                base_params = {
+                    'temperature': temperature,
+                    'max_tokens': max_tokens,
+                    'model': model
+                }
+                
+                personalized_params = await personalization_service.adapt_ai_parameters(
+                    user_id=user_id,
+                    base_params=base_params
+                )
+                
+                temperature = personalized_params.get('temperature', temperature)
+                max_tokens = personalized_params.get('max_tokens', max_tokens)
+                
+                # Log personalization applied
+                if personalized_params != base_params:
+                    logger.debug(f"Applied personalized parameters for user {user_id}: {personalized_params}")
+                    
+            except Exception as e:
+                logger.warning(f"Failed to apply personalized parameters: {e}")
+        
+        # Adjust parameters based on user preferences (legacy support)
         if context_metadata and context_metadata.get('user_preferences'):
             prefs = context_metadata['user_preferences']
             
@@ -413,7 +497,11 @@ class MultiProviderAIService:
                         conversation_id=conversation_id,
                         message_type=ContextType.AI_RESPONSE,
                         content=response.content,
-                        metadata={'context_messages_used': len(enhanced_messages)},
+                        metadata={
+                            'context_messages_used': len(enhanced_messages),
+                            'personalization_applied': use_personalization and personalization_service is not None,
+                            'model_selected_by_personalization': model if personalization_service else None
+                        },
                         ai_provider=response.provider.value,
                         ai_model=response.model,
                         tokens_used=response.usage,
@@ -421,6 +509,25 @@ class MultiProviderAIService:
                     )
                 except Exception as e:
                     logger.warning(f"Failed to store AI response in context: {e}")
+            
+            # Update personalization profile based on successful interaction
+            if personalization_service and user_id:
+                try:
+                    interaction_data = {
+                        'response_time': response.response_time_ms,
+                        'model_used': response.model,
+                        'provider_used': response.provider.value,
+                        'tokens_used': response.usage.get('total_tokens', 0),
+                        'positive_feedback': True,  # Assume positive for successful generation
+                        'topic': 'general'  # Could be enhanced with topic detection
+                    }
+                    
+                    await personalization_service.update_profile_from_interaction(
+                        user_id=user_id,
+                        interaction_data=interaction_data
+                    )
+                except Exception as e:
+                    logger.warning(f"Failed to update personalization profile: {e}")
             
             # Record performance metrics
             self.performance_monitor.record_ai_request(

@@ -47,6 +47,14 @@ app.include_router(alerts_router)
 from app.routes.ai_performance import router as ai_performance_router
 app.include_router(ai_performance_router)
 
+# AI Context Enhancement Routes (Task 2.1.3)
+from app.routes.ai_context import router as ai_context_router
+app.include_router(ai_context_router)
+
+# AI Personalization Routes (Task 2.1.4)
+from app.routes.ai_personalization import router as ai_personalization_router
+app.include_router(ai_personalization_router)
+
 # Enhanced health check endpoint with Task 1.3.5 integration
 @app.get("/api/health")
 async def health_check():
