@@ -40,14 +40,16 @@ class Settings(BaseSettings):
     rate_limit_requests: int = Field(100, alias="RATE_LIMIT_REQUESTS")
     rate_limit_window: int = Field(3600, alias="RATE_LIMIT_WINDOW")
     
-    # Redis configuration for CapeAI
+    # Redis configuration for CapeAI and Context Enhancement (Task 2.1.3)
     redis_host: str = Field("localhost", alias="REDIS_HOST")
     redis_port: int = Field(6379, alias="REDIS_PORT")
     redis_password: str = Field("", alias="REDIS_PASSWORD")
+    redis_url: str = Field("redis://localhost:6379/0", alias="REDIS_URL")
     
     # AI Provider Configuration (Task 2.1.1: Multi-Provider Support)
     openai_api_key: str = Field("", alias="OPENAI_API_KEY")
     claude_api_key: str = Field("", alias="CLAUDE_API_KEY")  # NEW: Claude API key
+    gemini_api_key: str = Field("", alias="GEMINI_API_KEY")  # Task 2.1.2: Gemini API key
     gemini_api_key: str = Field("", alias="GEMINI_API_KEY")  # Task 2.1.2: Gemini API key
     
     @property

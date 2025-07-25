@@ -32,6 +32,7 @@ from pydantic import BaseModel
 
 from app.config import settings
 from app.services.ai_performance_service import get_ai_performance_monitor, AIProvider
+from app.services.conversation_context_service import get_context_service, ContextType
 
 logger = logging.getLogger(__name__)
 
@@ -270,13 +271,73 @@ class MultiProviderAIService:
         temperature: Optional[float] = None,
         max_tokens: Optional[int] = None,
         user_id: Optional[str] = None,
+        conversation_id: Optional[str] = None,
+        use_context: bool = True,
         **kwargs
     ) -> AIProviderResponse:
-        """Generate AI response using specified or default model"""
+        """
+        Generate AI response using specified or default model
         
-        # Use default model if none specified
+        Enhanced with Task 2.1.3: Context Enhancement
+        - Automatic conversation context integration
+        - User preference-aware model selection
+        - Context-aware response generation
+        """
+        
+        # Initialize context service
+        context_service = await get_context_service()
+        
+        # Handle conversation context if enabled
+        enhanced_messages = messages.copy()
+        context_metadata = {}
+        
+        if use_context and user_id and conversation_id:
+            try:
+                # Get conversation context
+                ai_context, context_metadata = await context_service.generate_context_for_ai(
+                    conversation_id=conversation_id,
+                    max_context_messages=8,  # Keep reasonable context window
+                    include_summary=True
+                )
+                
+                # Merge with current messages, avoiding duplicates
+                if ai_context:
+                    # Find the last user message in current messages
+                    current_user_message = None
+                    for msg in reversed(messages):
+                        if msg.get('role') == 'user':
+                            current_user_message = msg
+                            break
+                    
+                    # If context doesn't end with the same user message, merge
+                    if ai_context and current_user_message:
+                        last_context_msg = ai_context[-1] if ai_context else None
+                        if (not last_context_msg or 
+                            last_context_msg.get('role') != 'user' or 
+                            last_context_msg.get('content') != current_user_message.get('content')):
+                            enhanced_messages = ai_context + messages
+                        else:
+                            # Replace the last context message with current
+                            enhanced_messages = ai_context[:-1] + messages
+                    else:
+                        enhanced_messages = ai_context + messages
+                
+                logger.debug(f"Enhanced messages with context: {len(ai_context)} context + {len(messages)} new = {len(enhanced_messages)} total")
+                
+            except Exception as e:
+                logger.warning(f"Failed to load conversation context: {e}")
+                # Continue without context
+        
+        # Use default model if none specified, considering user preferences
         if not model:
-            model = self.get_default_model()
+            if context_metadata and context_metadata.get('user_preferences', {}).get('preferred_ai_model'):
+                preferred_model = context_metadata['user_preferences']['preferred_ai_model']
+                if self.get_model_config(preferred_model):
+                    model = preferred_model
+                    logger.debug(f"Using user preferred model: {model}")
+            
+            if not model:
+                model = self.get_default_model()
         
         # Get model configuration
         config = self.get_model_config(model)
@@ -291,27 +352,75 @@ class MultiProviderAIService:
         temperature = temperature if temperature is not None else config.temperature
         max_tokens = max_tokens if max_tokens is not None else config.max_tokens
         
+        # Adjust parameters based on user preferences
+        if context_metadata and context_metadata.get('user_preferences'):
+            prefs = context_metadata['user_preferences']
+            
+            # Adjust response style based on communication preference
+            if prefs.get('communication_style') == 'casual' and temperature is not None:
+                temperature = min(temperature + 0.1, 1.0)  # Slightly more creative
+            elif prefs.get('communication_style') == 'formal' and temperature is not None:
+                temperature = max(temperature - 0.1, 0.0)  # More deterministic
+        
+        # Store user message in context if enabled
+        if use_context and user_id and conversation_id and messages:
+            try:
+                # Find the user message to store
+                user_message = None
+                for msg in reversed(messages):
+                    if msg.get('role') == 'user':
+                        user_message = msg
+                        break
+                
+                if user_message:
+                    await context_service.add_message(
+                        user_id=user_id,
+                        conversation_id=conversation_id,
+                        message_type=ContextType.USER_MESSAGE,
+                        content=user_message['content'],
+                        metadata={'original_messages_count': len(messages)}
+                    )
+            except Exception as e:
+                logger.warning(f"Failed to store user message in context: {e}")
+        
         # Route to appropriate provider
         start_time = asyncio.get_event_loop().time()
         
         try:
             if config.provider == ModelProvider.OPENAI:
                 response = await self._generate_openai_response(
-                    messages, config, temperature, max_tokens, **kwargs
+                    enhanced_messages, config, temperature, max_tokens, **kwargs
                 )
             elif config.provider == ModelProvider.CLAUDE:
                 response = await self._generate_claude_response(
-                    messages, config, temperature, max_tokens, **kwargs
+                    enhanced_messages, config, temperature, max_tokens, **kwargs
                 )
             elif config.provider == ModelProvider.GEMINI:
                 response = await self._generate_gemini_response(
-                    messages, config, temperature, max_tokens, **kwargs
+                    enhanced_messages, config, temperature, max_tokens, **kwargs
                 )
             else:
                 raise ValueError(f"Provider '{config.provider.value}' not implemented")
             
             end_time = asyncio.get_event_loop().time()
             response.response_time_ms = int((end_time - start_time) * 1000)
+            
+            # Store AI response in context if enabled
+            if use_context and user_id and conversation_id:
+                try:
+                    await context_service.add_message(
+                        user_id=user_id,
+                        conversation_id=conversation_id,
+                        message_type=ContextType.AI_RESPONSE,
+                        content=response.content,
+                        metadata={'context_messages_used': len(enhanced_messages)},
+                        ai_provider=response.provider.value,
+                        ai_model=response.model,
+                        tokens_used=response.usage,
+                        response_time_ms=response.response_time_ms
+                    )
+                except Exception as e:
+                    logger.warning(f"Failed to store AI response in context: {e}")
             
             # Record performance metrics
             self.performance_monitor.record_ai_request(
