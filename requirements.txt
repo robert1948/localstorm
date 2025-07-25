@@ -40,3 +40,6 @@ redis>=4.5.4
 numpy==2.3.2
 scikit-learn==1.7.1
 scipy==1.16.0
+
+# User Agent Parsing for Audit Logging (Task 1.2.6)
+user-agents>=2.2.0
