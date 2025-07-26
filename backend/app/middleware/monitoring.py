@@ -521,7 +521,7 @@ class MonitoringMiddleware(BaseHTTPMiddleware):
                 'ip': user_context.get('ip', 'unknown'),
                 'method': request.method,
                 'status_code': response.status_code
-            })}")
+            })}")   
 
         # Track authentication events
         if endpoint_category == "authentication":
