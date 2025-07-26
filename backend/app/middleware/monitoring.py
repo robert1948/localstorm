@@ -514,14 +514,15 @@ class MonitoringMiddleware(BaseHTTPMiddleware):
             })
 
             # Log AI service performance
-            self.business_logger.info(f"AI_SERVICE_REQUEST: {json.dumps({
-                'timestamp': datetime.utcnow().isoformat(),
-                'endpoint': request.url.path,
-                'processing_time_ms': round(processing_time * 1000, 2),
-                'ip': user_context.get('ip', 'unknown'),
-                'method': request.method,
-                'status_code': response.status_code
-            })}")   
+            self.business_logger.info("AI_SERVICE_REQUEST: " + json.dumps({
+                "timestamp": datetime.utcnow().isoformat(),
+                "endpoint": request.url.path,
+                "processing_time_ms": round(processing_time * 1000, 2),
+                "ip": user_context.get("ip", "unknown"),
+                "method": request.method,
+                "status_code": response.status_code
+            }))
+
 
         # Track authentication events
         if endpoint_category == "authentication":
