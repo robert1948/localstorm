@@ -108,6 +108,7 @@ class AuditLog(Base):
     - User activity tracking
     """
     __tablename__ = "audit_logs"
+    __table_args__ = {"extend_existing": True}  # ✅ Fix for redefinition error
     
     id = Column(Integer, primary_key=True, index=True)
     
