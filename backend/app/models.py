@@ -11,7 +11,8 @@ class User(Base):
     Only includes columns that exist in production database
     """
     __tablename__ = "users"
-
+    __table_args__ = {"extend_existing": True}
+    
     # Production database columns only
     id = Column(String, primary_key=True, index=True, default=lambda: str(uuid.uuid4()))  # UUID generator
     email = Column(String(255), unique=True, index=True)

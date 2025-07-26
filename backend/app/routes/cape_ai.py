@@ -14,7 +14,7 @@ from app.dependencies import get_current_user
 # Import User directly from models.py to avoid circular import issues
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from models import User
+from app.models import User
 from typing import Any
 
 # Type alias for User model
