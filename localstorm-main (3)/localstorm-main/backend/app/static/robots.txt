@@ -1,9 +1,0 @@
-User-agent: *
-Allow: /
-
-# Sitemaps
-Sitemap: https://www.cape-control.com/sitemap.xml
-
-# Disallow certain paths if needed
-# Disallow: /admin/
-# Disallow: /private/
