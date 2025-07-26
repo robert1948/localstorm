@@ -1,0 +1,38 @@
+// filepath: /localstorm-ai-project/localstorm-ai-project/mobile/src/components/chat/ChatComponent.tsx
+import React from 'react';
+import { View, Text, TextInput, Button, FlatList } from 'react-native';
+
+const ChatComponent = () => {
+    const [message, setMessage] = React.useState('');
+    const [messages, setMessages] = React.useState([]);
+
+    const sendMessage = () => {
+        if (message.trim()) {
+            setMessages([...messages, { id: Date.now().toString(), text: message }]);
+            setMessage('');
+        }
+    };
+
+    return (
+        <View style={{ flex: 1, padding: 10 }}>
+            <FlatList
+                data={messages}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) => (
+                    <View style={{ marginVertical: 5 }}>
+                        <Text>{item.text}</Text>
+                    </View>
+                )}
+            />
+            <TextInput
+                value={message}
+                onChangeText={setMessage}
+                placeholder="Type your message..."
+                style={{ borderWidth: 1, borderColor: '#ccc', padding: 10, marginBottom: 10 }}
+            />
+            <Button title="Send" onPress={sendMessage} />
+        </View>
+    );
+};
+
+export default ChatComponent;

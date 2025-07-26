@@ -7,25 +7,52 @@ from app.middleware.input_sanitization import InputSanitizationMiddleware  # Tas
 from app.middleware.content_moderation import ContentModerationMiddleware  # Task 1.2.5: Content Moderation
 from app.middleware.audit_logging import AuditLoggingMiddleware  # Task 1.2.6: Audit Logging
 from app.middleware.monitoring import MonitoringMiddleware, set_monitoring_middleware_instance  # Task 1.3.1: Monitoring
-# from app.routes import auth  # Legacy - DISABLED
-# from app.routes import auth_enhanced  # Enhanced - DISABLED
+import os
+
+# Import all route modules
 from app.routes import auth_v2  # V2 registration system - ACTIVE
 from app.routes import cape_ai  # CapeAI service - ACTIVE
 from app.routes import audit  # Audit logging API - ACTIVE
 from app.routes import monitoring  # Monitoring API - ACTIVE
 from app.routes import error_tracking  # Error tracking API - ACTIVE (Task 1.3.3)
 from app.routes import dashboard  # Performance dashboard API - ACTIVE (Task 1.3.4)
-import os
+
+# Health Check Routes (Task 1.3.5)
+from app.routes.health import router as health_router
+
+# Alert System Routes (Task 1.3.6)
+from app.routes.alerts import router as alerts_router
+
+# AI Performance Monitoring Routes (Task 1.3.2)
+from app.routes.ai_performance import router as ai_performance_router
+
+# AI Context Enhancement Routes (Task 2.1.3)
+from app.routes.ai_context import router as ai_context_router
+
+# AI Personalization Routes (Task 2.1.4)
+from app.routes.ai_personalization import router as ai_personalization_router
+
+# NEW: Usage Analytics Enhancement Routes (Task 2.2.5) - Conditional import
+try:
+    from app.routes.usage_analytics import router as usage_analytics_router
+    USAGE_ANALYTICS_AVAILABLE = True
+except ImportError:
+    USAGE_ANALYTICS_AVAILABLE = False
+    print("⚠️  Usage Analytics routes not available - Task 2.2.5 not deployed")
+
+# NEW: Preference Management Routes (Task 2.2.6) - Conditional import
+try:
+    from app.routes.preference_management import router as preference_management_router
+    PREFERENCE_MANAGEMENT_AVAILABLE = True
+except ImportError:
+    PREFERENCE_MANAGEMENT_AVAILABLE = False
+    print("⚠️  Preference Management routes not available - Task 2.2.6 not deployed")
 
 app = FastAPI(
     title="CapeControl API",
-    description="Secure, scalable authentication system for CapeControl",
-    version="2.0.0"
+    description="Secure, scalable authentication system for CapeControl with AI capabilities",
+    version="3.0.0"
 )
-
-# Include routers - Production V2 only
-# app.include_router(auth.router, prefix="/api")  # Legacy authentication - DISABLED
-# app.include_router(auth_enhanced.router)  # Enhanced authentication - DISABLED
 
 # Production routers - ACTIVE
 app.include_router(auth_v2.router)  # V2 authentication system
@@ -34,26 +61,20 @@ app.include_router(audit.router)  # Audit logging API
 app.include_router(monitoring.router)  # Monitoring API (Task 1.3.1)
 app.include_router(error_tracking.router)  # Error tracking API (Task 1.3.3)
 app.include_router(dashboard.router)  # Performance dashboard API (Task 1.3.4)
+app.include_router(health_router)  # Health Check Routes (Task 1.3.5)
+app.include_router(alerts_router)  # Alert System Routes (Task 1.3.6)
+app.include_router(ai_performance_router)  # AI Performance Monitoring Routes (Task 1.3.2)
+app.include_router(ai_context_router)  # AI Context Enhancement Routes (Task 2.1.3)
+app.include_router(ai_personalization_router)  # AI Personalization Routes (Task 2.1.4)
 
-# Health Check Routes (Task 1.3.5)
-from app.routes.health import router as health_router
-app.include_router(health_router)
+# Phase 2.2 routers - Conditional inclusion
+if USAGE_ANALYTICS_AVAILABLE:
+    app.include_router(usage_analytics_router, prefix="/api/v1/analytics", tags=["usage-analytics"])
+    print("✅ Usage Analytics routes enabled (Task 2.2.5)")
 
-# Alert System Routes (Task 1.3.6)
-from app.routes.alerts import router as alerts_router
-app.include_router(alerts_router)
-
-# AI Performance Monitoring Routes (Task 1.3.2)
-from app.routes.ai_performance import router as ai_performance_router
-app.include_router(ai_performance_router)
-
-# AI Context Enhancement Routes (Task 2.1.3)
-from app.routes.ai_context import router as ai_context_router
-app.include_router(ai_context_router)
-
-# AI Personalization Routes (Task 2.1.4)
-from app.routes.ai_personalization import router as ai_personalization_router
-app.include_router(ai_personalization_router)
+if PREFERENCE_MANAGEMENT_AVAILABLE:
+    app.include_router(preference_management_router, prefix="/api/v1/preferences", tags=["preferences"])
+    print("✅ Preference Management routes enabled (Task 2.2.6)")
 
 # Enhanced health check endpoint with Task 1.3.5 integration
 @app.get("/api/health")
@@ -77,7 +98,7 @@ async def health_check():
             "status": status_value,
             "message": "CapeControl API is running",
             "version": "3.0.0",
-            "timestamp": health_result.get("timestamp", "2025-07-25"),
+            "timestamp": health_result.get("timestamp", "2025-07-26"),
             "database_connected": True,
             "enhanced_auth": "enabled (v2 tables)",
             "registration_v2": "enabled (2-step flow)",
@@ -90,11 +111,24 @@ async def health_check():
             "performance_dashboard": "enabled (Task 1.3.4)",
             "health_checks_enhancement": "enabled (Task 1.3.5)",
             "alert_system": "enabled (Task 1.3.6)",
+            "ai_context_enhancement": "enabled (Task 2.1.3)",
+            "ai_personalization": "enabled (Task 2.1.4)",
+            "usage_analytics_enhancement": "enabled (Task 2.2.5)" if USAGE_ANALYTICS_AVAILABLE else "pending deployment",
+            "preference_management": "enabled (Task 2.2.6)" if PREFERENCE_MANAGEMENT_AVAILABLE else "pending deployment",
             "health_summary": {
                 "services_checked": len(health_result.get("services", {})),
                 "endpoints_checked": len(health_result.get("endpoints", {})),
                 "active_alerts": len(health_result.get("alerts", [])),
                 "check_duration_ms": health_result.get("check_duration_ms", 0)
+            },
+            "phase_2_progress": {
+                "ai_enhancement_complete": True,
+                "user_experience_progress": f"{86 + (14 if USAGE_ANALYTICS_AVAILABLE and PREFERENCE_MANAGEMENT_AVAILABLE else 0)}% ({6 + (1 if USAGE_ANALYTICS_AVAILABLE else 0) + (1 if PREFERENCE_MANAGEMENT_AVAILABLE else 0)}/7 tasks)",
+                "tasks_status": {
+                    "usage_analytics": "✅ Complete" if USAGE_ANALYTICS_AVAILABLE else "⏳ Pending",
+                    "preferences": "✅ Complete" if PREFERENCE_MANAGEMENT_AVAILABLE else "⏳ Pending",
+                    "account_settings": "⏳ Next task (2.2.7)"
+                }
             }
         }
     except Exception as e:
@@ -118,7 +152,7 @@ async def health_check():
                 "status": health_status,
                 "message": "CapeControl API is running (basic health check)",
                 "version": "3.0.0",
-                "timestamp": "2025-07-25",
+                "timestamp": "2025-07-26",
                 "database_connected": True,
                 "enhanced_auth": "enabled (v2 tables)",
                 "registration_v2": "enabled (2-step flow)",
@@ -131,6 +165,8 @@ async def health_check():
                 "performance_dashboard": "enabled (Task 1.3.4)",
                 "health_checks_enhancement": "enabled (Task 1.3.5)",
                 "alert_system": "enabled (Task 1.3.6)",
+                "usage_analytics_enhancement": "enabled (Task 2.2.5)" if USAGE_ANALYTICS_AVAILABLE else "pending deployment",
+                "preference_management": "enabled (Task 2.2.6)" if PREFERENCE_MANAGEMENT_AVAILABLE else "pending deployment",
                 "health_check_fallback": str(e),
                 "error_tracking_stats": {
                     "total_errors": error_stats.get("total_errors", 0),
@@ -144,7 +180,7 @@ async def health_check():
                 "status": "degraded",
                 "message": "CapeControl API is running with issues",
                 "version": "3.0.0",
-                "timestamp": "2025-07-25",
+                "timestamp": "2025-07-26",
                 "database_connected": True,
                 "enhanced_auth": "enabled (v2 tables)",
                 "registration_v2": "enabled (2-step flow)",
@@ -157,6 +193,8 @@ async def health_check():
                 "performance_dashboard": "enabled (Task 1.3.4)",
                 "health_checks_enhancement": "enabled (Task 1.3.5)",
                 "alert_system": "enabled (Task 1.3.6)",
+                "usage_analytics_enhancement": "enabled (Task 2.2.5)" if USAGE_ANALYTICS_AVAILABLE else "pending deployment",
+                "preference_management": "enabled (Task 2.2.6)" if PREFERENCE_MANAGEMENT_AVAILABLE else "pending deployment",
                 "health_check_error": str(e),
                 "fallback_error": str(fallback_error)
             }
@@ -165,13 +203,6 @@ async def health_check():
 @app.get("/api/security/stats")
 async def security_stats():
     """Get security middleware statistics"""
-    # Get input sanitization stats from middleware
-    input_sanitization_middleware = None
-    for middleware in app.user_middleware:
-        if isinstance(middleware.cls, type) and issubclass(middleware.cls, InputSanitizationMiddleware):
-            # Access the middleware instance if available
-            break
-    
     return {
         "security_systems": {
             "ddos_protection": "active",
@@ -227,6 +258,12 @@ async def security_stats():
                 "Application performance monitoring"
             ]
         },
+        "phase_2_features": {
+            "usage_analytics": "operational" if USAGE_ANALYTICS_AVAILABLE else "pending deployment",
+            "preference_management": "operational" if PREFERENCE_MANAGEMENT_AVAILABLE else "pending deployment",
+            "ai_personalization": "operational",
+            "context_enhancement": "operational"
+        },
         "message": "Security systems operational"
     }
 
@@ -236,13 +273,26 @@ async def api_root():
     return {
         "message": "CapeControl API",
         "status": "operational",
+        "version": "3.0.0",
         "docs": "/docs",
         "health": "/api/health",
-        "security": "/api/security/stats"
+        "security": "/api/security/stats",
+        "features": {
+            "authentication": "v2 enhanced",
+            "ai_capabilities": "full",
+            "monitoring": "comprehensive", 
+            "security": "enterprise-grade",
+            "phase_2_progress": f"{86 + (14 if USAGE_ANALYTICS_AVAILABLE and PREFERENCE_MANAGEMENT_AVAILABLE else 0)}% complete"
+        },
+        "endpoints": {
+            "auth": "/api/auth/*",
+            "ai": "/api/ai/*",
+            "analytics": "/api/v1/analytics/*" if USAGE_ANALYTICS_AVAILABLE else "pending",
+            "preferences": "/api/v1/preferences/*" if PREFERENCE_MANAGEMENT_AVAILABLE else "pending",
+            "monitoring": "/api/monitoring/*",
+            "health": "/api/health"
+        }
     }
-
-# TODO: Enable enhanced auth after database migration
-# app.include_router(auth_enhanced.router)  # New enhanced authentication system
 
 # Add security middleware stack (Task 1.2.3 + 1.2.4 + 1.2.5 + 1.2.6 + 1.3.1: Comprehensive security and monitoring)
 monitoring_middleware = MonitoringMiddleware(app, enable_detailed_logging=True)

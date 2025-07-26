@@ -1,0 +1,49 @@
+// filepath: /localstorm-ai-project/localstorm-ai-project/frontend/src/components/chat/ChatComponent.tsx
+import React, { useState, useEffect } from 'react';
+import { sendMessage, receiveMessages } from '../../services/ai.service';
+
+const ChatComponent = () => {
+    const [messages, setMessages] = useState([]);
+    const [input, setInput] = useState('');
+
+    useEffect(() => {
+        const fetchMessages = async () => {
+            const initialMessages = await receiveMessages();
+            setMessages(initialMessages);
+        };
+
+        fetchMessages();
+    }, []);
+
+    const handleSendMessage = async () => {
+        if (input.trim()) {
+            const newMessage = { text: input, sender: 'user' };
+            setMessages([...messages, newMessage]);
+            setInput('');
+
+            const response = await sendMessage(input);
+            setMessages(prevMessages => [...prevMessages, { text: response, sender: 'ai' }]);
+        }
+    };
+
+    return (
+        <div className="chat-container">
+            <div className="messages">
+                {messages.map((msg, index) => (
+                    <div key={index} className={msg.sender}>
+                        {msg.text}
+                    </div>
+                ))}
+            </div>
+            <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Type your message..."
+            />
+            <button onClick={handleSendMessage}>Send</button>
+        </div>
+    );
+};
+
+export default ChatComponent;
