@@ -16,10 +16,9 @@ import anthropic
 import google.generativeai as genai
 from sqlalchemy.orm import Session
 from sqlalchemy import text
-
+from ..models import User
 from ..database import get_db
 from ..config import settings
-from ..models.user import User
 
 logger = logging.getLogger(__name__)
 
