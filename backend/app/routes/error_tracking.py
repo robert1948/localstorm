@@ -19,9 +19,7 @@ from app.services.error_tracker import (
     ErrorCategory,
     error_tracker
 )
-from app.middleware.security import get_current_user
-from app.models.user import User
-
+from app.auth import get_current_user
 
 router = APIRouter(prefix="/api/errors", tags=["error-tracking"])
 
