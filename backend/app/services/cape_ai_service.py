@@ -970,4 +970,4 @@ class CapeAIService:
                 "status": "degraded",
                 "error": str(e),
                 "timestamp": datetime.utcnow().isoformat()
-            }
+}
