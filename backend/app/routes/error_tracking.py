@@ -20,6 +20,7 @@ from app.services.error_tracker import (
     error_tracker
 )
 from app.auth import get_current_user
+from app.models.user import User
 
 router = APIRouter(prefix="/api/errors", tags=["error-tracking"])
 
@@ -327,38 +328,38 @@ async def get_error_summary(
             (critical_errors + high_errors) / max(total_errors, 1) * 100
         )
         
-        # Get top error category
-        top_category = max(
-            statistics["errors_by_category"].items(),
-            key=lambda x: x[1]
-        ) if statistics["errors_by_category"] else ("unknown", 0)
-        
-        return {
-            "status": "success",
-            "data": {
-                "timestamp": current_time.isoformat(),
-                "total_errors": total_errors,
-                "last_hour_errors": last_hour_errors,
-                "last_24h_errors": last_24h_errors,
-                "critical_error_percentage": round(critical_percentage, 1),
-                "top_error_category": {
-                    "category": top_category[0],
-                    "count": top_category[1]
-                },
-                "error_rate_1min": statistics["error_rates"]["1min"],
-                "error_rate_5min": statistics["error_rates"]["5min"],
-                "error_rate_1hour": statistics["error_rates"]["1hour"],
-                "active_patterns": len(statistics["error_patterns"]),
-                "health_status": self._calculate_error_health_status(
-                    last_hour_errors, critical_percentage
-                )
-            }
+    # Get top error category
+    top_category = max(
+        statistics["errors_by_category"].items(),
+        key=lambda x: x[1]
+    ) if statistics["errors_by_category"] else ("unknown", 0)
+
+    return {
+        "status": "success",
+        "data": {
+            "timestamp": current_time.isoformat(),
+            "total_errors": total_errors,
+            "last_hour_errors": last_hour_errors,
+            "last_24h_errors": last_24h_errors,
+            "critical_error_percentage": round(critical_percentage, 1),
+            "top_error_category": {
+                "category": top_category[0],
+                "count": top_category[1]
+            },
+            "error_rate_1min": statistics["error_rates"]["1min"],
+            "error_rate_5min": statistics["error_rates"]["5min"],
+            "error_rate_1hour": statistics["error_rates"]["1hour"],
+            "active_patterns": len(statistics["error_patterns"]),
+            "health_status": _calculate_error_health_status(
+                last_hour_errors, critical_percentage
+            )
         }
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Failed to retrieve error summary: {str(e)}"
-        )
+    }
+except Exception as e:
+    raise HTTPException(
+        status_code=500,
+        detail=f"Failed to retrieve error summary: {str(e)}"
+    )
 
 
 def _calculate_error_health_status(hourly_errors: int, critical_percentage: float) -> str:
@@ -379,11 +380,11 @@ async def track_manual_error(
     current_user: User = Depends(get_current_user)
 ) -> Dict[str, Any]:
     """
-    Manually track an error (for testing or manual logging)
-    
+    Track a manual error.
+
     Args:
         error_data: Error information to track
-    
+
     Returns:
         Error tracking confirmation with error ID
     """
