@@ -971,3 +971,37 @@ class CapeAIService:
                 "error": str(e),
                 "timestamp": datetime.utcnow().isoformat()
 }
+# Add this to the END of backend/app/services/cape_ai_service.py
+
+from sqlalchemy.orm import Session
+from ..database import get_db
+
+# Global service instance
+_cape_ai_service_instance = None
+
+def get_cape_ai_service(db: Session = None) -> CapeAIService:
+    """
+    Get the global CapeAI service instance.
+    
+    Args:
+        db: Database session (optional, will create if not provided)
+        
+    Returns:
+        CapeAIService: The global service instance
+    """
+    global _cape_ai_service_instance
+    
+    if _cape_ai_service_instance is None:
+        # Get database session if not provided
+        if db is None:
+            db = next(get_db())
+        
+        # Initialize with required parameters
+        _cape_ai_service_instance = CapeAIService(db=db)
+    
+    return _cape_ai_service_instance
+
+def reset_cape_ai_service():
+    """Reset the global service instance (useful for testing)."""
+    global _cape_ai_service_instance
+    _cape_ai_service_instance = None
