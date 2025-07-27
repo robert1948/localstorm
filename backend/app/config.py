@@ -1,3 +1,4 @@
+# backend/app/config.py
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field, field_validator
 from typing import List
@@ -48,9 +49,8 @@ class Settings(BaseSettings):
     
     # AI Provider Configuration (Task 2.1.1: Multi-Provider Support)
     openai_api_key: str = Field("", alias="OPENAI_API_KEY")
-    claude_api_key: str = Field("", alias="CLAUDE_API_KEY")  # NEW: Claude API key
-    gemini_api_key: str = Field("", alias="GEMINI_API_KEY")  # Task 2.1.2: Gemini API key
-    gemini_api_key: str = Field("", alias="GEMINI_API_KEY")  # Task 2.1.2: Gemini API key
+    claude_api_key: str = Field("", alias="CLAUDE_API_KEY")  # Claude API key
+    gemini_api_key: str = Field("", alias="GEMINI_API_KEY")  # FIXED: Single definition only
     
     @property
     def REDIS_HOST(self) -> str:
@@ -71,6 +71,10 @@ class Settings(BaseSettings):
     @property
     def CLAUDE_API_KEY(self) -> str:
         return self.claude_api_key
+    
+    @property
+    def GEMINI_API_KEY(self) -> str:  # ADDED: Missing property accessor
+        return self.gemini_api_key
     
     @property
     def allowed_hosts_list(self) -> List[str]:
