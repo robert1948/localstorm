@@ -176,6 +176,9 @@ def get_production_cors_config():
     }
 
 # Development CORS configuration (more permissive)
+# Replace lines 179-204 with:
+
+# Development CORS configuration (more permissive)
 def get_development_cors_config():
     """Get development CORS configuration for testing."""
     return {
@@ -185,3 +188,20 @@ def get_development_cors_config():
         "allow_headers": ["*"],  # Allow all headers
         "max_age": 600,  # 10 minutes
     }
+
+def add_cors_middleware(app, environment: str = "development"):
+    """
+    Add CORS middleware to the FastAPI app.
+    
+    Args:
+        app: FastAPI app instance
+        environment: 'development' or 'production'
+    """
+    config = (
+        get_development_cors_config()
+        if environment == "development"
+        else get_production_cors_config()
+    )
+    
+    # Use the custom CORSMiddleware class defined above
+    app.add_middleware(CORSMiddleware, **config)
