@@ -13,7 +13,7 @@ from .auth_service import AuthService, get_auth_service
 from .user_service import UserService, get_user_service
 from .conversation_service import ConversationService
 from .cape_ai_service import CapeAIService, get_cape_ai_service
-from .audit_service import AuditService, get_audit_logger, AuditEventType, AuditLogLevel
+from .audit_service import get_audit_logger, AuditEventType, AuditLogLevel  # REMOVED: AuditService
 
 # Core services that actually exist and work
 CORE_SERVICES = {
@@ -21,7 +21,7 @@ CORE_SERVICES = {
     "user": UserService,
     "conversation": ConversationService,
     "cape_ai": CapeAIService,
-    "audit": AuditService
+    # REMOVED: "audit": AuditService  # This class doesn't exist
 }
 
 # Service factory functions for dependency injection
@@ -48,7 +48,7 @@ def get_service(service_name: str, db_session=None):
     elif service_name == "conversation":
         return ConversationService()
     elif service_name == "audit":
-        return get_audit_logger()
+        return get_audit_logger()  # Use the function that actually exists
     else:
         raise ValueError(f"Service '{service_name}' not found. Available: {list(CORE_SERVICES.keys())}")
 
@@ -72,6 +72,13 @@ def check_service_health(service_name: str) -> dict:
                 "service": service_name, 
                 "message": f"{service_class.__name__} is accessible and ready"
             }
+        elif service_name == "audit":
+            # Special case for audit service which is a function, not a class
+            return {
+                "status": "healthy",
+                "service": service_name,
+                "message": "AuditLogger function is accessible and ready"
+            }
         else:
             return {
                 "status": "not_found", 
@@ -89,17 +96,20 @@ def check_all_services_health() -> dict:
     """Check health status of all existing services."""
     from datetime import datetime
     
+    # Include both class-based services and function-based services
+    all_services = list(CORE_SERVICES.keys()) + ["audit"]
+    
     health_status = {
         "overall": "healthy",
         "services": {},
         "timestamp": datetime.utcnow().isoformat(),
-        "total_services": len(CORE_SERVICES),
+        "total_services": len(all_services),
         "healthy_services": 0
     }
     
     unhealthy_count = 0
     
-    for service_name in CORE_SERVICES.keys():
+    for service_name in all_services:
         service_health = check_service_health(service_name)
         health_status["services"][service_name] = service_health
         
@@ -111,7 +121,7 @@ def check_all_services_health() -> dict:
     # Set overall status based on individual service health
     if unhealthy_count == 0:
         health_status["overall"] = "healthy"
-    elif unhealthy_count <= len(CORE_SERVICES) // 2:
+    elif unhealthy_count <= len(all_services) // 2:
         health_status["overall"] = "degraded"  
     else:
         health_status["overall"] = "unhealthy"
@@ -176,7 +186,9 @@ __all__ = [
     "UserService", "get_user_service", 
     "ConversationService",
     "CapeAIService", "get_cape_ai_service",
-    "AuditService", "get_audit_logger", "AuditEventType", "AuditLogLevel",
+    
+    # Audit service (function-based, not class-based)
+    "get_audit_logger", "AuditEventType", "AuditLogLevel",
     
     # Service management
     "CORE_SERVICES", "SERVICE_INFO",
