@@ -90,12 +90,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Add EXISTING middleware with error handling
-try:
-    app.add_middleware(ContentModerationMiddleware, strict_mode=False)
-    print("✅ ContentModerationMiddleware added successfully")
-except Exception as e:
-    print(f"❌ Failed to add ContentModerationMiddleware: {e}")
+# Add REQUIRED middleware
+# Temporarily disable ContentModerationMiddleware to fix timeout issues
+# try:
+#     app.add_middleware(ContentModerationMiddleware, strict_mode=False)
+#     print("✅ ContentModerationMiddleware added successfully")
+# except Exception as e:
+#     print(f"❌ Failed to add ContentModerationMiddleware: {e}")
+print("⚠️  ContentModerationMiddleware temporarily disabled")
 
 try:
     app.add_middleware(InputSanitizationMiddleware, max_content_length=10*1024*1024)
