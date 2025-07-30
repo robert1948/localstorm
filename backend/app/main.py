@@ -170,6 +170,13 @@ async def sitemap_xml():
     except:
         return '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>'
 
+@app.get("/manifest.json")
+async def manifest_json():
+    try:
+        return FileResponse(os.path.join(FRONTEND_DIST, "manifest.json"), media_type="application/manifest+json")
+    except:
+        return {"name": "CapeControl", "short_name": "CapeControl", "start_url": "/", "display": "standalone"}
+
 @app.get("/site.webmanifest")
 async def site_webmanifest():
     try:
