@@ -12,6 +12,7 @@ export default defineConfig({
   ],
   base: '/', // ✅ Required for production
   resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
     alias: {
       "@": path.resolve(__dirname, "./src"),
       "@components": path.resolve(__dirname, "./src/components"),

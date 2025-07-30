@@ -10,6 +10,9 @@ COPY scripts/ ./scripts
 # Let scripts know we're inside Docker to avoid local-only actions
 ENV INSIDE_DOCKER=true
 
+# Debug: Check file structure
+RUN ls -la client/src/lib/
+
 # Install dependencies and build
 RUN cd client && npm install && npm run build
 RUN node scripts/cache-bust.cjs
