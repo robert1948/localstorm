@@ -1,6 +1,6 @@
 # 🛡️ CapeControl API - Enterprise Storm Tracking & Weather Monitoring System
 
-[![Deploy to GitHub Pages](https://github.com/YOUR_USERNAME/localstorm/actions/workflows/deploy.yml/badge.svg)](https://github.com/YOUR_USERNAME/localstorm/actions/workflows/deploy.yml)
+[![Deploy to GitHub Pages](https://github.com/robert1948/localstorm/actions/workflows/deploy.yml/badge.svg)](https://github.com/robert1948/localstorm/actions/workflows/deploy.yml)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-009688.svg)](https://fastapi.tiangolo.com)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-brightgreen.svg)](#ai-features)
@@ -10,7 +10,7 @@
 
 ## 🌐 **Live Documentation**
 
-📊 **[View Live API Documentation](https://YOUR_USERNAME.github.io/localstorm/)** - Professional GitHub Pages portal with interactive features
+📊 **[View Live API Documentation](https://robert1948.github.io/localstorm/)** - Professional GitHub Pages portal with interactive features
 
 ## 🎯 **System Overview**
 
@@ -28,7 +28,7 @@ CapeControl API is an **enterprise-grade storm tracking and weather monitoring s
 ### **Development Setup**
 ```bash
 # Clone repository
-git clone https://github.com/YOUR_USERNAME/localstorm.git
+git clone https://github.com/robert1948/localstorm.git
 cd localstorm
 
 # Setup Python environment
@@ -176,7 +176,7 @@ export AI_MODEL_ENDPOINTS="your-ai-endpoints"
 
 ## 📚 **Documentation**
 
-- 📊 **[Live API Documentation](https://YOUR_USERNAME.github.io/localstorm/)** - Interactive GitHub Pages portal
+- 📊 **[Live API Documentation](https://robert1948.github.io/localstorm/)** - Interactive GitHub Pages portal
 - 📄 **[Project Structure](PROJECT_STRUCTURE.md)** - Complete system architecture
 - 🚀 **[Implementation Status](IMPLEMENTATION_STATUS.md)** - Development progress
 - 📋 **[Deployment Guide](DEPLOYMENT.md)** - Deployment instructions
@@ -209,9 +209,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 **Support**
 
-- 📊 **Documentation**: [GitHub Pages Portal](https://YOUR_USERNAME.github.io/localstorm/)
-- 🐛 **Issues**: [GitHub Issues](https://github.com/YOUR_USERNAME/localstorm/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/YOUR_USERNAME/localstorm/discussions)
+- 📊 **Documentation**: [GitHub Pages Portal](https://robert1948.github.io/localstorm/)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/robert1948/localstorm/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/robert1948/localstorm/discussions)
 
 ---
 
