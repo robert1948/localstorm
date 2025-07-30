@@ -7,11 +7,11 @@ from app.database import Base  # Updated import for new structure
 
 class User(Base):
     """
-    SQLAlchemy model for the users table.
+    SQLAlchemy model for the users_v2 table.
     Updated for production schema compatibility - July 13, 2025
     Only includes columns that exist in production database
     """
-    __tablename__ = "users"
+    __tablename__ = "users_v2"
     __table_args__ = {"extend_existing": True}
     
     # Production database columns only
