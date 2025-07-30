@@ -12,6 +12,8 @@ eggs/
 .eggs/
 lib/
 lib64/
+# Exception: Allow client src lib directory
+!client/src/lib/
 parts/
 sdist/
 var/
