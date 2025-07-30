@@ -56,17 +56,17 @@ app = FastAPI(
 )
 
 # Include routers
-app.include_router(auth_v2.router)
-app.include_router(cape_ai.router)
-app.include_router(audit.router)
-app.include_router(monitoring.router)
-app.include_router(error_tracking.router)
-app.include_router(dashboard.router)
-app.include_router(health_router)
-app.include_router(alerts_router)
-app.include_router(ai_performance_router)
-app.include_router(ai_context_router)
-app.include_router(ai_personalization_router)
+app.include_router(auth_v2.router, prefix="/api/auth", tags=["auth"])
+app.include_router(cape_ai.router, prefix="/api/cape_ai", tags=["cape-ai"])
+app.include_router(audit.router, prefix="/api/audit", tags=["audit"])
+app.include_router(monitoring.router, prefix="/api/monitoring", tags=["monitoring"])
+app.include_router(error_tracking.router, prefix="/api/error_tracking", tags=["error-tracking"])
+app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
+app.include_router(health_router, prefix="/api/health", tags=["health"])
+app.include_router(alerts_router, prefix="/api/alerts", tags=["alerts"])
+app.include_router(ai_performance_router, prefix="/api/ai_performance", tags=["ai-performance"])
+app.include_router(ai_context_router, prefix="/api/ai_context", tags=["ai-context"])
+app.include_router(ai_personalization_router, prefix="/api/ai_personalization", tags=["ai-personalization"])
 
 if USAGE_ANALYTICS_AVAILABLE:
     app.include_router(usage_analytics_router, prefix="/api/v1/analytics", tags=["usage-analytics"])
@@ -193,12 +193,8 @@ async def apple_touch_icon():
         from fastapi.responses import Response
         return Response("", media_type="image/png")
 
-@app.get("/{full_path:path}")
-async def serve_spa(full_path: str, request: Request):
-    return FileResponse(INDEX_HTML)
-
-@app.get("/")
-async def root():
+@app.get("/api/status")
+async def api_status():
     return {
         "message": "CapeControl API is running successfully!",
         "version": "3.0.0",
@@ -216,3 +212,11 @@ async def root():
             "preference_management": PREFERENCE_MANAGEMENT_AVAILABLE
         }
     }
+
+@app.get("/")
+async def serve_react_app():
+    return FileResponse(INDEX_HTML)
+
+@app.get("/{full_path:path}")
+async def serve_spa(full_path: str, request: Request):
+    return FileResponse(INDEX_HTML)
