@@ -283,12 +283,12 @@ function HelpSupport() {
 
 // Step 1: Basic Information + Role Selection (New 2-Step Flow)
 function BasicInfoAndRole({ onNext, formData = {}, setFormData }) {
-  const [firstName, setFirstName] = useState(formData.firstName || "");
-  const [lastName, setLastName] = useState(formData.lastName || "");
-  const [email, setEmail] = useState(formData.email || "");
-  const [password, setPassword] = useState(formData.password || "");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [selectedRole, setSelectedRole] = useState(formData.role || "");
+  const [selectedRole, setSelectedRole] = useState("");
   const [error, setError] = useState("");
   
   // Password visibility states
@@ -303,6 +303,15 @@ function BasicInfoAndRole({ onNext, formData = {}, setFormData }) {
   const [emailValid, setEmailValid] = useState(null);
   const [emailChecking, setEmailChecking] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(true);
+
+  // Initialize form data only once
+  useEffect(() => {
+    if (formData.firstName) setFirstName(formData.firstName);
+    if (formData.lastName) setLastName(formData.lastName);
+    if (formData.email) setEmail(formData.email);
+    if (formData.password) setPassword(formData.password);
+    if (formData.role) setSelectedRole(formData.role);
+  }, []); // Empty dependency array to run only once
 
   // Password validation
   const validatePassword = (pwd) => {
@@ -405,14 +414,16 @@ function BasicInfoAndRole({ onNext, formData = {}, setFormData }) {
     setRegistrationMessage("Basic information validated successfully! Proceeding to next step...");
 
     // Update form data and proceed to next step
-    setFormData({
+    const updatedFormData = {
       ...formData,
       firstName: firstName.trim(),
       lastName: lastName.trim(),
       email: email.trim().toLowerCase(),
       password,
       role: selectedRole,
-    });
+    };
+    
+    setFormData(updatedFormData);
 
     // Small delay to show success message
     setTimeout(() => {
@@ -643,10 +654,10 @@ function BasicInfoAndRole({ onNext, formData = {}, setFormData }) {
 
 // Step 2: Detailed Information (Role-specific)
 function DetailedInformation({ formData = {}, setFormData, onSubmit }) {
-  const [company, setCompany] = useState(formData.company || "");
-  const [phone, setPhone] = useState(formData.phone || "");
-  const [website, setWebsite] = useState(formData.website || "");
-  const [experience, setExperience] = useState(formData.experience || "");
+  const [company, setCompany] = useState("");
+  const [phone, setPhone] = useState("");
+  const [website, setWebsite] = useState("");
+  const [experience, setExperience] = useState("");
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -654,6 +665,14 @@ function DetailedInformation({ formData = {}, setFormData, onSubmit }) {
   // Registration status
   const [registrationStatus, setRegistrationStatus] = useState(null);
   const [registrationMessage, setRegistrationMessage] = useState("");
+
+  // Initialize form data only once
+  useEffect(() => {
+    if (formData.company) setCompany(formData.company);
+    if (formData.phone) setPhone(formData.phone);
+    if (formData.website) setWebsite(formData.website);
+    if (formData.experience) setExperience(formData.experience);
+  }, []); // Empty dependency array to run only once
 
   const handleSubmit = async (e) => {
     e.preventDefault();
