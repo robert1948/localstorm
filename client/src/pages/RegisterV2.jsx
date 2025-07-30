@@ -183,7 +183,7 @@ function HelpSupport() {
 }
 
 // Step 1: Basic Information + Role Selection (New 2-Step Flow)
-function BasicInfoAndRole({ onNext, formData, setFormData }) {
+function BasicInfoAndRole({ onNext, formData = {}, setFormData }) {
   const [firstName, setFirstName] = useState(formData.firstName || "");
   const [lastName, setLastName] = useState(formData.lastName || "");
   const [email, setEmail] = useState(formData.email || "");
@@ -481,7 +481,7 @@ function BasicInfoAndRole({ onNext, formData, setFormData }) {
 }
 
 // Step 2: Detailed Information (Role-specific)
-function DetailedInformation({ formData, setFormData, onSubmit }) {
+function DetailedInformation({ formData = {}, setFormData, onSubmit }) {
   const [company, setCompany] = useState(formData.company || "");
   const [phone, setPhone] = useState(formData.phone || "");
   const [website, setWebsite] = useState(formData.website || "");
