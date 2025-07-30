@@ -148,7 +148,7 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
             response.headers["X-Content-Type-Options"] = "nosniff"
             response.headers["X-Frame-Options"] = "DENY"
             response.headers["X-XSS-Protection"] = "1; mode=block"
-            response.headers["Content-Security-Policy"] = "default-src 'self'"
+            response.headers["Content-Security-Policy"] = "default-src 'self'; img-src 'self' https://lightning-s3.s3.amazonaws.com https://lightning-s3.s3.us-east-1.amazonaws.com; manifest-src 'self'"
             
             return response
             
