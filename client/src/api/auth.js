@@ -34,8 +34,15 @@ export async function validateEmail(email) {
       headers: { 'Content-Type': 'application/json' }
     });
 
+    // Check if response is JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Server returned non-JSON response');
+    }
+
     if (!response.ok) {
-      throw new Error('Email validation failed');
+      const error = await response.json();
+      throw new Error(error.detail || error.message || 'Email validation failed');
     }
 
     return await response.json(); // { available: bool, reason?: string, message: string }
@@ -60,8 +67,15 @@ export async function validatePassword(password) {
       body: JSON.stringify({ password })
     });
 
+    // Check if response is JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Server returned non-JSON response');
+    }
+
     if (!response.ok) {
-      throw new Error('Password validation failed');
+      const error = await response.json();
+      throw new Error(error.detail || error.message || 'Password validation failed');
     }
 
     return await response.json(); // { valid: bool, score: int, requirements: object }
@@ -92,12 +106,20 @@ export async function registerUserV2(userData) {
       body: JSON.stringify(userData)
     });
 
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.detail || 'Registration failed');
+    // Check if response is JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      console.error('Non-JSON response received:', await response.text());
+      throw new Error('Server error: Invalid response format');
     }
 
-    return await response.json(); // { id, email, access_token?, ... }
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.detail || data.message || 'Registration failed');
+    }
+
+    return data; // { id, email, access_token?, ... }
   } catch (error) {
     console.error('Registration error:', error);
     throw error;

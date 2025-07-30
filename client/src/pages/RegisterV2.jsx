@@ -26,6 +26,22 @@ function EyeIcon({ isVisible, onClick }) {
   );
 }
 
+// View/Info Icon Component for Regular Input Fields
+function ViewIcon({ tooltip, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      title={tooltip}
+      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+    >
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </button>
+  );
+}
+
 // Registration Status Component
 function RegistrationStatus({ status, message }) {
   if (!status) return null;
@@ -431,27 +447,39 @@ function BasicInfoAndRole({ onNext, formData = {}, setFormData }) {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 First Name *
               </label>
-              <input
-                type="text" autoComplete="username"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                placeholder="Enter your first name"
-                required
-              />
+              <div className="relative">
+                <input
+                  type="text" autoComplete="username"
+                  className="w-full p-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  placeholder="Enter your first name"
+                  required
+                />
+                <ViewIcon 
+                  tooltip="Your first name for personalization" 
+                  onClick={() => alert("We'll use your first name to personalize your experience.")} 
+                />
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Last Name *
               </label>
-              <input
-                type="text" autoComplete="username"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                placeholder="Enter your last name"
-                required
-              />
+              <div className="relative">
+                <input
+                  type="text" autoComplete="username"
+                  className="w-full p-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  placeholder="Enter your last name"
+                  required
+                />
+                <ViewIcon 
+                  tooltip="Your last name for formal communications" 
+                  onClick={() => alert("Your last name will be used for formal communications and certificates.")} 
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -464,14 +492,20 @@ function BasicInfoAndRole({ onNext, formData = {}, setFormData }) {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Email Address *
               </label>
-              <input
-                type="email" autoComplete="username"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email address"
-                required
-              />
+              <div className="relative">
+                <input
+                  type="email" autoComplete="username"
+                  className="w-full p-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email address"
+                  required
+                />
+                <ViewIcon 
+                  tooltip="We'll use this email for login and notifications" 
+                  onClick={() => alert("This email will be your login username and used for important notifications.")} 
+                />
+              </div>
               <EmailValidationIndicator 
                 email={email} 
                 isValid={emailValid} 
@@ -687,40 +721,58 @@ function DetailedInformation({ formData = {}, setFormData, onSubmit }) {
           <label className="block text-sm font-medium text-gray-700 mb-1">
             {formData.role === "customer" ? "Company Name" : "Developer/Company Name"} *
           </label>
-          <input
-            type="text"
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            value={company}
-            onChange={(e) => setCompany(e.target.value)}
-            placeholder={formData.role === "customer" ? "Your company name" : "Your name or company"}
-            required
-          />
+          <div className="relative">
+            <input
+              type="text"
+              className="w-full p-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+              placeholder={formData.role === "customer" ? "Your company name" : "Your name or company"}
+              required
+            />
+            <ViewIcon 
+              tooltip={formData.role === "customer" ? "Your business or company name" : "Your professional name or company"} 
+              onClick={() => alert(formData.role === "customer" ? "Enter your business or company name for professional identification." : "Enter your professional name or company for your developer profile.")} 
+            />
+          </div>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Phone Number
           </label>
-          <input
-            type="tel"
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="+1 (555) 123-4567"
-          />
+          <div className="relative">
+            <input
+              type="tel"
+              className="w-full p-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="+1 (555) 123-4567"
+            />
+            <ViewIcon 
+              tooltip="Optional phone number for support contact" 
+              onClick={() => alert("Phone number is optional and will only be used for important support communications.")} 
+            />
+          </div>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Website (Optional)
           </label>
-          <input
-            type="url"
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            value={website}
-            onChange={(e) => setWebsite(e.target.value)}
-            placeholder="https://"
-          />
+          <div className="relative">
+            <input
+              type="url"
+              className="w-full p-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+              placeholder="https://"
+            />
+            <ViewIcon 
+              tooltip="Your business or portfolio website" 
+              onClick={() => alert("Add your business website or portfolio URL to showcase your work.")} 
+            />
+          </div>
         </div>
 
         <div>
