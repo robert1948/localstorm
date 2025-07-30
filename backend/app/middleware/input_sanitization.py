@@ -29,6 +29,11 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
         self._request_counts = {}
         self._blocked_ips = set()
         
+        # Performance monitoring
+        self._request_counter = 0
+        self._security_checks_performed = 0
+        self._threats_blocked = 0
+        
         # Define dangerous patterns
         self.sql_injection_patterns = [
             r'(\bunion\b.*\bselect\b)',
@@ -70,18 +75,32 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
             'img': ['src', 'alt', 'width', 'height'],
         }
         
-        logger.info("✅ InputSanitizationMiddleware initialized")
+        logger.info("✅ InputSanitizationMiddleware initialized with performance monitoring")
+    
+    def get_security_stats(self) -> Dict[str, Any]:
+        """Get security middleware performance statistics"""
+        return {
+            "requests_processed": self._request_counter,
+            "security_checks_performed": self._security_checks_performed,
+            "threats_blocked": self._threats_blocked,
+            "blocked_ips_count": len(self._blocked_ips),
+            "tracked_ips_count": len(self._request_counts)
+        }
     
     async def dispatch(self, request: Request, call_next) -> Response:
         """Process request with comprehensive input sanitization"""
         
         try:
+            # Increment request counter for monitoring
+            self._request_counter += 1
+            
             # Get client IP for tracking
             client_ip = self._get_client_ip(request)
             
             # Check if IP is blocked
             if client_ip in self._blocked_ips:
                 logger.warning(f"Blocked request from IP: {client_ip}")
+                self._threats_blocked += 1
                 return JSONResponse(
                     status_code=403,
                     content={"error": "Access denied", "details": "IP temporarily blocked"}
@@ -99,9 +118,11 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
             
             # Sanitize query parameters
             if request.query_params:
+                self._security_checks_performed += 1
                 sanitized_query = self._sanitize_query_params(dict(request.query_params))
                 if not sanitized_query['is_safe']:
                     self._track_malicious_request(client_ip, "query_params")
+                    self._threats_blocked += 1
                     logger.warning(f"Malicious query parameters detected from {client_ip}: {sanitized_query['threats']}")
                     return JSONResponse(
                         status_code=400,
@@ -122,9 +143,11 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
                         # Read and sanitize JSON body
                         body = await request.body()
                         if body:
+                            self._security_checks_performed += 1
                             sanitized_body = await self._sanitize_json_body(body)
                             if not sanitized_body['is_safe']:
                                 self._track_malicious_request(client_ip, "json_body")
+                                self._threats_blocked += 1
                                 logger.warning(f"Malicious JSON body detected from {client_ip}: {sanitized_body['threats']}")
                                 return JSONResponse(
                                     status_code=400,
@@ -138,10 +161,12 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
                     elif 'application/x-www-form-urlencoded' in content_type:
                         # Handle form data
                         try:
+                            self._security_checks_performed += 1
                             form_data = await request.form()
                             sanitized_form = self._sanitize_form_data(dict(form_data))
                             if not sanitized_form['is_safe']:
                                 self._track_malicious_request(client_ip, "form_data")
+                                self._threats_blocked += 1
                                 logger.warning(f"Malicious form data detected from {client_ip}: {sanitized_form['threats']}")
                                 return JSONResponse(
                                     status_code=400,
@@ -162,6 +187,10 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
             # Process the request
             response = await call_next(request)
             
+            # Periodic cleanup to prevent memory bloat (every 1000 requests)
+            if self._request_counter % 1000 == 0:
+                self._cleanup_old_tracking_data()
+            
             # Add security headers
             response.headers["X-Content-Type-Options"] = "nosniff"
             response.headers["X-Frame-Options"] = "DENY"
@@ -172,7 +201,10 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; "
                 "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; "
                 "img-src 'self' data: https: blob: https://lightning-s3.s3.amazonaws.com https://lightning-s3.s3.us-east-1.amazonaws.com; "
-                "connect-src 'self' https://api.openai.com https://api.anthropic.com https://generativelanguage.googleapis.com wss: https:; "
+                "connect-src 'self' "
+                "https://www.cape-control.com https://cape-control.com https://capecraft.herokuapp.com "
+                "https://api.openai.com https://api.anthropic.com https://generativelanguage.googleapis.com "
+                "wss: https:; "
                 "manifest-src 'self'; "
                 "worker-src 'self' blob:; "
                 "child-src 'self' blob:; "
@@ -204,8 +236,8 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
         for key, value in params.items():
             str_value = str(value)
             
-            # Check for SQL injection
-            if self._detect_sql_injection(str_value):
+            # Check for SQL injection (performance optimized)
+            if self._detect_sql_injection_fast(str_value):
                 threats.append(f"SQL injection in query param '{key}'")
             
             # Check for XSS
@@ -254,8 +286,8 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
         for key, value in form_data.items():
             str_value = str(value)
             
-            # Check for SQL injection
-            if self._detect_sql_injection(str_value):
+            # Check for SQL injection (performance optimized)
+            if self._detect_sql_injection_fast(str_value):
                 threats.append(f"SQL injection in form field '{key}'")
             
             # Check for XSS
@@ -286,8 +318,8 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
                 threats.extend(self._check_json_recursively(item, current_path))
         
         elif isinstance(data, str):
-            # Check string values
-            if self._detect_sql_injection(data):
+            # Check string values (performance optimized)
+            if self._detect_sql_injection_fast(data):
                 threats.append(f"SQL injection in {path}")
             if self._detect_xss(data):
                 threats.append(f"XSS attempt in {path}")
@@ -361,15 +393,48 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
     def _track_malicious_request(self, client_ip: str, threat_type: str):
         """Track malicious requests and potentially block repeat offenders"""
         if client_ip not in self._request_counts:
-            self._request_counts[client_ip] = {'count': 0, 'threats': []}
+            self._request_counts[client_ip] = {'count': 0, 'threats': [], 'last_seen': None}
         
+        import time
         self._request_counts[client_ip]['count'] += 1
         self._request_counts[client_ip]['threats'].append(threat_type)
+        self._request_counts[client_ip]['last_seen'] = time.time()
         
         # Block IP if too many malicious requests (simple threshold)
         if self._request_counts[client_ip]['count'] >= 5:
             self._blocked_ips.add(client_ip)
             logger.warning(f"IP {client_ip} blocked due to repeated malicious requests")
+    
+    def _cleanup_old_tracking_data(self):
+        """Clean up old tracking data to prevent memory bloat"""
+        import time
+        current_time = time.time()
+        cleanup_threshold = 3600  # 1 hour
+        
+        # Remove old request tracking data
+        old_ips = []
+        for ip, data in self._request_counts.items():
+            if data.get('last_seen') and (current_time - data['last_seen']) > cleanup_threshold:
+                old_ips.append(ip)
+        
+        for ip in old_ips:
+            del self._request_counts[ip]
+            self._blocked_ips.discard(ip)
+        
+        if old_ips:
+            logger.info(f"🧹 Cleaned up tracking data for {len(old_ips)} old IPs")
+    
+    def _detect_sql_injection_fast(self, text: str) -> bool:
+        """Fast SQL injection detection for performance"""
+        # Quick check for common SQL keywords (case-insensitive)
+        text_lower = text.lower()
+        
+        # Most common patterns for quick rejection
+        if any(keyword in text_lower for keyword in ['select ', 'union ', 'drop ', 'delete ', 'insert ', 'update ']):
+            # Only run full regex if suspicious keywords found
+            return self._detect_sql_injection(text)
+        
+        return False
 
 # Export the middleware
 __all__ = ["InputSanitizationMiddleware"]

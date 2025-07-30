@@ -22,7 +22,7 @@ ALGORITHM = settings.JWT_ALGORITHM
 # ----------------------------
 # Email Validation Endpoint
 # ----------------------------
-@router.get("/auth/v2/validate-email", tags=["auth-v2"])
+@router.get("/v2/validate-email", tags=["auth-v2"])
 async def validate_email(email: str, db: Session = Depends(get_db)):
     """
     Check if email is available for registration
@@ -69,7 +69,7 @@ async def validate_email(email: str, db: Session = Depends(get_db)):
 # ----------------------------
 # Password Strength Validation
 # ----------------------------
-@router.post("/auth/v2/validate-password", tags=["auth-v2"])
+@router.post("/v2/validate-password", tags=["auth-v2"])
 async def validate_password(password_data: dict):
     """
     Validate password strength
@@ -105,7 +105,7 @@ async def validate_password(password_data: dict):
 # ----------------------------
 # Enhanced Registration Route (V2)
 # ----------------------------
-@router.post("/auth/v2/register", response_model=schemas.UserOut, tags=["auth-v2"])
+@router.post("/v2/register", response_model=schemas.UserOut, tags=["auth-v2"])
 async def register_v2(
     user: schemas.UserCreateV2Production, 
     background_tasks: BackgroundTasks,
@@ -241,7 +241,7 @@ async def send_welcome_email_task(user_data: dict):
 # ----------------------------
 # Enhanced Login Route (V2)
 # ----------------------------
-@router.post("/auth/v2/login", tags=["auth-v2"])
+@router.post("/v2/login", tags=["auth-v2"])
 async def login_v2(payload: schemas.LoginInput, db: Session = Depends(get_db)):
     """
     Enhanced login with better error handling
@@ -352,7 +352,7 @@ async def login_v2(payload: schemas.LoginInput, db: Session = Depends(get_db)):
 # ----------------------------
 # 2-Step Registration Endpoints (Frontend Compatibility)
 # ----------------------------
-@router.post("/auth/register/step1", tags=["auth-v2"])
+@router.post("/register/step1", tags=["auth-v2"])
 async def register_step1(request: schemas.RegisterStep1Request, db: Session = Depends(get_db)):
     """
     Step 1: Validate email and basic info, create pending user
@@ -397,7 +397,7 @@ async def register_step1(request: schemas.RegisterStep1Request, db: Session = De
             detail=f"Step 1 validation failed: {str(e)}"
         )
 
-@router.post("/auth/register/step2", response_model=schemas.UserOut, tags=["auth-v2"])
+@router.post("/register/step2", response_model=schemas.UserOut, tags=["auth-v2"])
 async def register_step2(request: schemas.RegisterStep2Request, db: Session = Depends(get_db)):
     """
     Step 2: Complete registration with full user data
