@@ -25,6 +25,10 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
         super().__init__(app)
         self.max_content_length = max_content_length
         
+        # Rate limiting tracking (simple in-memory for now)
+        self._request_counts = {}
+        self._blocked_ips = set()
+        
         # Define dangerous patterns
         self.sql_injection_patterns = [
             r'(\bunion\b.*\bselect\b)',
@@ -72,6 +76,17 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
         """Process request with comprehensive input sanitization"""
         
         try:
+            # Get client IP for tracking
+            client_ip = self._get_client_ip(request)
+            
+            # Check if IP is blocked
+            if client_ip in self._blocked_ips:
+                logger.warning(f"Blocked request from IP: {client_ip}")
+                return JSONResponse(
+                    status_code=403,
+                    content={"error": "Access denied", "details": "IP temporarily blocked"}
+                )
+            
             # Check content length
             if hasattr(request, 'headers') and 'content-length' in request.headers:
                 content_length = int(request.headers.get('content-length', 0))
@@ -86,7 +101,8 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
             if request.query_params:
                 sanitized_query = self._sanitize_query_params(dict(request.query_params))
                 if not sanitized_query['is_safe']:
-                    logger.warning(f"Malicious query parameters detected: {sanitized_query['threats']}")
+                    self._track_malicious_request(client_ip, "query_params")
+                    logger.warning(f"Malicious query parameters detected from {client_ip}: {sanitized_query['threats']}")
                     return JSONResponse(
                         status_code=400,
                         content={
@@ -108,7 +124,8 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
                         if body:
                             sanitized_body = await self._sanitize_json_body(body)
                             if not sanitized_body['is_safe']:
-                                logger.warning(f"Malicious JSON body detected: {sanitized_body['threats']}")
+                                self._track_malicious_request(client_ip, "json_body")
+                                logger.warning(f"Malicious JSON body detected from {client_ip}: {sanitized_body['threats']}")
                                 return JSONResponse(
                                     status_code=400,
                                     content={
@@ -124,7 +141,8 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
                             form_data = await request.form()
                             sanitized_form = self._sanitize_form_data(dict(form_data))
                             if not sanitized_form['is_safe']:
-                                logger.warning(f"Malicious form data detected: {sanitized_form['threats']}")
+                                self._track_malicious_request(client_ip, "form_data")
+                                logger.warning(f"Malicious form data detected from {client_ip}: {sanitized_form['threats']}")
                                 return JSONResponse(
                                     status_code=400,
                                     content={
@@ -148,7 +166,27 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
             response.headers["X-Content-Type-Options"] = "nosniff"
             response.headers["X-Frame-Options"] = "DENY"
             response.headers["X-XSS-Protection"] = "1; mode=block"
-            response.headers["Content-Security-Policy"] = "default-src 'self'; img-src 'self' https://lightning-s3.s3.amazonaws.com https://lightning-s3.s3.us-east-1.amazonaws.com; manifest-src 'self'"
+            response.headers["Content-Security-Policy"] = (
+                "default-src 'self'; "
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; "
+                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; "
+                "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; "
+                "img-src 'self' data: https: blob: https://lightning-s3.s3.amazonaws.com https://lightning-s3.s3.us-east-1.amazonaws.com; "
+                "connect-src 'self' https://api.openai.com https://api.anthropic.com https://generativelanguage.googleapis.com wss: https:; "
+                "manifest-src 'self'; "
+                "worker-src 'self' blob:; "
+                "child-src 'self' blob:; "
+                "object-src 'none'; "
+                "base-uri 'self'; "
+                "form-action 'self'; "
+                "frame-ancestors 'none'"
+            )
+            
+            # Additional production security headers
+            response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
+            response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+            response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=()"
+            response.headers["X-Permitted-Cross-Domain-Policies"] = "none"
             
             return response
             
@@ -301,6 +339,37 @@ class InputSanitizationMiddleware(BaseHTTPMiddleware):
         text = re.sub(r'\s+', ' ', text).strip()
         
         return text
+    
+    def _get_client_ip(self, request: Request) -> str:
+        """Extract client IP from request headers (considering Cloudflare/Heroku proxies)"""
+        # Check for Cloudflare connecting IP first
+        if 'cf-connecting-ip' in request.headers:
+            return request.headers['cf-connecting-ip']
+        
+        # Check for X-Forwarded-For (Heroku/proxy)
+        if 'x-forwarded-for' in request.headers:
+            forwarded_ips = request.headers['x-forwarded-for'].split(',')
+            return forwarded_ips[0].strip()
+        
+        # Check for X-Real-IP
+        if 'x-real-ip' in request.headers:
+            return request.headers['x-real-ip']
+        
+        # Fallback to remote address
+        return getattr(request.client, 'host', 'unknown')
+    
+    def _track_malicious_request(self, client_ip: str, threat_type: str):
+        """Track malicious requests and potentially block repeat offenders"""
+        if client_ip not in self._request_counts:
+            self._request_counts[client_ip] = {'count': 0, 'threats': []}
+        
+        self._request_counts[client_ip]['count'] += 1
+        self._request_counts[client_ip]['threats'].append(threat_type)
+        
+        # Block IP if too many malicious requests (simple threshold)
+        if self._request_counts[client_ip]['count'] >= 5:
+            self._blocked_ips.add(client_ip)
+            logger.warning(f"IP {client_ip} blocked due to repeated malicious requests")
 
 # Export the middleware
 __all__ = ["InputSanitizationMiddleware"]
