@@ -1,0 +1,7 @@
+name = "capecontrol-api-zeonita"
+main = "fixed-landing-worker.js"
+compatibility_date = "2024-03-18"
+
+[[routes]]
+pattern = "cape-control.com/*"
+zone_name = "cape-control.com"

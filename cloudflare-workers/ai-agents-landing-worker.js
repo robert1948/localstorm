@@ -110,7 +110,31 @@ export default {
       }
     }
     
-    // AI-Agents Platform Landing Page - Matching Blue Header Design
+    // For all other requests (including root /), proxy to the Heroku backend first
+    // This allows the React app to be served properly
+    try {
+      const backendUrl = new URL(url.pathname + url.search, BACKEND_URL)
+      const response = await fetch(backendUrl.toString(), {
+        method: request.method,
+        headers: request.headers,
+        body: request.method !== 'GET' ? request.body : null
+      })
+      
+      const newHeaders = new Headers(response.headers)
+      Object.entries(securityHeaders).forEach(([key, value]) => {
+        newHeaders.set(key, value)
+      })
+      
+      return new Response(response.body, {
+        status: response.status,
+        headers: newHeaders
+      })
+    } catch (error) {
+      console.error('Backend proxy error:', error)
+      // Fall back to static landing page only if backend is unavailable
+    }
+
+    // AI-Agents Platform Landing Page - Fallback only when backend is down
     const landingPage = `<!DOCTYPE html>
 <html lang="en">
 <head>
