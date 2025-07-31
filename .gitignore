@@ -148,3 +148,76 @@ temp/
 # Test files
 test-results.json
 coverage/
+
+# Build outputs
+dist/
+build/
+out/
+
+# Vite
+.vite/
+
+# Package manager
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# Docker
+.dockerignore
+
+# Heroku
+.herokuignore
+
+# Cache directories
+.cache/
+.eslintcache
+.stylelintcache
+
+# Temporary files
+*.tmp
+*.temp
+
+# Backup files
+*.backup
+*.bak
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# AI/ML
+*.model
+*.pkl
+*.h5
+
+# Reports and documentation
+reports/
+docs/build/
