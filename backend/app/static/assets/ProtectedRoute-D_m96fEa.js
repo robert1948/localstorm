@@ -1,1 +1,0 @@
-import{a,j as e,N as i}from"./index-BShdYOKx.js";function s({children:r}){const{user:t}=a();return t===void 0?e.jsx("div",{className:"p-4 text-center",children:"Checking authentication..."}):t?r:e.jsx(i,{to:"/login",replace:!0})}export{s as default};

@@ -43,11 +43,32 @@ export default {
         '8xl': ['6rem', { lineHeight: '1' }],
         '9xl': ['8rem', { lineHeight: '1' }],
       },
+      colors: {
+        // Enhanced brand colors for better mobile visibility
+        brand: {
+          blue: '#2563eb',
+          purple: '#9333ea',
+          light: '#eff6ff',
+          dark: '#1e3a8a'
+        },
+        // Improved mobile contrast
+        mobile: {
+          'text-primary': '#111827',
+          'text-secondary': '#6b7280',
+          'bg-light': '#f9fafb',
+          'bg-card': '#ffffff',
+          'border': '#e5e7eb',
+          'accent': '#3b82f6'
+        }
+      },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out',
         'dropdown': 'dropdown 0.3s ease-out',
         'slide-up': 'slideUp 0.3s ease-out',
         'slide-down': 'slideDown 0.3s ease-out',
+        'bounce-in': 'bounceIn 0.6s ease-out',
+        'scale-in': 'scaleIn 0.3s ease-out',
+        'mobile-tap': 'mobileTap 0.1s ease-out',
         'scale-in': 'scaleIn 0.2s ease-out',
         'bounce-gentle': 'bounceGentle 0.6s ease-out',
       },
@@ -125,6 +146,43 @@ export default {
           '5': 'hsl(var(--chart-5))',
         },
       },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' }
+        },
+        dropdown: {
+          '0%': { opacity: '0', transform: 'translateY(-10%)' },
+          '100%': { opacity: '1', transform: 'translateY(0%)' }
+        },
+        slideUp: {
+          '0%': { opacity: '0', transform: 'translateY(100%)' },
+          '100%': { opacity: '1', transform: 'translateY(0%)' }
+        },
+        slideDown: {
+          '0%': { opacity: '0', transform: 'translateY(-100%)' },
+          '100%': { opacity: '1', transform: 'translateY(0%)' }
+        },
+        bounceIn: {
+          '0%': { opacity: '0', transform: 'scale(0.3)' },
+          '50%': { opacity: '1', transform: 'scale(1.05)' },
+          '70%': { transform: 'scale(0.9)' },
+          '100%': { opacity: '1', transform: 'scale(1)' }
+        },
+        scaleIn: {
+          '0%': { opacity: '0', transform: 'scale(0.9)' },
+          '100%': { opacity: '1', transform: 'scale(1)' }
+        },
+        mobileTap: {
+          '0%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(0.95)' },
+          '100%': { transform: 'scale(1)' }
+        }
+      },
+      backdropFilter: {
+        'none': 'none',
+        'blur': 'blur(20px)',
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],

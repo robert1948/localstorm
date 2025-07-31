@@ -434,120 +434,159 @@ function BasicInfoAndRole({ onNext, formData = {}, setFormData }) {
   const passwordValidation = validatePassword(password);
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-8 bg-white rounded-lg shadow-lg">
-      <div className="text-center mb-8">
-        <h2 className="text-4xl font-bold text-gray-900 mb-2">Create Your CapeControl Account</h2>
-        <p className="text-gray-600 text-lg">Step 1: Basic Information & Role Selection</p>
-        <ProgressBar currentStep={1} totalSteps={2} />
-      </div>
-
-      <RegistrationStatus status={registrationStatus} message={registrationMessage} />
-
-      {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-red-600 text-sm text-center">{error}</p>
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Personal Information */}
-        <div className="bg-gray-50 p-6 rounded-lg">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Personal Information</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                First Name *
-              </label>
-              <div className="relative">
-                <input
-                  type="text" autoComplete="username"
-                  className="w-full p-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  placeholder="Enter your first name"
-                  required
-                />
-                <ViewIcon 
-                  tooltip="Your first name for personalization" 
-                  onClick={() => alert("We'll use your first name to personalize your experience.")} 
-                />
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Last Name *
-              </label>
-              <div className="relative">
-                <input
-                  type="text" autoComplete="username"
-                  className="w-full p-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  placeholder="Enter your last name"
-                  required
-                />
-                <ViewIcon 
-                  tooltip="Your last name for formal communications" 
-                  onClick={() => alert("Your last name will be used for formal communications and certificates.")} 
-                />
-              </div>
+    <div className="container-mobile mt-8 lg:mt-10">
+      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
+        {/* Header with gradient background */}
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-8 sm:px-8 lg:px-12">
+          <div className="text-center">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white mb-2">
+              Create Your CapeControl Account
+            </h2>
+            <p className="text-blue-100 text-base lg:text-lg">
+              Step 1: Basic Information & Role Selection
+            </p>
+            <div className="mt-6">
+              <ProgressBar currentStep={1} totalSteps={2} />
             </div>
           </div>
         </div>
+        
+        {/* Main content */}
+        <div className="p-6 sm:p-8 lg:p-12">
 
-        {/* Account Information */}
-        <div className="bg-gray-50 p-6 rounded-lg">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Account Information</h3>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email Address *
-              </label>
-              <div className="relative">
-                <input
-                  type="email" autoComplete="username"
-                  className="w-full p-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email address"
-                  required
-                />
-                <ViewIcon 
-                  tooltip="We'll use this email for login and notifications" 
-                  onClick={() => alert("This email will be your login username and used for important notifications.")} 
-                />
+          <RegistrationStatus status={registrationStatus} message={registrationMessage} />
+
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-400 rounded-lg">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-red-700 text-sm font-medium">{error}</p>
+                </div>
               </div>
-              <EmailValidationIndicator 
-                email={email} 
-                isValid={emailValid} 
-                isChecking={emailChecking} 
-              />
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Personal Information */}
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 lg:p-8 rounded-xl border border-blue-100">
+              <div className="flex items-center mb-6">
+                <div className="bg-blue-600 rounded-full p-2 mr-3">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900">Personal Information</h3>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    First Name *
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text" 
+                      autoComplete="given-name"
+                      className="input-mobile border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 shadow-sm"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      placeholder="Enter your first name"
+                      required
+                    />
+                    <ViewIcon 
+                      tooltip="Your first name for personalization" 
+                      onClick={() => alert("We'll use your first name to personalize your experience.")} 
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Last Name *
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text" 
+                      autoComplete="family-name"
+                      className="input-mobile border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 shadow-sm"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      placeholder="Enter your last name"
+                      required
+                    />
+                    <ViewIcon 
+                      tooltip="Your last name for formal communications" 
+                      onClick={() => alert("Your last name will be used for formal communications and certificates.")} 
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Password *
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"} 
-                  autoComplete="new-password"
-                  className="w-full p-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Create a strong password"
-                  minLength={12}
-                  required
-                />
-                <EyeIcon 
-                  isVisible={showPassword} 
-                  onClick={() => setShowPassword(!showPassword)} 
-                />
+            {/* Account Information */}
+            <div className="bg-gradient-to-br from-purple-50 to-blue-50 p-6 lg:p-8 rounded-xl border border-purple-100">
+              <div className="flex items-center mb-6">
+                <div className="bg-purple-600 rounded-full p-2 mr-3">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m0 0a2 2 0 012 2v6a2 2 0 01-2 2h-10a2 2 0 01-2-2V9a2 2 0 012-2m0 0V7a2 2 0 012-2h4z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900">Account Information</h3>
               </div>
-              <PasswordStrengthIndicator password={password} />
-              {password && (
-                <div className="mt-2 text-xs text-gray-600">
-                  <p className="font-medium">Password Requirements:</p>
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Email Address *
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="email" 
+                      autoComplete="email"
+                      className="input-mobile border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 shadow-sm"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email address"
+                      required
+                    />
+                    <ViewIcon 
+                      tooltip="We'll use this email for login and notifications" 
+                      onClick={() => alert("This email will be your login username and used for important notifications.")} 
+                    />
+                  </div>
+                  <EmailValidationIndicator 
+                    email={email} 
+                    isValid={emailValid} 
+                    isChecking={emailChecking} 
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Password *
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"} 
+                      autoComplete="new-password"
+                      className="input-mobile border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 shadow-sm"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Create a strong password"
+                      minLength={12}
+                      required
+                    />
+                    <EyeIcon 
+                      isVisible={showPassword} 
+                      onClick={() => setShowPassword(!showPassword)} 
+                    />
+                  </div>
+                  <PasswordStrengthIndicator password={password} />
+                  {password && (
+                    <div className="mt-3 p-3 bg-white rounded-lg border border-gray-200">
+                      <p className="font-semibold text-sm text-gray-700 mb-2">Password Requirements:</p>
                   <ul className="mt-1 space-y-1">
                     <li className={passwordValidation.requirements.minLength ? 'text-green-600' : 'text-red-600'}>
                       ✓ At least 12 characters
@@ -649,6 +688,8 @@ function BasicInfoAndRole({ onNext, formData = {}, setFormData }) {
       
       <HelpSupport />
     </div>
+      </div>
+    </div>
   );
 }
 
@@ -718,135 +759,211 @@ function DetailedInformation({ formData = {}, setFormData, onSubmit }) {
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 p-8 bg-white rounded-lg shadow-lg">
-      <div className="text-center mb-8">
-        <h2 className="text-4xl font-bold text-gray-900 mb-2">Complete Your Profile</h2>
-        <p className="text-gray-600 text-lg">
-          Step 2: {formData.role === "customer" ? "Business" : "Developer"} Details
-        </p>
-        <ProgressBar currentStep={2} totalSteps={2} />
-      </div>
-
-      <RegistrationStatus status={registrationStatus} message={registrationMessage} />
-
-      {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-red-600 text-sm text-center">{error}</p>
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            {formData.role === "customer" ? "Company Name" : "Developer/Company Name"} *
-          </label>
-          <div className="relative">
-            <input
-              type="text"
-              className="w-full p-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
-              placeholder={formData.role === "customer" ? "Your company name" : "Your name or company"}
-              required
-            />
-            <ViewIcon 
-              tooltip={formData.role === "customer" ? "Your business or company name" : "Your professional name or company"} 
-              onClick={() => alert(formData.role === "customer" ? "Enter your business or company name for professional identification." : "Enter your professional name or company for your developer profile.")} 
-            />
+    <div className="container-mobile mt-8 lg:mt-10">
+      <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
+        {/* Header with gradient background */}
+        <div className="bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-8 sm:px-8 lg:px-12">
+          <div className="text-center">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white mb-2">
+              Complete Your Profile
+            </h2>
+            <p className="text-purple-100 text-base lg:text-lg">
+              Step 2: {formData.role === "customer" ? "Business" : "Developer"} Details
+            </p>
+            <div className="mt-6">
+              <ProgressBar currentStep={2} totalSteps={2} />
+            </div>
           </div>
         </div>
+        
+        {/* Main content */}
+        <div className="p-6 sm:p-8 lg:p-12">
+          <RegistrationStatus status={registrationStatus} message={registrationMessage} />
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Phone Number
-          </label>
-          <div className="relative">
-            <input
-              type="tel"
-              className="w-full p-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="+1 (555) 123-4567"
-            />
-            <ViewIcon 
-              tooltip="Optional phone number for support contact" 
-              onClick={() => alert("Phone number is optional and will only be used for important support communications.")} 
-            />
-          </div>
-        </div>
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-400 rounded-lg">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-red-700 text-sm font-medium">{error}</p>
+                </div>
+              </div>
+            </div>
+          )}
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Website (Optional)
-          </label>
-          <div className="relative">
-            <input
-              type="url"
-              className="w-full p-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              value={website}
-              onChange={(e) => setWebsite(e.target.value)}
-              placeholder="https://"
-            />
-            <ViewIcon 
-              tooltip="Your business or portfolio website" 
-              onClick={() => alert("Add your business website or portfolio URL to showcase your work.")} 
-            />
-          </div>
-        </div>
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Business/Developer Information */}
+            <div className="bg-gradient-to-br from-purple-50 to-blue-50 p-6 lg:p-8 rounded-xl border border-purple-100">
+              <div className="flex items-center mb-6">
+                <div className="bg-purple-600 rounded-full p-2 mr-3">
+                  {formData.role === "customer" ? (
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-2m-2 0H7m5 0v-5a2 2 0 00-2-2H8a2 2 0 00-2 2v5m5 0v-3a1 1 0 00-1-1h-1a1 1 0 00-1 1v3m4 0h2M7 7h3v3H7V7z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                    </svg>
+                  )}
+                </div>
+                <h3 className="text-xl font-bold text-gray-900">
+                  {formData.role === "customer" ? "Business Information" : "Developer Information"}
+                </h3>
+              </div>
+              
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    {formData.role === "customer" ? "Company Name" : "Developer/Company Name"} *
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      autoComplete="organization"
+                      className="input-mobile border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 shadow-sm"
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
+                      placeholder={formData.role === "customer" ? "Your company name" : "Your name or company"}
+                      required
+                    />
+                    <ViewIcon 
+                      tooltip={formData.role === "customer" ? "Your business/company name" : "Your professional name or company"} 
+                      onClick={() => alert(formData.role === "customer" ? "Enter your business or company name." : "Enter your professional name or development company.")} 
+                    />
+                  </div>
+                </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            {formData.role === "customer" ? "Business Experience" : "Development Experience"} *
-          </label>
-          <select
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            value={experience}
-            onChange={(e) => setExperience(e.target.value)}
-            required
-          >
-            <option value="">Select experience level</option>
-            <option value="beginner">Beginner (0-1 years)</option>
-            <option value="intermediate">Intermediate (2-5 years)</option>
-            <option value="advanced">Advanced (5+ years)</option>
-            <option value="expert">Expert (10+ years)</option>
-          </select>
-        </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Phone Number (Optional)
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="tel"
+                      autoComplete="tel"
+                      className="input-mobile border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 shadow-sm"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="+1 (555) 123-4567"
+                    />
+                    <ViewIcon 
+                      tooltip="Optional phone number for support contact" 
+                      onClick={() => alert("Phone number is optional and will only be used for important support communications.")} 
+                    />
+                  </div>
+                </div>
 
-        <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
-          <input
-            type="checkbox"
-            id="terms"
-            className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-            checked={agreedToTerms}
-            onChange={(e) => setAgreedToTerms(e.target.checked)}
-          />
-          <label htmlFor="terms" className="text-sm text-gray-700">
-            I agree to the{" "}
-            <a href="/terms" className="text-blue-600 hover:underline" target="_blank">
-              Terms & Conditions
-            </a>{" "}
-            and{" "}
-            <a href="/privacy" className="text-blue-600 hover:underline" target="_blank">
-              Privacy Policy
-            </a>{" "}
-            for {formData.role === "customer" ? "Users" : "Developers"}
-          </label>
-        </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Website (Optional)
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="url"
+                      autoComplete="url"
+                      className="input-mobile border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 shadow-sm"
+                      value={website}
+                      onChange={(e) => setWebsite(e.target.value)}
+                      placeholder="https://your-website.com"
+                    />
+                    <ViewIcon 
+                      tooltip="Your business or portfolio website" 
+                      onClick={() => alert("Add your business website or portfolio URL to showcase your work.")} 
+                    />
+                  </div>
+                </div>
 
-        <button
-          type="submit"
-          disabled={loading || !agreedToTerms}
-          className={`w-full p-4 rounded-lg font-semibold text-lg transition-colors ${
-            loading || !agreedToTerms
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700"
-          } text-white`}
-        >
-          {loading ? "Creating Account..." : "Create Account"}
-        </button>
-      </form>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    {formData.role === "customer" ? "Business Experience" : "Development Experience"} *
+                  </label>
+                  <select
+                    className="input-mobile border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 shadow-sm"
+                    value={experience}
+                    onChange={(e) => setExperience(e.target.value)}
+                    required
+                  >
+                    <option value="">Select experience level</option>
+                    <option value="beginner">Beginner (0-1 years)</option>
+                    <option value="intermediate">Intermediate (2-5 years)</option>
+                    <option value="advanced">Advanced (5+ years)</option>
+                    <option value="expert">Expert (10+ years)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Terms Agreement */}
+            <div className="bg-gradient-to-br from-gray-50 to-blue-50 p-6 lg:p-8 rounded-xl border border-gray-200">
+              <div className="flex items-start space-x-4">
+                <input
+                  type="checkbox"
+                  id="terms"
+                  className="mt-1 h-5 w-5 text-purple-600 focus:ring-purple-500 border-gray-300 rounded transition-colors"
+                  checked={agreedToTerms}
+                  onChange={(e) => setAgreedToTerms(e.target.checked)}
+                />
+                <label htmlFor="terms" className="text-sm text-gray-700 leading-relaxed">
+                  I agree to the{" "}
+                  <a href="/terms" className="text-purple-600 hover:text-purple-700 underline font-medium" target="_blank" rel="noopener noreferrer">
+                    Terms & Conditions
+                  </a>{" "}
+                  and{" "}
+                  <a href="/privacy" className="text-purple-600 hover:text-purple-700 underline font-medium" target="_blank" rel="noopener noreferrer">
+                    Privacy Policy
+                  </a>{" "}
+                  for {formData.role === "customer" ? "Business Users" : "Developers"}
+                </label>
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <div className="pt-6">
+              <button
+                type="submit"
+                disabled={loading || !agreedToTerms}
+                className="btn-mobile-lg w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold rounded-xl shadow-lg hover:from-purple-700 hover:to-blue-700 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-purple-600 disabled:hover:to-blue-600"
+              >
+                {loading ? (
+                  <span className="flex items-center justify-center">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Creating Account...
+                  </span>
+                ) : (
+                  <span className="flex items-center justify-center">
+                    Create My Account
+                    <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </span>
+                )}
+              </button>
+              
+              {!agreedToTerms && (
+                <p className="text-center text-sm text-gray-500 mt-3">
+                  Please agree to the terms and conditions to continue
+                </p>
+              )}
+            </div>
+
+            <p className="text-center text-sm text-gray-600 mt-6">
+              Need help?{" "}
+              <a href="/support" className="text-purple-600 hover:underline font-medium">
+                Contact Support
+              </a>
+            </p>
+          </form>
       
       <HelpSupport />
+        </div>
+      </div>
     </div>
   );
 }

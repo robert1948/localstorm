@@ -69,25 +69,40 @@ export default function Landing() {
             </p>
           </div>
 
-          {/* Action buttons - full width on mobile, enhanced for touch */}
+          {/* Action buttons - enhanced mobile-first design */}
           <div className="mb-12 lg:mb-16 space-y-4 sm:space-y-0 sm:flex sm:flex-wrap sm:justify-center sm:gap-4 lg:gap-6 px-2">
             <button 
               onClick={handleTryForFree}
-              className="w-full sm:w-auto sm:min-w-[200px] bg-blue-600 text-white px-8 py-4 min-h-[54px] rounded-xl hover:bg-blue-700 active:bg-blue-800 transition-all duration-300 text-lg font-semibold shadow-lg hover:shadow-xl hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-blue-300"
+              className="btn-mobile-lg w-full sm:w-auto sm:min-w-[220px] bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-blue-800 active:from-blue-800 active:to-blue-900 transition-all duration-300 font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-blue-300"
             >
-              Get Started Free
+              <span className="flex items-center justify-center">
+                🚀 Get Started Free
+                <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </span>
             </button>
             <button 
               onClick={handleJoinAsDeveloper}
-              className="w-full sm:w-auto sm:min-w-[200px] bg-purple-600 text-white px-8 py-4 min-h-[54px] rounded-xl hover:bg-purple-700 active:bg-purple-800 transition-all duration-300 text-lg font-semibold shadow-lg hover:shadow-xl hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-purple-300"
+              className="btn-mobile-lg w-full sm:w-auto sm:min-w-[220px] bg-gradient-to-r from-purple-600 to-purple-700 text-white px-8 py-4 rounded-xl hover:from-purple-700 hover:to-purple-800 active:from-purple-800 active:to-purple-900 transition-all duration-300 font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-purple-300"
             >
-              Join as Developer
+              <span className="flex items-center justify-center">
+                👨‍💻 Join as Developer
+                <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+              </span>
             </button>
             <button 
               onClick={handleSeeHowItWorks}
-              className="w-full sm:w-auto sm:min-w-[200px] border-2 border-blue-600 text-blue-600 px-8 py-4 min-h-[54px] rounded-xl hover:bg-blue-50 active:bg-blue-100 transition-all duration-300 text-lg font-semibold shadow-lg hover:shadow-xl hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-blue-300"
+              className="btn-mobile-lg w-full sm:w-auto sm:min-w-[220px] border-2 border-blue-600 text-blue-600 bg-white px-8 py-4 rounded-xl hover:bg-blue-50 active:bg-blue-100 transition-all duration-300 font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-blue-300"
             >
-              See How It Works
+              <span className="flex items-center justify-center">
+                📖 See How It Works
+                <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </span>
             </button>
           </div>
 
