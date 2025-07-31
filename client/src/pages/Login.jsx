@@ -4,7 +4,7 @@ import useAuth from "../hooks/useAuth";
 import { loginUserV2 } from "../api/auth";
 import { setToken } from "../utils/token";
 
-export function Login() {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -229,5 +229,3 @@ export function Login() {
     </div>
   );
 }
-
-export default Login;
