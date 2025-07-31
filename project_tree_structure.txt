@@ -1,0 +1,303 @@
+.
+├── backend
+│   ├── app
+│   │   ├── config
+│   │   ├── core
+│   │   ├── middleware
+│   │   ├── models
+│   │   ├── routes
+│   │   ├── services
+│   │   ├── static
+│   │   ├── utils
+│   │   ├── auth_enhanced.py
+│   │   ├── auth.py
+│   │   ├── config.py
+│   │   ├── database.py
+│   │   ├── dependencies.py
+│   │   ├── email_service.py
+│   │   ├── init_db.py
+│   │   ├── __init__.py
+│   │   ├── main.py
+│   │   ├── models_enhanced.py
+│   │   ├── models.py
+│   │   ├── schemas_enhanced.py
+│   │   └── schemas.py
+│   ├── migrations
+│   │   ├── versions
+│   │   └── __init__.py
+│   ├── tests
+│   │   ├── conftest.py
+│   │   ├── __init__.py
+│   │   ├── README.md
+│   │   ├── test_advanced_prompting.py
+│   │   ├── test_ai_analytics.py
+│   │   ├── test_alert_system.py
+│   │   ├── test_auth.py
+│   │   ├── test_cape_ai.py
+│   │   ├── test_context_aware_ai.py
+│   │   ├── test_conversation_management.py
+│   │   ├── test_database_models.py
+│   │   ├── test_enhanced_cape_ai.py
+│   │   ├── test_enhanced_user_profiles.py
+│   │   ├── test_health_enhancement.py
+│   │   ├── test_integration_api_workflows.py
+│   │   ├── test_integration_api_workflows_v2.py
+│   │   ├── test_multi_provider_ai_service.py
+│   │   ├── test_sanity_check_fixed.py
+│   │   ├── test_sanity_check.py
+│   │   ├── test_task_1_1_4_integration_workflows.py
+│   │   ├── test_task_1_1_6_performance_simple.py
+│   │   ├── test_task_1_1_6_performance_tests.py
+│   │   ├── test_task_1_1_7_security_tests.py
+│   │   ├── test_task_1_2_1_rate_limiting.py
+│   │   ├── test_task_1_2_2_ai_rate_limiting.py
+│   │   ├── test_task_1_2_3_ddos_protection.py
+│   │   ├── test_task_1_2_4_input_sanitization.py
+│   │   ├── test_task_1_2_5_content_moderation.py
+│   │   ├── test_task_1_3_2_ai_performance.py
+│   │   └── test_voice_integration.py
+│   ├── auth_api_standalone.py
+│   ├── debug_thread_creation.py
+│   ├── demo_advanced_prompting.py
+│   ├── demo_ai_analytics.py
+│   ├── demo_ai_personalization.py
+│   ├── demo_auth_server.py
+│   ├── demo_context_aware_ai.py
+│   ├── demo_conversation_management.py
+│   ├── demo_enhanced_user_profiles.py
+│   ├── demo_personalized_dashboards.py
+│   ├── demo_voice_integration.py
+│   ├── Dockerfile
+│   ├── fix_enum_constraint.py
+│   ├── init_postgresql.py
+│   ├── __init__.py
+│   ├── integration_test.py
+│   ├── migrate_auth.py
+│   ├── migrate_phase2_profile.py
+│   ├── migrate_production.py
+│   ├── Procfile
+│   ├── pytest.ini
+│   ├── requirements.txt
+│   ├── runtime.txt
+│   ├── test_ai_performance_standalone.py
+│   ├── test_ai_personalization.py
+│   ├── test_alert_system.py
+│   ├── test_auth_system.py
+│   ├── validate_ddos_protection.py
+│   ├── validate_input_sanitization.py
+│   └── voice_demo_report_1753449761.json
+├── client
+│   ├── public
+│   │   ├── static
+│   │   ├── manifest.json
+│   │   ├── robots.txt
+│   │   ├── sitemap.xml
+│   │   ├── site.webmanifest
+│   │   └── site.webmanifest.new
+│   ├── scripts
+│   │   └── download-icons.js
+│   ├── src
+│   │   ├── api
+│   │   ├── assets
+│   │   ├── components
+│   │   ├── context
+│   │   ├── hooks
+│   │   ├── lib
+│   │   ├── pages
+│   │   ├── test
+│   │   ├── utils
+│   │   ├── App.jsx
+│   │   ├── AppTestNoContext.jsx
+│   │   ├── main-enhanced.jsx
+│   │   ├── main.jsx
+│   │   ├── main-minimal.jsx
+│   │   ├── main-original.jsx
+│   │   ├── main-safe.jsx
+│   │   ├── main-test-no-context.jsx
+│   │   └── styles.css
+│   ├── components.json
+│   ├── debug_email_test.js
+│   ├── eslint.config.js
+│   ├── fix_password_selectors.py
+│   ├── fix_register_tests.py
+│   ├── index.html
+│   ├── jsconfig.json
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── postcss.config.js
+│   ├── remove_required.py
+│   ├── tailwind.config.js
+│   ├── test-results.json
+│   ├── vite.config.js
+│   ├── vite.plugins.cachebuster.js
+│   └── vitest.config.js
+├── cloudflare-workers
+│   ├── ai-agents-landing-worker.js
+│   ├── api-cache-worker.js
+│   ├── corrected-worker.js
+│   ├── DEPLOY_BLUE_HEADER.md
+│   ├── DEVELOPMENT.md
+│   ├── enhanced-landing-worker.js
+│   ├── fixed-landing-worker.js
+│   ├── landing-page-worker.js
+│   ├── production-worker.js
+│   ├── README.md
+│   ├── simple-test-worker.js
+│   └── wrangler.toml
+├── docs
+│   ├── archive
+│   │   ├── Cape Control Developer PredevInfo.md
+│   │   ├── CapeControlVision.md
+│   │   ├── RELEASE_NOTES_v2.0.md
+│   │   └── TailPlan.md
+│   ├── checklists
+│   │   ├── Checklist.md
+│   │   ├── Checklist_MVP.md
+│   │   ├── Checklist_Phase2.md
+│   │   └── ChecklistV1.md
+│   ├── development
+│   │   ├── EMAIL_SETUP.md
+│   │   ├── EMAIL_SYSTEM_README.md
+│   │   ├── IMPLEMENTATION_STATUS.md
+│   │   ├── REACT_DEVELOPMENT.md
+│   │   ├── REGISTRATION_DEVELOPMENT_ROADMAP.md
+│   │   └── REGISTRATION_PROCESS_BREAKDOWN.md
+│   ├── api_specification.md
+│   ├── database_schema.md
+│   ├── implementation_guide.md
+│   ├── openapi.yaml
+│   └── project_summary.md
+├── localstorm-ai-project
+│   ├── backend
+│   │   ├── src
+│   │   ├── tests
+│   │   ├── docker-compose.yml
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   ├── docs
+│   │   ├── api
+│   │   ├── deployment
+│   │   └── development
+│   ├── frontend
+│   │   ├── src
+│   │   ├── package.json
+│   │   ├── public
+│   │   ├── tsconfig.json
+│   │   └── vite.config.ts
+│   ├── mobile
+│   │   ├── src
+│   │   ├── android
+│   │   ├── ios
+│   │   ├── metro.config.js
+│   │   └── package.json
+│   ├── scripts
+│   │   ├── deploy.sh
+│   │   ├── setup.sh
+│   │   └── test.sh
+│   ├── shared
+│   │   ├── types
+│   │   └── utils
+│   ├── docker-compose.yml
+│   └── README.md
+├── localstorm-ai-project-1
+│   ├── backend
+│   │   ├── src
+│   │   ├── tests
+│   │   ├── Dockerfile
+│   │   ├── pytest.ini
+│   │   ├── requirements-dev.txt
+│   │   └── requirements.txt
+│   ├── scripts
+│   │   ├── deploy.sh
+│   │   ├── run-tests.sh
+│   │   └── setup-env.sh
+│   ├── docker-compose.yml
+│   └── README.md
+├── scripts
+│   ├── setup
+│   │   ├── add_phase2_columns.py
+│   │   ├── init_enhanced_auth.py
+│   │   ├── recreate_tables.py
+│   │   ├── setup_database.py
+│   │   ├── setup_enhanced_auth.py
+│   │   ├── test_email.py
+│   │   ├── test_phase2_onboarding.py
+│   │   ├── test_postgres.py
+│   │   └── test_smtp.py
+│   ├── tests
+│   │   ├── sanity-test.md
+│   │   ├── test_email.py
+│   │   ├── test_enhanced_auth_complete.sh
+│   │   ├── test_enhanced_auth.sh
+│   │   ├── test_imports.py
+│   │   ├── test_init.py
+│   │   ├── test_phase2_onboarding.py
+│   │   ├── test_postgres.py
+│   │   └── test_smtp.py
+│   ├── cache-bust.cjs
+│   ├── check-images.sh
+│   ├── check_sanity.sh
+│   ├── deploy-static-assets.sh
+│   ├── fix-s3-public-access.sh
+│   ├── pre-commit-cleanup.sh
+│   ├── preserve-png-images.sh
+│   ├── reorganize-assets.sh
+│   ├── s3-public-read-policy.json
+│   ├── setup-production-env.sh
+│   ├── setup-s3-public-access.sh
+│   ├── start-local.sh
+│   ├── start_localstorm.sh
+│   ├── sync_checklist.sh
+│   ├── test_check_sanity.sh
+│   ├── test_enhanced_auth_complete.sh
+│   ├── test_enhanced_auth.sh
+│   ├── upload-images.sh
+│   ├── upload-manifest.sh
+│   ├── upload_static_assets.sh
+│   ├── upload-static.sh
+│   ├── upload-to-s3.sh
+│   ├── verify-png-images.sh
+│   ├── verify-production-images.sh
+│   └── welcome-check.sh
+├── app.json
+├── apply_security_fixes.sh
+├── CAPEAI_DEVELOPMENT_PLAN.md
+├── check_db_registrations.py
+├── COMPREHENSIVE_FILE_DIAGRAM.md
+├── CSV_EXPORT_README.md
+├── CSV_UPDATE_SUMMARY_TASK_1_1_4.md
+├── demo_claude_integration.py
+├── demo_complete_multi_provider.py
+├── demo_context_enhancement.py
+├── DEPLOYMENT.md
+├── docker-compose.yml
+├── Dockerfile
+├── fix_auth_tests.sh
+├── heroku.yml
+├── IMPLEMENTATION_STATUS.md
+├── IMPLEMENTATION_STATUS_UPDATED.md
+├── LICENSE
+├── Makefile
+├── MASTER_PROJECT_PLAN_UPDATE_TASK_1_1_4.md
+├── MASTER_PROJECT_PLAN_UPDATE_TASK_1_1_5_PROGRESS.md
+├── migrate_users_consolidation.py
+├── mobile-landing.html
+├── MOBILE_TAILWIND_IMPLEMENTATION.md
+├── PHASE_2_AI_TASK_STATUS.md
+├── Procfile
+├── PROJECT_STRUCTURE.md
+├── project_tracking.csv
+├── project_tree_structure.txt
+├── README.md
+├── requirements.txt
+├── runtime.txt
+├── start_localhost_claude.sh
+├── TASK_1_1_5_FINAL_STATUS.md
+├── TASK_1_3_2_AI_PERFORMANCE_COMPLETION.md
+├── test_context_enhancement.py
+├── test_enhanced_security.py
+├── test_error_tracking.py
+├── test_gemini_integration.py
+└── test_localhost.sh
+
+54 directories, 247 files
