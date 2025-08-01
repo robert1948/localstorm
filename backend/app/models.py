@@ -32,6 +32,7 @@ class User(Base):
 
     # Relationships
     conversations = relationship("Conversation", back_populates="user")
+    # audit_logs relationship handled in AuditLog model to avoid circular imports
 
 class UserProfile(Base):
     """
@@ -58,7 +59,7 @@ class Conversation(Base):
     __table_args__ = {"extend_existing": True}
     
     id = Column(String, primary_key=True, index=True, default=lambda: str(uuid.uuid4()))
-    user_id = Column(String, ForeignKey("users.id"), index=True)
+    user_id = Column(String, ForeignKey("users_v2.id"), index=True)
     title = Column(String(255))
     status = Column(String(20), default="active")  # active, archived, deleted
     

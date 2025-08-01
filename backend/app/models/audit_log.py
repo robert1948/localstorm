@@ -113,7 +113,7 @@ class AuditLog(Base):
     id = Column(Integer, primary_key=True, index=True)
     
     # User Information
-    user_id = Column(String, ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
+    user_id = Column(String, ForeignKey("users_v2.id", ondelete="SET NULL"), nullable=True, index=True)
     user_email = Column(String(255), nullable=True, index=True)
     user_role = Column(String(50), nullable=True)
     
@@ -160,7 +160,8 @@ class AuditLog(Base):
     event_timestamp = Column(DateTime(timezone=True), nullable=True)  # When the actual event occurred
     
     # Relationships
-    user = relationship("User", backref="audit_logs")
+    # Note: User relationship defined here to avoid circular import issues
+    # user = relationship("User", foreign_keys=[user_id])
     
     def __repr__(self):
         return f"<AuditLog(id={self.id}, event_type={self.event_type}, user_id={self.user_id}, timestamp={self.created_at})>"
