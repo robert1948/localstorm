@@ -8,31 +8,88 @@ from app.database import Base  # Updated import for new structure
 class User(Base):
     """
     SQLAlchemy model for the users_v2 table.
-    Updated for production schema compatibility - July 13, 2025
-    Only includes columns that exist in production database
+    Updated for production schema compatibility - August 1, 2025
+    Matches actual production database schema
     """
     __tablename__ = "users_v2"
     __table_args__ = {"extend_existing": True}
     
-    # Production database columns only
-    id = Column(String, primary_key=True, index=True, default=lambda: str(uuid.uuid4()))  # UUID generator
-    email = Column(String(255), unique=True, index=True)
-    password_hash = Column(String(60))
-    user_role = Column(String(20))
-    full_name = Column(String(100))
-    tos_accepted_at = Column(DateTime(timezone=True))
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
-    company_name = Column(String)
-    industry = Column(String)
-    project_budget = Column(String)
-    skills = Column(String)
-    portfolio = Column(String)
-    github = Column(String)
+    # Production database columns - matching actual schema
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String(255), unique=True, index=True, nullable=False)
+    password_hash = Column(String(255), nullable=False)
+    role = Column(String(20), nullable=False, default='customer')  # Note: 'role' not 'user_role'
+    first_name = Column(String(100))
+    last_name = Column(String(100))
+    phone = Column(String(20))
+    website = Column(String(255))
+    company = Column(String(255))
+    is_active = Column(Boolean, nullable=False, default=True)
+    is_verified = Column(Boolean, nullable=False, default=False)
+    email_verified_at = Column(DateTime(timezone=True))
+    experience = Column(String(20))  # beginner, intermediate, advanced, expert
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    updated_at = Column(DateTime(timezone=True))
+    last_login_at = Column(DateTime(timezone=True))
+    terms_accepted_at = Column(DateTime(timezone=True))
+    privacy_accepted_at = Column(DateTime(timezone=True))
 
     # Relationships
     conversations = relationship("Conversation", back_populates="user")
     # audit_logs relationship handled in AuditLog model to avoid circular imports
+    
+    # Backward compatibility properties
+    @property
+    def user_role(self):
+        """Backward compatibility for user_role field"""
+        return self.role
+    
+    @user_role.setter
+    def user_role(self, value):
+        """Backward compatibility setter for user_role field"""
+        self.role = value
+    
+    @property
+    def full_name(self):
+        """Backward compatibility for full_name field"""
+        if self.first_name and self.last_name:
+            return f"{self.first_name} {self.last_name}"
+        elif self.first_name:
+            return self.first_name
+        elif self.last_name:
+            return self.last_name
+        return None
+    
+    @full_name.setter
+    def full_name(self, value):
+        """Backward compatibility setter for full_name field"""
+        if value:
+            parts = value.strip().split(' ', 1)
+            self.first_name = parts[0]
+            self.last_name = parts[1] if len(parts) > 1 else None
+        else:
+            self.first_name = None
+            self.last_name = None
+    
+    @property
+    def tos_accepted_at(self):
+        """Backward compatibility for tos_accepted_at field"""
+        return self.terms_accepted_at
+    
+    @tos_accepted_at.setter
+    def tos_accepted_at(self, value):
+        """Backward compatibility setter for tos_accepted_at field"""
+        self.terms_accepted_at = value
+    
+    @property
+    def company_name(self):
+        """Backward compatibility for company_name field"""
+        return self.company
+    
+    @company_name.setter
+    def company_name(self, value):
+        """Backward compatibility setter for company_name field"""
+        self.company = value
 
 class UserProfile(Base):
     """
@@ -42,7 +99,7 @@ class UserProfile(Base):
     __table_args__ = {"extend_existing": True}
     
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, index=True)  # Foreign key to users.id
+    user_id = Column(Integer, ForeignKey("users_v2.id"), index=True)  # Foreign key to users_v2.id
     
     # Role-specific data (stored as JSON-like text)
     profile_data = Column(Text)  # JSON string with role-specific fields
@@ -59,7 +116,7 @@ class Conversation(Base):
     __table_args__ = {"extend_existing": True}
     
     id = Column(String, primary_key=True, index=True, default=lambda: str(uuid.uuid4()))
-    user_id = Column(String, ForeignKey("users_v2.id"), index=True)
+    user_id = Column(Integer, ForeignKey("users_v2.id"), index=True)
     title = Column(String(255))
     status = Column(String(20), default="active")  # active, archived, deleted
     

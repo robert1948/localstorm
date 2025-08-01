@@ -113,7 +113,7 @@ class AuditLog(Base):
     id = Column(Integer, primary_key=True, index=True)
     
     # User Information
-    user_id = Column(String, ForeignKey("users_v2.id", ondelete="SET NULL"), nullable=True, index=True)
+    user_id = Column(Integer, ForeignKey("users_v2.id", ondelete="SET NULL"), nullable=True, index=True)
     user_email = Column(String(255), nullable=True, index=True)
     user_role = Column(String(50), nullable=True)
     
